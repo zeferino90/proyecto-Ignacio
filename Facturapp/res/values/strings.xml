@@ -3,6 +3,6 @@
 
     <string name="app_name">Facturapp</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">ola k ase?</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
