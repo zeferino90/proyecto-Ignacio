@@ -10,6 +10,13 @@ public class Principal extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_principal);
+		
+		getFacturas();
+	}
+
+	private void getFacturas() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -18,5 +25,5 @@ public class Principal extends Activity {
 		getMenuInflater().inflate(R.menu.principal, menu);
 		return true;
 	}
-
+	
 }
