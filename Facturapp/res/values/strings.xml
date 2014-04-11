@@ -5,5 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world_desdegithub!</string>
     <string name="export">Exportar</string>
+    <string name="title_activity_gestion_facturas">Gestion_facturas</string>
+    <string name="anadir">Añadir</string>
 
 </resources>
