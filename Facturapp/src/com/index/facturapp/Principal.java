@@ -37,6 +37,7 @@ public class Principal extends Activity {
 		int id = item.getItemId();
 		if (id == R.id.anadir) {
 			Intent intent = new Intent(this, Gestion_facturas.class);
+			intent.putExtra("nuevo", true);
 		    startActivity(intent);
 			return true;
 		}

@@ -1,19 +1,32 @@
 package com.index.facturapp;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class Gestion_facturas extends Activity {
-
+	Bundle bundle;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gestion_facturas);
+		Bundle bundle = getIntent().getExtras();
+		setContentGestionFacturas(bundle);
 		
-		
+	}
+
+	private void setContentGestionFacturas(Bundle bundle) {
+		// TODO Auto-generated method stub
+		//Si no es nueva consultar base de datos
+			//generar todas las linias segun los productos obtenidos de esa factura
+		//sino generar linia vacia
+		if (bundle.getBoolean("nuevo")){
+			
+		}
+		else{
+			
+		}
 	}
 
 	@Override
