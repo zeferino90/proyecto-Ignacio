@@ -40,7 +40,7 @@ public final class R {
         public static final int gestion_facturas=0x7f030001;
     }
     public static final class menu {
-        public static final int gestion_facturas=0x7f070000;
+        public static final int mgestion_facturas=0x7f070000;
         public static final int principal=0x7f070001;
     }
     public static final class string {

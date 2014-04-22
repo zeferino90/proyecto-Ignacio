@@ -33,7 +33,7 @@ public class Gestion_facturas extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.gestion_facturas, menu);
+		getMenuInflater().inflate(R.menu.mgestion_facturas, menu);
 		return true;
 	}
 
