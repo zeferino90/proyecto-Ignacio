@@ -1,6 +1,7 @@
 package com.index.facturapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +12,7 @@ public class Gestion_facturas extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gestion_facturas);
-
+		
 		
 	}
 
@@ -29,8 +30,8 @@ public class Gestion_facturas extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		if (id == R.id.anadir) {
+			//a–adir linia producto
 		}
 		return super.onOptionsItemSelected(item);
 	}
