@@ -16,8 +16,10 @@ public class FacturaDB extends SQLiteOpenHelper {
 		super (context, DATABASE_NAME, null, 1);
 	}
 	
-	public getLiniasProducto(int idFactura){
+	public LiniaProducto[] getLiniasProducto(int idFactura){
 		//aqui estabas
+		LiniaProducto[] productos;
+		return productos;
 	}
 	
 	@Override
