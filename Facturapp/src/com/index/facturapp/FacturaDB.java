@@ -19,6 +19,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	public LiniaProducto[] getLiniasProducto(int idFactura){
 		//aqui estabas
 		LiniaProducto[] productos;
+		Cursor c = db.query()
 		return productos;
 	}
 	
