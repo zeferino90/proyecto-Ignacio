@@ -1,7 +1,10 @@
 package com.index.facturapp;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,6 +30,36 @@ public class Gestion_facturas extends Activity {
 		else{
 			
 		}
+	}
+	
+	public LiniaProducto[] getLiniasProducto(int idFactura){
+		//aqui estabas
+		LiniaProducto[] productos = new LiniaProducto[]{};
+		FacturaDB dbHelper = new FacturaDB(this);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		String[] campos = new String[] {"nombreProducto", "cantidad"};
+		String[] args = new String[] {};
+		args[0] = Integer.toString(idFactura);
+		Cursor c = db.query("LINIAPRODUCTO", campos, "idFactura=?", args, null, null, null);
+		if(c.moveToFirst()){
+			int i = 0;
+			do {
+				productos[i].setNombre(c.getString(0));
+				productos[i].setCantidad(c.getInt(1));
+				productos[i].setFactura(idFactura);
+				String[] campos2 = new String[] {"precio", "categoria"};
+				String[] args2 = new String[] {c.getString(0)};
+				Cursor p = db.query("PRODUCTO", campos2, "nombre=?", args2, null, null, null);
+				if(c.moveToFirst()){
+					productos[i].setPrecio(p.getFloat(0));
+					productos[i].setCategoria(p.getString(1));
+				}
+				else Log.e("dberror", "no hay producto con ese nombre en factura " + idFactura);
+				i++;
+			} while(c.moveToNext());
+		}
+		else Log.e("dberror", "no hay linias de producto para la factura " + idFactura);
+		return productos;
 	}
 
 	@Override

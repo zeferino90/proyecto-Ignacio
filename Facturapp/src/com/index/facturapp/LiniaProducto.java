@@ -5,6 +5,9 @@ public class LiniaProducto {
 	private String nombre;
 	private String categoria;
 	private float precio;
+	private int cantidad;
+	
+	public LiniaProducto(){}
 	
 	public int getFactura() {
 		return factura;
@@ -29,6 +32,14 @@ public class LiniaProducto {
 	}
 	public void setPrecio(float precio) {
 		this.precio = precio;
+	}
+
+	public int getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
 	}
 	
 	
