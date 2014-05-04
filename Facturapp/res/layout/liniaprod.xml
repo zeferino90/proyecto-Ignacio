@@ -6,29 +6,34 @@
 
     <TextView
         android:id="@+id/nombreProd"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="100dp"
+        android:text="producto" />
 
     <EditText
         android:id="@+id/nProd"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" >
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:text="0" >
 
         <requestFocus />
     </EditText>
 
     <TextView
         android:id="@+id/precioUni"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_marginRight="16dp"
+        android:text="PU" />
 
     <TextView
         android:id="@+id/precioTotal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="PVT" />
 
 </LinearLayout>
