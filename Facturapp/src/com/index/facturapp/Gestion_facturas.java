@@ -7,31 +7,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class Gestion_facturas extends Activity {
 	Bundle bundle;
+	private LiniaProducto[] liniaprod;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.gestion_facturas);
+		//setContentView(R.layout.gestion_facturas);
 		Bundle bundle = getIntent().getExtras();
 		setContentGestionFacturas(bundle);
 		
 	}
 
-	private void setContentGestionFacturas(Bundle bundle) {
-		// TODO Auto-generated method stub
-		//Si no es nueva consultar base de datos
-			//generar todas las linias segun los productos obtenidos de esa factura
-		//sino generar linia vacia
-		if (bundle.getBoolean("nuevo")){
-			
-		}
-		else{
-			
-		}
-	}
-	
 	public LiniaProducto[] getLiniasProducto(int idFactura){
 		//aqui estabas
 		LiniaProducto[] productos = new LiniaProducto[]{};
@@ -60,6 +52,32 @@ public class Gestion_facturas extends Activity {
 		}
 		else Log.e("dberror", "no hay linias de producto para la factura " + idFactura);
 		return productos;
+	}
+	
+	private void setContentGestionFacturas(Bundle bundle) {
+		// TODO Auto-generated method stub
+		//Si no es nueva consultar base de datos
+			//generar todas las linias segun los productos obtenidos de esa factura
+		//sino generar linia vacia
+		if (bundle.getBoolean("nuevo")){
+			
+		}
+		else{
+			liniaprod = getLiniasProducto(bundle.getInt("factura"));
+			int n = liniaprod.length;
+			ListView main = (ListView)findViewById(R.layout.gestion_facturas); //esto puede petar
+			for (int i = 0; i < n; i++){
+				LinearLayout filas = (LinearLayout) getLayoutInflater().inflate(R.layout.liniaprod, main);
+				int count = filas.getChildCount();
+				View v = null;
+				for(int j=0; j<count; j++) {
+				    v = filas.getChildAt(j); //conseguir cada hijo
+				    
+				}
+				main.addView(filas);
+			}
+			
+		}
 	}
 
 	@Override

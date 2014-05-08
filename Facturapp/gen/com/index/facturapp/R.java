@@ -33,7 +33,7 @@ public final class R {
         public static final int action_settings=0x7f080006;
         public static final int anadir=0x7f080007;
         public static final int contenedor_fact=0x7f080000;
-        public static final int expandableListView1=0x7f080001;
+        public static final int listalinias=0x7f080001;
         public static final int nProd=0x7f080003;
         public static final int nombreProd=0x7f080002;
         public static final int precioTotal=0x7f080005;
