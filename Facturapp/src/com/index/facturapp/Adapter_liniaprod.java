@@ -20,11 +20,11 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = convertView;
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.liniaprod, null);
-        }
+		//View view = convertView;
+        //if (view == null) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.liniaprod, parent, false);
+        //}
 
         LiniaProducto item = datos[position];
         if (item!= null) {

@@ -1,6 +1,7 @@
 package com.index.facturapp;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-public class Gestion_facturas extends Activity {
+public class Gestion_facturas extends ListActivity {
 	Bundle bundle;
 	private LiniaProducto[] liniaprod;
 	@Override
@@ -21,11 +22,9 @@ public class Gestion_facturas extends Activity {
 		//setContentView(R.layout.gestion_facturas);
 		Bundle bundle = getIntent().getExtras();
 		setContentGestionFacturas(bundle);
-		
 	}
 
 	public LiniaProducto[] getLiniasProducto(int idFactura){
-		//aqui estabas
 		LiniaProducto[] productos = new LiniaProducto[]{};
 		FacturaDB dbHelper = new FacturaDB(this);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -60,23 +59,13 @@ public class Gestion_facturas extends Activity {
 			//generar todas las linias segun los productos obtenidos de esa factura
 		//sino generar linia vacia
 		if (bundle.getBoolean("nuevo")){
-			
+			//si cal falta poner el codigo para hacerla vacia
 		}
 		else{
 			liniaprod = getLiniasProducto(bundle.getInt("factura"));
-			int n = liniaprod.length;
-			ListView main = (ListView)findViewById(R.layout.gestion_facturas); //esto puede petar
-			for (int i = 0; i < n; i++){
-				LinearLayout filas = (LinearLayout) getLayoutInflater().inflate(R.layout.liniaprod, main);
-				int count = filas.getChildCount();
-				View v = null;
-				for(int j=0; j<count; j++) {
-				    v = filas.getChildAt(j); //conseguir cada hijo
-				    
-				}
-				main.addView(filas);
-			}
-			
+			//ListView main = (ListView)findViewById(R.layout.gestion_facturas); //esto puede petar
+			Adapter_liniaprod adaptador = new Adapter_liniaprod(this, liniaprod);
+			setListAdapter(adaptador);
 		}
 	}
 
