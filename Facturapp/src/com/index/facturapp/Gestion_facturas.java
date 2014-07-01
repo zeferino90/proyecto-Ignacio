@@ -20,8 +20,12 @@ public class Gestion_facturas extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.gestion_facturas);
+		FacturaDB fdb = new FacturaDB(this);
+		SQLiteDatabase db = fdb.getWritableDatabase();
+		db.close();
 		Bundle bundle = getIntent().getExtras();
 		setContentGestionFacturas(bundle);
+		
 	}
 
 	public LiniaProducto[] getLiniasProducto(int idFactura){
