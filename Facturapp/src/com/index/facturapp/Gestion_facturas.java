@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import com.index.facturapp.FacturaDB;
 
 public class Gestion_facturas extends ListActivity {
 	Bundle bundle;
@@ -28,34 +29,7 @@ public class Gestion_facturas extends ListActivity {
 		
 	}
 
-	public LiniaProducto[] getLiniasProducto(int idFactura){
-		LiniaProducto[] productos = new LiniaProducto[]{};
-		FacturaDB dbHelper = new FacturaDB(this);
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		String[] campos = new String[] {"nombreProducto", "cantidad"};
-		String[] args = new String[] {};
-		args[0] = Integer.toString(idFactura);
-		Cursor c = db.query("LINIAPRODUCTO", campos, "idFactura=?", args, null, null, null);
-		if(c.moveToFirst()){
-			int i = 0;
-			do {
-				productos[i].setNombre(c.getString(0));
-				productos[i].setCantidad(c.getInt(1));
-				productos[i].setFactura(idFactura);
-				String[] campos2 = new String[] {"precio", "categoria"};
-				String[] args2 = new String[] {c.getString(0)};
-				Cursor p = db.query("PRODUCTO", campos2, "nombre=?", args2, null, null, null);
-				if(c.moveToFirst()){
-					productos[i].setPrecio(p.getFloat(0));
-					productos[i].setCategoria(p.getString(1));
-				}
-				else Log.e("dberror", "no hay producto con ese nombre en factura " + idFactura);
-				i++;
-			} while(c.moveToNext());
-		}
-		else Log.e("dberror", "no hay linias de producto para la factura " + idFactura);
-		return productos;
-	}
+	
 	
 	private void setContentGestionFacturas(Bundle bundle) {
 		// TODO Auto-generated method stub
@@ -66,7 +40,8 @@ public class Gestion_facturas extends ListActivity {
 			//si cal falta poner el codigo para hacerla vacia
 		}
 		else{
-			liniaprod = getLiniasProducto(bundle.getInt("factura"));
+			FacturaDB fdb = new FacturaDB(this);
+			liniaprod = fdb.getLiniasProducto(bundle.getInt("factura"));
 			//ListView main = (ListView)findViewById(R.layout.gestion_facturas); //esto puede petar
 			Adapter_liniaprod adaptador = new Adapter_liniaprod(this, liniaprod);
 			setListAdapter(adaptador);
