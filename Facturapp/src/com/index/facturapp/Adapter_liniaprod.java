@@ -1,5 +1,7 @@
 package com.index.facturapp;
 
+import com.index.facturapp.clasesextra.LiniaProducto;
+
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;

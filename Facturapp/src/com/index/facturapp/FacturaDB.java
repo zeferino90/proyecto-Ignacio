@@ -1,5 +1,9 @@
 package com.index.facturapp;
 
+import com.index.facturapp.clasesextra.Categoria;
+import com.index.facturapp.clasesextra.LiniaProducto;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,13 +13,13 @@ import android.util.Log;
 public class FacturaDB extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "facturas.db";
 	private String sqlCreate = "CREATE TABLE CLIENTE(dni VARCHAR(10), nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30), direccion VARCHAR(100), localidad VARCHAR(40))";
-	private String sqlCreate2 =	"CREATE TABLE CATEGORIA (categoria VARCHAR(20))";
+	private String sqlCreate2 =	"CREATE TABLE CATEGORIA (id INTEGER, categoria VARCHAR(20))";
 	private String sqlCreate3 = "CREATE TABLE PRODUCTO (nombre TEXT, precio FLOAT(8, 2), categoria VARCHAR(20))";
 	private String sqlCreate4 = "CREATE TABLE FACTURAS (idFactura INTERGER, fecha DATE, estado VARCHAR(12), cliente VARCHAR(10))";
 	private String sqlCreate5 = "CREATE TABLE LINIAPRODUCTO (nombreProducto TEXT, idFactura INTEGER, cantidad INTEGERc)";
 	
 	public FacturaDB(Context context){
-		super (context, DATABASE_NAME, null, 2);
+		super (context, DATABASE_NAME, null, 3);
 	}
 	
 	@Override
@@ -63,5 +67,25 @@ public class FacturaDB extends SQLiteOpenHelper {
 		}
 		else Log.e("dberror", "no hay linias de producto para la factura " + idFactura);
 		return productos;
+	}
+	
+	public void createCategoria (Categoria categoria){
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put("categoria", categoria.getCategoria());
+		values.put("id", categoria.getId());
+		
+		db.insert("categoria", null, values);
+	}
+	
+	public void updateCategoria (Categoria categoria){
+		SQLiteDatabase db = this.getWritableDatabase();
+		 
+	    ContentValues values = new ContentValues();
+	    values.put("categoria", categoria.getCategoria());
+	 
+	    // updating row
+	    db.update("categoria", values, "id" + " = ?",
+	            new String[] { String.valueOf(categoria.getId()) });
 	}
 }

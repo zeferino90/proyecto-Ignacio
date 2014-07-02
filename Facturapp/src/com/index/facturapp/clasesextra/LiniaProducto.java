@@ -1,4 +1,4 @@
-package com.index.facturapp;
+package com.index.facturapp.clasesextra;
 
 public class LiniaProducto {
 	private int factura;

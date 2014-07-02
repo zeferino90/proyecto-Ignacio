@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import com.index.facturapp.FacturaDB;
+import com.index.facturapp.clasesextra.LiniaProducto;
 
 public class Gestion_facturas extends ListActivity {
 	Bundle bundle;
