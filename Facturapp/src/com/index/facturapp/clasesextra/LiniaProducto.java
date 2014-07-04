@@ -3,9 +3,8 @@ package com.index.facturapp.clasesextra;
 public class LiniaProducto {
 	private int factura;
 	private String nombre;
-	private String categoria;
-	private float precio;
 	private int cantidad;
+	private float precio;
 	
 	public LiniaProducto(){}
 	
@@ -21,25 +20,19 @@ public class LiniaProducto {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getCategoria() {
-		return categoria;
-	}
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-	public float getPrecio() {
-		return precio;
-	}
-	public void setPrecio(float precio) {
-		this.precio = precio;
-	}
-
 	public int getCantidad() {
 		return cantidad;
 	}
-
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
+	}
+
+	public float getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(float precio) {
+		this.precio = precio;
 	}
 	
 	

@@ -36,6 +36,7 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
             TextView precioUni = (TextView) view.findViewById(R.id.precioUni);
             TextView precioTotal = (TextView) view.findViewById(R.id.precioTotal);
             if ( nomprod != null ) {
+            	
                 // do whatever you want with your string and long
                 nomprod.setText(item.getNombre());
                 nprod.setText(Integer.toString(item.getCantidad()));

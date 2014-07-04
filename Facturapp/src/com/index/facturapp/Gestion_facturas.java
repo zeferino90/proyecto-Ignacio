@@ -1,8 +1,8 @@
 package com.index.facturapp;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ListActivity;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,9 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import com.index.facturapp.FacturaDB;
+import com.index.facturapp.clasesextra.Factura;
 import com.index.facturapp.clasesextra.LiniaProducto;
 
 public class Gestion_facturas extends ListActivity {
@@ -42,7 +44,7 @@ public class Gestion_facturas extends ListActivity {
 		}
 		else{
 			FacturaDB fdb = new FacturaDB(this);
-			liniaprod = fdb.getLiniasProducto(bundle.getInt("factura"));
+			liniaprod = fdb.getLiniasProducto((Factura) getIntent().getSerializableExtra("factura"));
 			//ListView main = (ListView)findViewById(R.layout.gestion_facturas); //esto puede petar
 			Adapter_liniaprod adaptador = new Adapter_liniaprod(this, liniaprod);
 			setListAdapter(adaptador);
@@ -64,7 +66,26 @@ public class Gestion_facturas extends ListActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.anadir) {
-			//a–adir linia producto
+			final Dialog dialog = new Dialog(this);
+			dialog.setContentView(R.layout.productdialog);
+			dialog.setTitle("Escoge tu producto");
+			
+			Log.e("dialog", "Llego al dialog");
+			dialog.show();
+			Log.e("dialog", "show dialog");
+			
+            Button button = (Button)dialog.findViewById(R.id.declinar);
+            button.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View declinar) {
+                	dialog.dismiss();
+                }
+                });
+            Button button2 = (Button)dialog.findViewById(R.id.confirmar);
+            button2.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View declinar) {
+                	dialog.dismiss();
+                }
+                });
 		}
 		return super.onOptionsItemSelected(item);
 	}

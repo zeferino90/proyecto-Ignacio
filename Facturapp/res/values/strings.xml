@@ -7,5 +7,6 @@
     <string name="export">Exportar</string>
     <string name="title_activity_gestion_facturas">Gestion_facturas</string>
     <string name="anadir">Añadir</string>
+    <string name="declinar">Declinar</string>
 
 </resources>

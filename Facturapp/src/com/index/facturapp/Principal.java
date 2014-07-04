@@ -38,6 +38,7 @@ public class Principal extends Activity {
 		if (id == R.id.anadir) {
 			Intent intent = new Intent(this, Gestion_facturas.class);
 			intent.putExtra("nuevo", true);
+			//intent.putExtra("factura", factura); esto es para cuando no sea una nueva sino una de las que aprete del listado
 		    startActivity(intent);
 			return true;
 		}
