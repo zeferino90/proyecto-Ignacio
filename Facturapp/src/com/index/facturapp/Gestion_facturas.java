@@ -10,12 +10,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
+
 import com.index.facturapp.FacturaDB;
+import com.index.facturapp.clasesextra.Categoria;
 import com.index.facturapp.clasesextra.Factura;
 import com.index.facturapp.clasesextra.LiniaProducto;
+import com.index.facturapp.clasesextra.Producto;
 
 public class Gestion_facturas extends ListActivity {
 	Bundle bundle;
@@ -29,6 +35,7 @@ public class Gestion_facturas extends ListActivity {
 		db.close();
 		Bundle bundle = getIntent().getExtras();
 		setContentGestionFacturas(bundle);
+		
 		
 	}
 
@@ -70,11 +77,25 @@ public class Gestion_facturas extends ListActivity {
 			dialog.setContentView(R.layout.productdialog);
 			dialog.setTitle("Escoge tu producto");
 			
-			Log.e("dialog", "Llego al dialog");
-			dialog.show();
-			Log.e("dialog", "show dialog");
+			FacturaDB fdb = new FacturaDB(this);
+			String[] categorias = fdb.getCategorias();
+			Spinner spincat = (Spinner)dialog.findViewById(R.id.spincategoria);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categorias); 
+			spincat.setAdapter(adapter);
 			
-            Button button = (Button)dialog.findViewById(R.id.declinar);
+			spincat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		        public void onItemSelected(AdapterView<?> parent,
+		                android.view.View v, int position, long id) {
+		        			FacturaDB fdb = new FacturaDB(getApplicationContext());
+		        			String[] categorias = fdb.getCategorias();
+		        			Producto[] productos = fdb.getProductoscat(categorias[position]);
+		            }
+		        public void onNothingSelected(AdapterView<?> parent) {
+		            
+		        }
+			});
+			
+			Button button = (Button)dialog.findViewById(R.id.declinar);
             button.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View declinar) {
                 	dialog.dismiss();
@@ -86,6 +107,12 @@ public class Gestion_facturas extends ListActivity {
                 	dialog.dismiss();
                 }
                 });
+			
+			Log.e("dialog", "Llego al dialog");
+			dialog.show();
+			Log.e("dialog", "show dialog");
+			
+            
 		}
 		return super.onOptionsItemSelected(item);
 	}

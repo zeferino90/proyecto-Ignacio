@@ -95,6 +95,35 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    return facturas;
 	}
 	
+	public String[] getCategorias(){
+		Categoria[] categorias = new Categoria[]{};
+		int i = 0;
+		SQLiteDatabase db = this.getWritableDatabase();
+	    String selectQuery = "SELECT  * FROM Categoria";
+	 
+	    Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, null);
+	 
+	    // looping through all rows and adding to list
+	    if (c.moveToFirst()) {
+	        do {
+	            Categoria cat = new Categoria();
+	            cat.setId(c.getInt(c.getColumnIndex("id")));
+	            cat.setCategoria(c.getString(c.getColumnIndex("categoria")));
+	 
+	            // adding to todo list
+	            categorias[i] = cat;
+	            ++i;
+	        } while (c.moveToNext());
+	    }
+	    String[] catego = new String[i];
+	    for(int j = 0; j < i; ++j){
+	    	catego[j] = categorias[j].getCategoria();
+	    }
+	 
+	    return catego;
+	}
+	
 	public Cliente getCliente(String idcliente) {
 		// TODO Auto-generated method stub
 		Cliente cliente = new Cliente();
@@ -133,6 +162,25 @@ public class FacturaDB extends SQLiteOpenHelper {
 		return producto;
 	}
 	
+	public Producto[] getProductoscat (String categoria){
+		Producto[] productos = new Producto[]{};
+		int i = 0;
+		SQLiteDatabase db = this.getWritableDatabase();
+		String selectQuery = "SELECT  * FROM producto where categoria = " + categoria;
+		
+		Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, null);
+	    if (c.moveToFirst()) {
+	        do {
+	        	productos[i].setNombre(c.getString(c.getColumnIndex("nombre")));
+	    	    productos[i].setPrecio(c.getFloat(c.getColumnIndex("precio")));
+	    	    productos[i].setCategoria(this.getCategoria(categoria));
+	            ++i;
+	        } while (c.moveToNext());
+	    }
+	    return productos;
+	}
+	
 	public Categoria getCategoria(int idcat){
 		Categoria categoria = new Categoria();
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -144,6 +192,21 @@ public class FacturaDB extends SQLiteOpenHelper {
 	        c.moveToFirst();
 	    categoria.setId(idcat);
 	    categoria.setCategoria(c.getString(c.getColumnIndex("categoria")));
+		
+		return categoria;
+	}
+	
+	public Categoria getCategoria(String cat){
+		Categoria categoria = new Categoria();
+		SQLiteDatabase db = this.getWritableDatabase();
+		String selectQuery = "SELECT  * FROM categoria where categoria = " + cat;
+		
+		Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, null);
+	    if (c != null)
+	        c.moveToFirst();
+	    categoria.setId(c.getInt(c.getColumnIndex("id")));
+	    categoria.setCategoria(cat);
 		
 		return categoria;
 	}

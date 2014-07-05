@@ -1,36 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogmain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center|top"
+    android:gravity="left"
     android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/escogecategoria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/escogecategoria"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Spinner
         android:id="@+id/spincategoria"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <Spinner
-        android:id="@+id/spinproducto"
+    <TextView
+        android:id="@+id/escogeproducto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/escogeproducto"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:id="@+id/dialogprodprecio"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <Spinner
+            android:id="@+id/spinproducto"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.26" />
+
+        <TextView
+            android:id="@+id/precio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/preciopordefecto"
+            android:textSize="20dp" />
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/precio"
-        android:layout_width="fill_parent"
+        android:id="@+id/introducecantidad"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/introcantidad"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/cantidad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" >
+        android:ems="10"
+        android:inputType="number" >
 
         <requestFocus />
     </EditText>
 
     <LinearLayout
+        android:id="@+id/dialogbuttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center" >

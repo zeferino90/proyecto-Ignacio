@@ -8,5 +8,9 @@
     <string name="title_activity_gestion_facturas">Gestion_facturas</string>
     <string name="anadir">Añadir</string>
     <string name="declinar">Declinar</string>
+    <string name="escogecategoria">Escoge la categoria:</string>
+    <string name="escogeproducto">Escoge tu producto:</string>
+    <string name="preciopordefecto">0.00€</string>
+    <string name="introcantidad">Introduce la cantidad del producto:</string>
 
 </resources>
