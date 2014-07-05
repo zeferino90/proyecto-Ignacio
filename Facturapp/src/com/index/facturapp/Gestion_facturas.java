@@ -89,6 +89,7 @@ public class Gestion_facturas extends ListActivity {
 		        			FacturaDB fdb = new FacturaDB(getApplicationContext());
 		        			String[] categorias = fdb.getCategorias();
 		        			Producto[] productos = fdb.getProductoscat(categorias[position]);
+		        			//continue here
 		            }
 		        public void onNothingSelected(AdapterView<?> parent) {
 		            
