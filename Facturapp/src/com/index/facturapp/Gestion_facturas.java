@@ -89,7 +89,15 @@ public class Gestion_facturas extends ListActivity {
 		        			FacturaDB fdb = new FacturaDB(getApplicationContext());
 		        			String[] categorias = fdb.getCategorias();
 		        			Producto[] productos = fdb.getProductoscat(categorias[position]);
-		        			//continue here
+		        			Spinner spinprod = (Spinner)dialog.findViewById(R.id.spinproducto);
+		        			int n = productos.length;
+		        			String[] prods = new String[n];
+		        			for(int i = 0; i < n; i++){
+		        				prods[i] = productos[i].getNombre();
+		        			}
+		        			ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, prods);
+		        			spinprod.setAdapter(adapter2);
+		        			
 		            }
 		        public void onNothingSelected(AdapterView<?> parent) {
 		            

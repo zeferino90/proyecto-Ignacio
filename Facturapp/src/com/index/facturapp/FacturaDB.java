@@ -96,32 +96,35 @@ public class FacturaDB extends SQLiteOpenHelper {
 	}
 	
 	public String[] getCategorias(){
-		Categoria[] categorias = new Categoria[]{};
-		int i = 0;
-		SQLiteDatabase db = this.getWritableDatabase();
-	    String selectQuery = "SELECT  * FROM Categoria";
+//		Categoria[] categorias = new Categoria[]{};
+//		int i = 0;
+//		SQLiteDatabase db = this.getWritableDatabase();
+//	    String selectQuery = "SELECT  * FROM Categoria";
+//	 
+//	    Log.e("dberror", selectQuery);
+//	    Cursor c = db.rawQuery(selectQuery, null);
+//	 
+//	    // looping through all rows and adding to list
+//	    if (c.moveToFirst()) {
+//	        do {
+//	            Categoria cat = new Categoria();
+//	            cat.setId(c.getInt(c.getColumnIndex("id")));
+//	            cat.setCategoria(c.getString(c.getColumnIndex("categoria")));
+//	 
+//	            // adding to todo list
+//	            categorias[i] = cat;
+//	            ++i;
+//	        } while (c.moveToNext());
+//	    }
+//	    String[] catego = new String[i];
+//	    for(int j = 0; j < i; ++j){
+//	    	catego[j] = categorias[j].getCategoria();
+//	    }
+		
 	 
-	    Log.e("dberror", selectQuery);
-	    Cursor c = db.rawQuery(selectQuery, null);
-	 
-	    // looping through all rows and adding to list
-	    if (c.moveToFirst()) {
-	        do {
-	            Categoria cat = new Categoria();
-	            cat.setId(c.getInt(c.getColumnIndex("id")));
-	            cat.setCategoria(c.getString(c.getColumnIndex("categoria")));
-	 
-	            // adding to todo list
-	            categorias[i] = cat;
-	            ++i;
-	        } while (c.moveToNext());
-	    }
-	    String[] catego = new String[i];
-	    for(int j = 0; j < i; ++j){
-	    	catego[j] = categorias[j].getCategoria();
-	    }
-	 
-	    return catego;
+//	    return catego;
+		String[] debug = {"madera", "pladur"};
+		return debug;
 	}
 	
 	public Cliente getCliente(String idcliente) {
@@ -163,22 +166,53 @@ public class FacturaDB extends SQLiteOpenHelper {
 	}
 	
 	public Producto[] getProductoscat (String categoria){
-		Producto[] productos = new Producto[]{};
-		int i = 0;
-		SQLiteDatabase db = this.getWritableDatabase();
-		String selectQuery = "SELECT  * FROM producto where categoria = " + categoria;
+//		Producto[] productos = new Producto[]{};
+//		int i = 0;
+//		SQLiteDatabase db = this.getWritableDatabase();
+//		String selectQuery = "SELECT  * FROM producto where categoria = " + categoria;
+//		
+//		Log.e("dberror", selectQuery);
+//	    Cursor c = db.rawQuery(selectQuery, null);
+//	    if (c.moveToFirst()) {
+//	        do {
+//	        	productos[i].setNombre(c.getString(c.getColumnIndex("nombre")));
+//	    	    productos[i].setPrecio(c.getFloat(c.getColumnIndex("precio")));
+//	    	    productos[i].setCategoria(this.getCategoria(categoria));
+//	            ++i;
+//	        } while (c.moveToNext());
+//	    }
+//	    return productos;
 		
-		Log.e("dberror", selectQuery);
-	    Cursor c = db.rawQuery(selectQuery, null);
-	    if (c.moveToFirst()) {
-	        do {
-	        	productos[i].setNombre(c.getString(c.getColumnIndex("nombre")));
-	    	    productos[i].setPrecio(c.getFloat(c.getColumnIndex("precio")));
-	    	    productos[i].setCategoria(this.getCategoria(categoria));
-	            ++i;
-	        } while (c.moveToNext());
-	    }
-	    return productos;
+		//----------------debug code--------------
+		Producto[] productos = new Producto[]{};
+		if (categoria == "madera"){
+				Categoria cate = new Categoria();
+				Producto prod = new Producto();
+				cate.setCategoria(categoria);
+				cate.setId(0);
+				prod.setNombre("hola");
+				prod.setCategoria(cate);
+				float aux = 0;
+				prod.setPrecio(aux);
+				productos[0]= prod;
+				prod.setNombre("adios");
+				prod.setCategoria(cate);
+				prod.setPrecio(aux);
+				productos[1]= prod;
+		}
+		else {
+			Categoria cate = new Categoria();
+			cate.setCategoria(categoria);
+			cate.setId(0);
+			productos[0].setNombre("pepe");
+			productos[0].setCategoria(cate);
+			float aux = 0;
+			productos[0].setPrecio(aux);
+			productos[1].setNombre("manolo");
+			productos[1].setCategoria(cate);
+			productos[1].setPrecio(aux);
+		}
+		return productos;
 	}
 	
 	public Categoria getCategoria(int idcat){
