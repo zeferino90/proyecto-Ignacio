@@ -184,33 +184,40 @@ public class FacturaDB extends SQLiteOpenHelper {
 //	    return productos;
 		
 		//----------------debug code--------------
-		Producto[] productos = new Producto[]{};
+		Producto[] productos = new Producto[2];
 		if (categoria == "madera"){
 				Categoria cate = new Categoria();
 				Producto prod = new Producto();
+				Producto prod2 = new Producto();
 				cate.setCategoria(categoria);
 				cate.setId(0);
 				prod.setNombre("hola");
 				prod.setCategoria(cate);
-				float aux = 0;
+				float aux = 1;
 				prod.setPrecio(aux);
 				productos[0]= prod;
-				prod.setNombre("adios");
-				prod.setCategoria(cate);
-				prod.setPrecio(aux);
-				productos[1]= prod;
+				prod2.setNombre("adios");
+				prod2.setCategoria(cate);
+				aux = 2;
+				prod2.setPrecio(aux);
+				productos[1]= prod2;
 		}
 		else {
 			Categoria cate = new Categoria();
+			Producto prod = new Producto();
+			Producto prod2 = new Producto();
 			cate.setCategoria(categoria);
 			cate.setId(0);
-			productos[0].setNombre("pepe");
-			productos[0].setCategoria(cate);
-			float aux = 0;
-			productos[0].setPrecio(aux);
-			productos[1].setNombre("manolo");
-			productos[1].setCategoria(cate);
-			productos[1].setPrecio(aux);
+			prod.setNombre("pepe");
+			prod.setCategoria(cate);
+			float aux = 3;
+			prod.setPrecio(aux);
+			productos[0]= prod;
+			prod2.setNombre("manolo");
+			prod2.setCategoria(cate);
+			aux = 4;
+			prod2.setPrecio(aux);
+			productos[1]= prod2;
 		}
 		return productos;
 	}

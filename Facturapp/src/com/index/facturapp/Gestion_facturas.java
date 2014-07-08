@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.index.facturapp.FacturaDB;
 import com.index.facturapp.clasesextra.Categoria;
@@ -82,21 +83,32 @@ public class Gestion_facturas extends ListActivity {
 			Spinner spincat = (Spinner)dialog.findViewById(R.id.spincategoria);
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categorias); 
 			spincat.setAdapter(adapter);
-			
 			spincat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 		        public void onItemSelected(AdapterView<?> parent,
 		                android.view.View v, int position, long id) {
 		        			FacturaDB fdb = new FacturaDB(getApplicationContext());
 		        			String[] categorias = fdb.getCategorias();
-		        			Producto[] productos = fdb.getProductoscat(categorias[position]);
+		        			final Producto[] productos = fdb.getProductoscat(categorias[position]);
 		        			Spinner spinprod = (Spinner)dialog.findViewById(R.id.spinproducto);
 		        			int n = productos.length;
 		        			String[] prods = new String[n];
 		        			for(int i = 0; i < n; i++){
 		        				prods[i] = productos[i].getNombre();
 		        			}
-		        			ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, prods);
+		        			ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, prods);
 		        			spinprod.setAdapter(adapter2);
+		        			spinprod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		        				public void onItemSelected(AdapterView<?> parent,
+		        		                android.view.View v, int position, long id){
+		        						TextView precio = (TextView)dialog.findViewById(R.id.precio);
+		        						precio.setText(String.valueOf(productos[position].getPrecio()) + "Û");
+		        						//poner formato a euro correctamente
+		        				}
+		        				public void onNothingSelected(AdapterView<?> parent) {
+		        		            
+		        		        }
+		        			});
+		        		
 		        			
 		            }
 		        public void onNothingSelected(AdapterView<?> parent) {
