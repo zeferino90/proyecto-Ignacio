@@ -1,5 +1,7 @@
 package com.index.facturapp;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -26,7 +28,7 @@ import com.index.facturapp.clasesextra.Producto;
 
 public class Gestion_facturas extends ListActivity {
 	Bundle bundle;
-	private LiniaProducto[] liniaprod;
+	private List<LiniaProducto> liniaprod;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,7 +56,7 @@ public class Gestion_facturas extends ListActivity {
 			FacturaDB fdb = new FacturaDB(this);
 			liniaprod = fdb.getLiniasProducto((Factura) getIntent().getSerializableExtra("factura"));
 			//ListView main = (ListView)findViewById(R.layout.gestion_facturas); //esto puede petar
-			Adapter_liniaprod adaptador = new Adapter_liniaprod(this, liniaprod);
+			Adapter_liniaprod adaptador = new Adapter_liniaprod(this, (LiniaProducto[])liniaprod.toArray());
 			setListAdapter(adaptador);
 		}
 	}
@@ -124,8 +126,10 @@ public class Gestion_facturas extends ListActivity {
                 });
             Button button2 = (Button)dialog.findViewById(R.id.confirmar);
             button2.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View declinar) {
-                	dialog.dismiss();
+                public void onClick(View aceptar) {
+                	LiniaProducto prod = new LiniaProducto();
+                	dialog.findViewById(R.id.cantidad);
+                	prod.setCantidad();
                 }
                 });
 			

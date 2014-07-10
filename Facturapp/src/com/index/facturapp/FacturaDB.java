@@ -1,7 +1,9 @@
 package com.index.facturapp;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -47,8 +49,8 @@ public class FacturaDB extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
-	public LiniaProducto[] getLiniasProducto(Factura factura){
-		LiniaProducto[] productos = new LiniaProducto[]{};
+	public List<LiniaProducto> getLiniasProducto(Factura factura){
+		List<LiniaProducto> productos = new ArrayList<LiniaProducto>();
 		SQLiteDatabase db = this.getWritableDatabase();
 		String[] campos = new String[] {"nombreProducto", "cantidad"};
 		String[] args = new String[] {};
@@ -57,10 +59,12 @@ public class FacturaDB extends SQLiteOpenHelper {
 		if(c.moveToFirst()){
 			int i = 0;
 			do {
-				productos[i].setNombre(c.getString(c.getColumnIndex("nombreProducto")));
-				productos[i].setCantidad(c.getInt(c.getColumnIndex("cantidad")));
-				productos[i].setFactura(factura.getNumFact());
-				productos[i].setPrecio(c.getFloat(c.getColumnIndex("precio")));
+				LiniaProducto prod = new LiniaProducto();
+				prod.setNombre(c.getString(c.getColumnIndex("nombreProducto")));
+				prod.setCantidad(c.getInt(c.getColumnIndex("cantidad")));
+				prod.setFactura(factura.getNumFact());
+				prod.setPrecio(c.getFloat(c.getColumnIndex("precio")));
+				productos.set(i, prod);
 				i++;
 			} while(c.moveToNext());
 		}
