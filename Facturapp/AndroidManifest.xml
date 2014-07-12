@@ -26,7 +26,18 @@
             android:name="com.index.facturapp.Gestion_facturas"
             android:label="@string/title_activity_gestion_facturas" >
         </activity>
-        
+        <activity
+            android:name="com.index.facturapp.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="com.index.facturapp.Settings"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="com.index.facturapp.Preferences"
+            android:label="@string/title_activity_preferences" >
+        </activity>
     </application>
 
 </manifest>

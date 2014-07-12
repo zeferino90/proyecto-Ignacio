@@ -1,5 +1,7 @@
 package com.index.facturapp;
 
+import java.util.List;
+
 import com.index.facturapp.clasesextra.LiniaProducto;
 
 import android.app.Activity;
@@ -13,9 +15,9 @@ import android.widget.TextView;
 
 public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 	private Context context;
-	private LiniaProducto[] datos;
+	private List<LiniaProducto> datos;
 	
-	Adapter_liniaprod(Activity context, LiniaProducto[] datos){
+	Adapter_liniaprod(Activity context, List<LiniaProducto> datos){
 		super(context, R.layout.liniaprod, datos);
         this.context = context;
         this.datos = datos;
@@ -28,7 +30,7 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
         View view = inflater.inflate(R.layout.liniaprod, parent, false);
         //}
 
-        LiniaProducto item = datos[position];
+        LiniaProducto item = datos.get(position);
         if (item!= null) {
             
             TextView nomprod = (TextView) view.findViewById(R.id.nombreProd);
@@ -46,6 +48,9 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
          }
 
         return view;
+	}
+	public List<LiniaProducto> getLiniasProducto(){
+		return this.datos;
 	}
 	
 	

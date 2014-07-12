@@ -12,5 +12,7 @@
     <string name="escogeproducto">Escoge tu producto:</string>
     <string name="preciopordefecto">0.00€</string>
     <string name="introcantidad">Introduce la cantidad del producto:</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_preferences">Preferences</string>
 
 </resources>

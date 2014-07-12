@@ -1,5 +1,6 @@
 package com.index.facturapp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -7,6 +8,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -28,7 +31,10 @@ import com.index.facturapp.clasesextra.Producto;
 
 public class Gestion_facturas extends ListActivity {
 	Bundle bundle;
-	private List<LiniaProducto> liniaprod;
+	private Factura fact;
+	private Adapter_liniaprod adaptador;
+	private boolean nuevo;
+	private ListActivity activity;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,6 +43,7 @@ public class Gestion_facturas extends ListActivity {
 		SQLiteDatabase db = fdb.getWritableDatabase();
 		db.close();
 		Bundle bundle = getIntent().getExtras();
+		activity = this;
 		setContentGestionFacturas(bundle);
 		
 		
@@ -50,13 +57,17 @@ public class Gestion_facturas extends ListActivity {
 			//generar todas las linias segun los productos obtenidos de esa factura
 		//sino generar linia vacia
 		if (bundle.getBoolean("nuevo")){
+			nuevo = true;
 			//si cal falta poner el codigo para hacerla vacia
+			List<LiniaProducto> liniaprod = new ArrayList<LiniaProducto>();
+			adaptador = new Adapter_liniaprod(this, liniaprod);
+    		setListAdapter(adaptador);
 		}
 		else{
 			FacturaDB fdb = new FacturaDB(this);
-			liniaprod = fdb.getLiniasProducto((Factura) getIntent().getSerializableExtra("factura"));
+			List<LiniaProducto> liniaprod = fdb.getLiniasProducto((Factura) getIntent().getSerializableExtra("factura"));
 			//ListView main = (ListView)findViewById(R.layout.gestion_facturas); //esto puede petar
-			Adapter_liniaprod adaptador = new Adapter_liniaprod(this, (LiniaProducto[])liniaprod.toArray());
+			adaptador = new Adapter_liniaprod(this, liniaprod);
 			setListAdapter(adaptador);
 		}
 	}
@@ -128,8 +139,19 @@ public class Gestion_facturas extends ListActivity {
             button2.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View aceptar) {
                 	LiniaProducto prod = new LiniaProducto();
-                	dialog.findViewById(R.id.cantidad);
-                	prod.setCantidad();
+                	EditText edi = (EditText)dialog.findViewById(R.id.cantidad);
+                	prod.setCantidad(Integer.parseInt(edi.getText().toString()));
+                	//prod.setFactura(fact.getNumFact());
+                	prod.setFactura(0);
+                	Spinner spinprod = (Spinner)dialog.findViewById(R.id.spinproducto);
+                	prod.setNombre(spinprod.getSelectedItem().toString());
+                	TextView preu = (TextView)dialog.findViewById(R.id.precio);
+                	CharSequence precio = preu.getText();
+                	precio.subSequence(0, precio.length());
+                	prod.setPrecio(Float.parseFloat(precio.subSequence(0, precio.length()-1).toString()));
+                	adaptador.add(prod);
+                	
+                	dialog.dismiss();
                 }
                 });
 			
