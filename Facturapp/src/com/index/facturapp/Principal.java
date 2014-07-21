@@ -43,7 +43,8 @@ public class Principal extends Activity {
 			return true;
 		}
 		else if (id == R.id.action_settings){
-			//Intent intent = new Intent(this, Settings.class);
+			Intent intent = new Intent(this, Preferencias.class);
+			startActivity(intent);
 		}
 		return super.onOptionsItemSelected(item);
 	}

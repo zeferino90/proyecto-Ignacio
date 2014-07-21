@@ -26,6 +26,18 @@
             android:name=".Gestion_facturas"
             android:label="@string/title_activity_gestion_facturas" >
         </activity>
+        <activity
+            android:name=".Preferencias"
+            android:label="@string/title_activity_preferencias" >
+        </activity>
+        <activity
+            android:name=".Prueva"
+            android:label="@string/title_activity_prueva" >
+        </activity>
+        <activity
+            android:name=".Preferencies"
+            android:label="@string/title_activity_preferencies" >
+        </activity>
     </application>
 
 </manifest>
