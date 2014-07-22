@@ -1,6 +1,7 @@
 package com.index.facturapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -18,7 +19,8 @@ public class Preferencias extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				Intent intent = new Intent(v.getContext(), Managecatprod.class);
+				startActivity(intent);
 			}
 		});
 	}

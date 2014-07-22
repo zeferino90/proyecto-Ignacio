@@ -30,6 +30,10 @@
             android:name=".Preferencias"
             android:label="@string/title_activity_preferencias" >
         </activity>
+        <activity
+            android:name=".Managecatprod"
+            android:label="@string/title_activity_managecatprod" >
+        </activity>
     </application>
 
 </manifest>
