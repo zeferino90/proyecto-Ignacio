@@ -1107,6 +1107,7 @@ containing a value of this type.
         public static final int collapseActionView=0x7f05000d;
         public static final int confirmar=0x7f05004f;
         public static final int contenedor_fact=0x7f05003e;
+        public static final int datosbd=0x7f05003f;
         public static final int declinar=0x7f050050;
         public static final int default_activity_button=0x7f050028;
         public static final int dialog=0x7f05000e;
@@ -1153,7 +1154,6 @@ containing a value of this type.
         public static final int search_plate=0x7f050036;
         public static final int search_src_text=0x7f050037;
         public static final int search_voice_btn=0x7f05003b;
-        public static final int section_label=0x7f05003f;
         public static final int shortcut=0x7f05002e;
         public static final int showCustom=0x7f050007;
         public static final int showHome=0x7f050004;

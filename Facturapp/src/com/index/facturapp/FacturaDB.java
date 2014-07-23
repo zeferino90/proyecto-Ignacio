@@ -169,6 +169,25 @@ public class FacturaDB extends SQLiteOpenHelper {
 		return producto;
 	}
 	
+	public String[] getProductos(){
+//		String[] productos = new String[]{};
+//		SQLiteDatabase db = this.getWritableDatabase();
+//		String selectQuery = "SELECT  * FROM producto";
+//		int i = 0;
+//		Log.e("dberror", selectQuery);
+//	    Cursor c = db.rawQuery(selectQuery, null);
+//	    if (c.moveToFirst()) {
+//	        do {
+//	            productos[i] = c.getString(c.getColumnIndex("nombre"));
+//	            ++i;
+//	        } while (c.moveToNext());
+//	    }
+//		return productos;
+		
+		String[] debug = {"caca", "culo"};
+		return debug;
+	}
+	
 	public Producto[] getProductoscat (String categoria){
 //		Producto[] productos = new Producto[]{};
 //		int i = 0;
