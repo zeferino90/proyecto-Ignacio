@@ -3,6 +3,7 @@ package com.index.facturapp;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -159,6 +161,8 @@ public class Managecatprod extends ActionBarActivity implements
 	
 	public static class CatFragment extends ListFragment {
 		
+		private ArrayAdapter<String> adapter;
+		
 		public CatFragment() {
 		}
 		
@@ -170,10 +174,36 @@ public class Managecatprod extends ActionBarActivity implements
 			FacturaDB fdb = new FacturaDB(getActivity());
 			String[] values;
 			values = fdb.getCategorias();
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
+			adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, values);
 			setListAdapter(adapter);
 			return rootView;
 		}
+
+		@Override
+		public void onListItemClick(ListView l, View v, int position, long id) {
+			// TODO Auto-generated method stub
+			super.onListItemClick(l, v, position, id);
+		}
+
+		@Override
+		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onActivityCreated(savedInstanceState);
+			getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+				@Override
+		        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+		                int arg2, long arg3) {
+						
+					
+					return true;
+				}
+			});
+		}
+
+		
+		
+		
+		
 	}
 	
 	public static class ProdFragment extends ListFragment {
