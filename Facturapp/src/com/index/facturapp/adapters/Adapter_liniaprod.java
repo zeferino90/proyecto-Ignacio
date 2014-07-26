@@ -1,7 +1,8 @@
-package com.index.facturapp;
+package com.index.facturapp.adapters;
 
 import java.util.List;
 
+import com.index.facturapp.R;
 import com.index.facturapp.clasesextra.LiniaProducto;
 
 import android.app.Activity;
@@ -17,7 +18,7 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 	private Context context;
 	private List<LiniaProducto> datos;
 	
-	Adapter_liniaprod(Activity context, List<LiniaProducto> datos){
+	public Adapter_liniaprod(Activity context, List<LiniaProducto> datos){
 		super(context, R.layout.liniaprod, datos);
         this.context = context;
         this.datos = datos;

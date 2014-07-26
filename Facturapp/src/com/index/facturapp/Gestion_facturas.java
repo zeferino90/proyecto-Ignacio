@@ -23,11 +23,12 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.index.facturapp.FacturaDB;
+import com.index.facturapp.dades.FacturaDB;
 import com.index.facturapp.clasesextra.Categoria;
 import com.index.facturapp.clasesextra.Factura;
 import com.index.facturapp.clasesextra.LiniaProducto;
 import com.index.facturapp.clasesextra.Producto;
+import com.index.facturapp.adapters.*;
 
 public class Gestion_facturas extends ListActivity {
 	Bundle bundle;
@@ -92,7 +93,7 @@ public class Gestion_facturas extends ListActivity {
 			dialog.setTitle("Escoge tu producto");
 			
 			FacturaDB fdb = new FacturaDB(this);
-			String[] categorias = fdb.getCategorias();
+			List<String> categorias = fdb.getCategorias();
 			Spinner spincat = (Spinner)dialog.findViewById(R.id.spincategoria);
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categorias); 
 			spincat.setAdapter(adapter);
@@ -100,8 +101,8 @@ public class Gestion_facturas extends ListActivity {
 		        public void onItemSelected(AdapterView<?> parent,
 		                android.view.View v, int position, long id) {
 		        			FacturaDB fdb = new FacturaDB(getApplicationContext());
-		        			String[] categorias = fdb.getCategorias();
-		        			final Producto[] productos = fdb.getProductoscat(categorias[position]);
+		        			List<String> categorias = fdb.getCategorias();
+		        			final Producto[] productos = fdb.getProductoscat(categorias.get(position));
 		        			Spinner spinprod = (Spinner)dialog.findViewById(R.id.spinproducto);
 		        			int n = productos.length;
 		        			String[] prods = new String[n];

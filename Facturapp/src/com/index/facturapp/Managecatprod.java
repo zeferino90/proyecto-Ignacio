@@ -1,7 +1,8 @@
 package com.index.facturapp;
 
 
-import android.database.sqlite.SQLiteDatabase;
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Toast;
+
+import com.index.facturapp.adapters.Adaptercatprod;
+import com.index.facturapp.dades.FacturaDB;
 
 public class Managecatprod extends ActionBarActivity implements
 		ActionBar.TabListener {
@@ -161,7 +165,7 @@ public class Managecatprod extends ActionBarActivity implements
 	
 	public static class CatFragment extends ListFragment {
 		
-		private ArrayAdapter<String> adapter;
+		private Adaptercatprod adapter;
 		
 		public CatFragment() {
 		}
@@ -172,9 +176,9 @@ public class Managecatprod extends ActionBarActivity implements
 			View rootView = inflater.inflate(android.R.layout.list_content,
 					container, false);
 			FacturaDB fdb = new FacturaDB(getActivity());
-			String[] values;
+			List<String> values;
 			values = fdb.getCategorias();
-			adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, values);
+			adapter = new Adaptercatprod(getActivity(),values);
 			setListAdapter(adapter);
 			return rootView;
 		}
@@ -186,9 +190,10 @@ public class Managecatprod extends ActionBarActivity implements
 			getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
 				@Override
 		        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-		                int arg2, long arg3) {
+		                int position, long id) {
 						
-					
+					Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Has apretado le item posicion:" + String.valueOf(position), Toast.LENGTH_LONG);
+					toast.show();
 					return true;
 				}
 			});
@@ -211,7 +216,7 @@ public class Managecatprod extends ActionBarActivity implements
 			View rootView = inflater.inflate(android.R.layout.list_content,
 					container, false);
 			FacturaDB fdb = new FacturaDB(getActivity());
-			String[] values;
+			List<String> values;
 			values = fdb.getProductos();
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
 			setListAdapter(adapter);

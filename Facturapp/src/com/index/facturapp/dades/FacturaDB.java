@@ -1,4 +1,4 @@
-package com.index.facturapp;
+package com.index.facturapp.dades;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,8 +72,8 @@ public class FacturaDB extends SQLiteOpenHelper {
 		return productos;
 	}
 	
-	public Factura[] getFacturas(){
-		Factura[] facturas = new Factura[]{};
+	public List<Factura> getFacturas(){
+		List<Factura> facturas = new ArrayList<Factura>();
 		int i = 0;
 		SQLiteDatabase db = this.getWritableDatabase();
 	    String selectQuery = "SELECT  * FROM Factura";
@@ -91,7 +91,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            fact.setCliente(this.getCliente(c.getString(c.getColumnIndex("cliente"))));
 	 
 	            // adding to todo list
-	            facturas[i] = fact;
+	            facturas.set(i, fact);
 	            ++i;
 	        } while (c.moveToNext());
 	    }
@@ -99,7 +99,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    return facturas;
 	}
 	
-	public String[] getCategorias(){
+	public List<String> getCategorias(){
 //		Categoria[] categorias = new Categoria[]{};
 //		int i = 0;
 //		SQLiteDatabase db = this.getWritableDatabase();
@@ -127,7 +127,9 @@ public class FacturaDB extends SQLiteOpenHelper {
 		
 	 
 //	    return catego;
-		String[] debug = {"madera", "pladur"};
+		List<String> debug = new ArrayList<String>();
+		debug.add("madera");
+		debug.add("pladur");
 		return debug;
 	}
 	
@@ -169,7 +171,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		return producto;
 	}
 	
-	public String[] getProductos(){
+	public List<String> getProductos(){
 //		String[] productos = new String[]{};
 //		SQLiteDatabase db = this.getWritableDatabase();
 //		String selectQuery = "SELECT  * FROM producto";
@@ -184,7 +186,9 @@ public class FacturaDB extends SQLiteOpenHelper {
 //	    }
 //		return productos;
 		
-		String[] debug = {"caca", "culo"};
+		List<String> debug = new ArrayList<String>();
+		debug.add("caca");
+		debug.add("culo");
 		return debug;
 	}
 	

@@ -1096,10 +1096,10 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050051;
+        public static final int action_settings=0x7f050052;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
-        public static final int anadir=0x7f050052;
+        public static final int anadir=0x7f050053;
         public static final int beginning=0x7f050011;
         public static final int cantidad=0x7f05004d;
         public static final int cateprod=0x7f05003d;
@@ -1159,6 +1159,7 @@ containing a value of this type.
         public static final int showHome=0x7f050004;
         public static final int showTitle=0x7f050006;
         public static final int spincategoria=0x7f050047;
+        public static final int spinneritem=0x7f050051;
         public static final int spinproducto=0x7f05004a;
         public static final int split_action_bar=0x7f05001e;
         public static final int submit_area=0x7f050039;
