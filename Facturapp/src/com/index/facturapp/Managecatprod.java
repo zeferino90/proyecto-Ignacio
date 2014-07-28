@@ -3,6 +3,8 @@ package com.index.facturapp;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.index.facturapp.adapters.Adaptercatprod;
@@ -173,13 +174,7 @@ public class Managecatprod extends ActionBarActivity implements
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(android.R.layout.list_content,
-					container, false);
-			FacturaDB fdb = new FacturaDB(getActivity());
-			List<String> values;
-			values = fdb.getCategorias();
-			adapter = new Adaptercatprod(getActivity(),values);
-			setListAdapter(adapter);
+			View rootView = inflater.inflate(android.R.layout.list_content, container, false);
 			return rootView;
 		}
 
@@ -187,11 +182,31 @@ public class Managecatprod extends ActionBarActivity implements
 		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
 			super.onActivityCreated(savedInstanceState);
+			FacturaDB fdb = new FacturaDB(getActivity());
+			List<String> values;
+			values = fdb.getCategorias();
+			adapter = new Adaptercatprod(getActivity(),values);
+			setListAdapter(adapter);
 			getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
 				@Override
 		        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 		                int position, long id) {
+					
+					final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+					String[] items = {"Eliminar", "Cancelar"};
+					dialog.setItems(items, new DialogInterface.OnClickListener() {
 						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							if (which == 0){
+								String paborrar = adapter.getItem(which);
+								adapter.remove(paborrar);
+								fdb.removeCategoria(paborrar);
+							}
+						}
+					});
+					
 					Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Has apretado le item posicion:" + String.valueOf(position), Toast.LENGTH_LONG);
 					toast.show();
 					return true;
@@ -207,6 +222,8 @@ public class Managecatprod extends ActionBarActivity implements
 	
 	public static class ProdFragment extends ListFragment {
 		
+		private Adaptercatprod adapter;
+		
 		public ProdFragment() {
 		}
 		
@@ -215,12 +232,27 @@ public class Managecatprod extends ActionBarActivity implements
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(android.R.layout.list_content,
 					container, false);
+			return rootView;
+		}
+		
+		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			super.onActivityCreated(savedInstanceState);
 			FacturaDB fdb = new FacturaDB(getActivity());
 			List<String> values;
 			values = fdb.getProductos();
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
+			adapter = new Adaptercatprod(getActivity(),values);
 			setListAdapter(adapter);
-			return rootView;
+			getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+				@Override
+		        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+		                int position, long id) {
+						
+					Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Has apretado le item posicion:" + String.valueOf(position), Toast.LENGTH_LONG);
+					toast.show();
+					return true;
+				}
+			});
 		}
 	}
 

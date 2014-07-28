@@ -392,4 +392,8 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    // updating row
 	    db.update("factura", values, "nombreProducto" + " = ?", new String []{String.valueOf(factura.getNumFact())});
 	}
+	
+	public void removeCategoria (String catego){
+		SQLiteDatabase db = this.getWritableDatabase();
+	}
 }
