@@ -21,14 +21,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.index.facturapp.adapters.Adaptercatprod;
+import com.index.facturapp.clasesextra.Categoria;
 import com.index.facturapp.dades.FacturaDB;
 
 public class Managecatprod extends ActionBarActivity implements
 		ActionBar.TabListener {
 
+	private int selectedTab = 0;
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
@@ -68,6 +71,8 @@ public class Managecatprod extends ActionBarActivity implements
 				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
+						selectedTab = position;
+						
 						actionBar.setSelectedNavigationItem(position);
 					}
 				});
@@ -97,8 +102,28 @@ public class Managecatprod extends ActionBarActivity implements
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		if (id == R.id.anadir2) {
+			final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+			LayoutInflater inflater = this.getLayoutInflater();
+			if(selectedTab == 0){
+				dialog.setView(inflater.inflate(R.id.nuevacategoria, null));
+				dialog.setPositiveButton("A–adir", new DialogInterface.OnClickListener(){
+					@Override
+					public void onClick(DialogInterface dialog, int id){
+						EditText campocategoria = (EditText) findViewById(R.id.nuevacategoria);
+						String categoria = campocategoria.getText().toString();
+						FacturaDB fdb = new FacturaDB(getBaseContext());
+						Categoria cate = new Categoria();
+						cate.setCategoria(categoria);
+						
+						//cate.setId();
+						fdb.createCategoria(cate);
+					}
+				});
+			}
+			else {
+				
+			}
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -182,7 +207,7 @@ public class Managecatprod extends ActionBarActivity implements
 		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
 			super.onActivityCreated(savedInstanceState);
-			FacturaDB fdb = new FacturaDB(getActivity());
+			final FacturaDB fdb = new FacturaDB(getActivity());
 			List<String> values;
 			values = fdb.getCategorias();
 			adapter = new Adaptercatprod(getActivity(),values);
@@ -194,6 +219,7 @@ public class Managecatprod extends ActionBarActivity implements
 					
 					final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
 					String[] items = {"Eliminar", "Cancelar"};
+					dialog.setTitle("Estas seguro de eliminar " + adapter.getItem(position) + "?");
 					dialog.setItems(items, new DialogInterface.OnClickListener() {
 						
 						@Override
@@ -204,11 +230,12 @@ public class Managecatprod extends ActionBarActivity implements
 								adapter.remove(paborrar);
 								fdb.removeCategoria(paborrar);
 							}
+							else {
+								dialog.dismiss();
+							}
 						}
 					});
-					
-					Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Has apretado le item posicion:" + String.valueOf(position), Toast.LENGTH_LONG);
-					toast.show();
+					dialog.show();
 					return true;
 				}
 			});
@@ -238,7 +265,7 @@ public class Managecatprod extends ActionBarActivity implements
 		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
 			super.onActivityCreated(savedInstanceState);
-			FacturaDB fdb = new FacturaDB(getActivity());
+			final FacturaDB fdb = new FacturaDB(getActivity());
 			List<String> values;
 			values = fdb.getProductos();
 			adapter = new Adaptercatprod(getActivity(),values);
@@ -248,8 +275,25 @@ public class Managecatprod extends ActionBarActivity implements
 		        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 		                int position, long id) {
 						
-					Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Has apretado le item posicion:" + String.valueOf(position), Toast.LENGTH_LONG);
-					toast.show();
+					final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+					String[] items = {"Eliminar", "Cancelar"};
+					dialog.setTitle("Estas seguro de eliminar " + adapter.getItem(position) + "?");
+					dialog.setItems(items, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							if (which == 0){
+								String paborrar = adapter.getItem(which);
+								adapter.remove(paborrar);
+								fdb.removeProducto(paborrar);
+							}
+							else {
+								dialog.dismiss();
+							}
+						}
+					});
+					dialog.show();
 					return true;
 				}
 			});

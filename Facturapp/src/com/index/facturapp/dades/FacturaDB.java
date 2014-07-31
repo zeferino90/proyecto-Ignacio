@@ -21,10 +21,11 @@ import com.index.facturapp.clasesextra.Producto;
 public class FacturaDB extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "facturas.db";
 	private String sqlCreate = "CREATE TABLE CLIENTE(dni VARCHAR(10) PRIMARY KEY, nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30), direccion VARCHAR(100), localidad VARCHAR(40))";
-	private String sqlCreate2 =	"CREATE TABLE CATEGORIA (id INTEGER PRIMARY KEY, categoria VARCHAR(20))";
+	private String sqlCreate2 =	"CREATE TABLE CATEGORIA (id INTEGER PRIMARY KEY, categoria VARCHAR(30))";
 	private String sqlCreate3 = "CREATE TABLE PRODUCTO (nombre TEXT PRIMARY KEY, precio FLOAT(8, 2), idcategoria INTEGER)";
 	private String sqlCreate4 = "CREATE TABLE FACTURAS (idFactura INTERGER PRIMARY KEY, fecha DATE, estado VARCHAR(12), cliente VARCHAR(10))";
 	private String sqlCreate5 = "CREATE TABLE LINIAPRODUCTO (nombreProducto TEXT, idFactura INTEGER, cantidad INTEGER, precio FLOAT(8, 2), PRIMARY KEY(nombreProducto, idFactura))";
+	private String sqlCreate6 = "INSERT INTO CATEGORIA (id, categoria) VALUES (0, 'Sin categoria')";
 	
 	public FacturaDB(Context context){
 		super (context, DATABASE_NAME, null, 3);
@@ -36,6 +37,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		db.execSQL(sqlCreate2);
 		db.execSQL(sqlCreate3);
 		db.execSQL(sqlCreate4);
+		db.execSQL(sqlCreate5);
 		db.execSQL(sqlCreate5);
 	}
 	
@@ -299,6 +301,17 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            new String[] { String.valueOf(categoria.getId()) });
 	}
 	
+	public void removeCategoria(String categoria){
+		SQLiteDatabase db = this.getWritableDatabase();
+		Categoria catego = this.getCategoria(categoria);
+		ContentValues nuevo= new ContentValues();
+		nuevo.put("idcategoria", 0);
+		String[] id ={String.valueOf(catego.getId())};
+		db.update("PRODUCTOS", nuevo, "idcategoria=?", id );
+		String[] cate ={categoria};
+		db.delete("CATEGORIA", "categoria=?", cate);
+	}
+	
 	public void createCliente (Cliente cliente){
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -348,6 +361,12 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    db.update("producto", values, "nombre" + " = ?", new String []{producto.getNombre()});
 	}
 	
+	public void removeProducto(String producto){
+		SQLiteDatabase db = this.getWritableDatabase();
+		String[] prod ={producto};
+		db.delete("PRODUCTO", "nombre=?", prod);
+	}
+	
 	public void createLiniaproducto (LiniaProducto liniaprod){
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -391,9 +410,5 @@ public class FacturaDB extends SQLiteOpenHelper {
 	 
 	    // updating row
 	    db.update("factura", values, "nombreProducto" + " = ?", new String []{String.valueOf(factura.getNumFact())});
-	}
-	
-	public void removeCategoria (String catego){
-		SQLiteDatabase db = this.getWritableDatabase();
 	}
 }

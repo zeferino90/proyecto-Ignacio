@@ -2,11 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.index.facturapp.Managecatprod" >
-
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+    <item android:id="@+id/anadir2" android:icon="@drawable/ic_action_new" android:showAsAction="ifRoom" android:title="@string/anadir" android:visible="true"></item>
 
 </menu>
