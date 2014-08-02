@@ -102,12 +102,12 @@ public class Gestion_facturas extends ListActivity {
 		                android.view.View v, int position, long id) {
 		        			FacturaDB fdb = new FacturaDB(getApplicationContext());
 		        			List<String> categorias = fdb.getCategorias();
-		        			final Producto[] productos = fdb.getProductoscat(categorias.get(position));
+		        			final List<Producto> productos = fdb.getProductoscat(categorias.get(position));
 		        			Spinner spinprod = (Spinner)dialog.findViewById(R.id.spinproducto);
-		        			int n = productos.length;
+		        			int n = productos.size();
 		        			String[] prods = new String[n];
 		        			for(int i = 0; i < n; i++){
-		        				prods[i] = productos[i].getNombre();
+		        				prods[i] = productos.get(i).getNombre();
 		        			}
 		        			ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, prods);
 		        			spinprod.setAdapter(adapter2);
@@ -115,7 +115,7 @@ public class Gestion_facturas extends ListActivity {
 		        				public void onItemSelected(AdapterView<?> parent,
 		        		                android.view.View v, int position, long id){
 		        						TextView precio = (TextView)dialog.findViewById(R.id.precio);
-		        						precio.setText(String.valueOf(productos[position].getPrecio()) + "Û");
+		        						precio.setText(String.valueOf(productos.get(position).getPrecio()) + "Û");
 		        						//poner formato a euro correctamente
 		        				}
 		        				public void onNothingSelected(AdapterView<?> parent) {

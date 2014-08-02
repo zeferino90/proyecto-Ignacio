@@ -28,7 +28,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	private String sqlCreate6 = "INSERT INTO CATEGORIA (id, categoria) VALUES (0, 'Sin categoria')";
 	
 	public FacturaDB(Context context){
-		super (context, DATABASE_NAME, null, 3);
+		super (context, DATABASE_NAME, null, 5);
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		db.execSQL(sqlCreate3);
 		db.execSQL(sqlCreate4);
 		db.execSQL(sqlCreate5);
-		db.execSQL(sqlCreate5);
+		db.execSQL(sqlCreate6);
 	}
 	
 	@Override
@@ -71,6 +71,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 			} while(c.moveToNext());
 		}
 		else Log.e("dberror", "no hay linias de producto para la factura " + factura.getNumFact());
+		db.close();
 		return productos;
 	}
 	
@@ -97,46 +98,43 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            ++i;
 	        } while (c.moveToNext());
 	    }
-	 
+	 db.close();
 	    return facturas;
 	}
 	
 	public List<String> getCategorias(){
-//		Categoria[] categorias = new Categoria[]{};
-//		int i = 0;
-//		SQLiteDatabase db = this.getWritableDatabase();
-//	    String selectQuery = "SELECT  * FROM Categoria";
-//	 
-//	    Log.e("dberror", selectQuery);
-//	    Cursor c = db.rawQuery(selectQuery, null);
-//	 
-//	    // looping through all rows and adding to list
-//	    if (c.moveToFirst()) {
-//	        do {
-//	            Categoria cat = new Categoria();
-//	            cat.setId(c.getInt(c.getColumnIndex("id")));
-//	            cat.setCategoria(c.getString(c.getColumnIndex("categoria")));
-//	 
-//	            // adding to todo list
-//	            categorias[i] = cat;
-//	            ++i;
-//	        } while (c.moveToNext());
-//	    }
-//	    String[] catego = new String[i];
-//	    for(int j = 0; j < i; ++j){
-//	    	catego[j] = categorias[j].getCategoria();
-//	    }
-		
+		List<Categoria> categorias = new ArrayList<Categoria>();
+		int i = 0;
+		SQLiteDatabase db = this.getWritableDatabase();
+	    String selectQuery = "SELECT  * FROM Categoria";
 	 
-//	    return catego;
-		List<String> debug = new ArrayList<String>();
-		debug.add("madera");
-		debug.add("pladur");
-		return debug;
+	    Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, null);
+	 
+	    // looping through all rows and adding to list
+	    if (c.moveToFirst()) {
+	        do {
+	            Categoria cat = new Categoria();
+	            cat.setId(c.getInt(c.getColumnIndex("id")));
+	            cat.setCategoria(c.getString(c.getColumnIndex("categoria")));
+	 
+	            // adding to todo list
+	            categorias.add(i, cat);
+	            ++i;
+	        } while (c.moveToNext());
+	    }
+	    List<String> catego = new ArrayList<String>();
+	    int j = 0;
+	    for(j = 0; j < i; ++j){
+	    	catego.add(j, categorias.get(j).getCategoria());
+	    }
+		
+	    db.close();
+	    return catego;
+		
 	}
 	
 	public Cliente getCliente(String idcliente) {
-		// TODO Auto-generated method stub
 		Cliente cliente = new Cliente();
 		SQLiteDatabase db = this.getWritableDatabase();
 		String selectQuery = "SELECT  * FROM cliente where dni = " + idcliente;
@@ -151,7 +149,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    cliente.setDir(c.getString(c.getColumnIndex("direccion")));
 	    cliente.setLocalidad(c.getString(c.getColumnIndex("localidad")));
 	    cliente.setNombre(c.getString(c.getColumnIndex("nombre")));
-	    
+	    db.close();
 		return cliente;
 	}
 	
@@ -169,50 +167,49 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    producto.setCategoria(this.getCategoria(c.getInt(c.getColumnIndex("id"))));
 	    
 	    
-	    
+	    db.close();
 		return producto;
 	}
 	
 	public List<String> getProductos(){
-//		String[] productos = new String[]{};
-//		SQLiteDatabase db = this.getWritableDatabase();
-//		String selectQuery = "SELECT  * FROM producto";
-//		int i = 0;
-//		Log.e("dberror", selectQuery);
-//	    Cursor c = db.rawQuery(selectQuery, null);
-//	    if (c.moveToFirst()) {
-//	        do {
-//	            productos[i] = c.getString(c.getColumnIndex("nombre"));
-//	            ++i;
-//	        } while (c.moveToNext());
-//	    }
-//		return productos;
-		
-		List<String> debug = new ArrayList<String>();
-		debug.add("caca");
-		debug.add("culo");
-		return debug;
+		List<String> productos = new ArrayList<String>();
+		SQLiteDatabase db = this.getWritableDatabase();
+		String selectQuery = "SELECT  * FROM producto";
+		int i = 0;
+		Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, null);
+	    if (c.moveToFirst()) {
+	        do {
+	            productos.set(i, c.getString(c.getColumnIndex("nombre")));
+	            ++i;
+	        } while (c.moveToNext());
+	    }
+	    db.close();
+		return productos;
 	}
 	
-	public Producto[] getProductoscat (String categoria){
-//		Producto[] productos = new Producto[]{};
-//		int i = 0;
-//		SQLiteDatabase db = this.getWritableDatabase();
-//		String selectQuery = "SELECT  * FROM producto where categoria = " + categoria;
-//		
-//		Log.e("dberror", selectQuery);
-//	    Cursor c = db.rawQuery(selectQuery, null);
-//	    if (c.moveToFirst()) {
-//	        do {
-//	        	productos[i].setNombre(c.getString(c.getColumnIndex("nombre")));
-//	    	    productos[i].setPrecio(c.getFloat(c.getColumnIndex("precio")));
-//	    	    productos[i].setCategoria(this.getCategoria(categoria));
-//	            ++i;
-//	        } while (c.moveToNext());
-//	    }
-//	    return productos;
+	public List<Producto> getProductoscat (String categoria){
+		List<Producto> productos = new ArrayList<Producto>();
+		int i = 0;
+		SQLiteDatabase db = this.getWritableDatabase();
+		String selectQuery = "SELECT  * FROM producto where categoria = " + categoria;
 		
-		//----------------debug code--------------
+		Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, null);
+	    if (c.moveToFirst()) {
+	        do {
+	        	Producto prod = productos.get(i);
+	        	prod.setNombre(c.getString(c.getColumnIndex("nombre")));
+	    	    prod.setPrecio(c.getFloat(c.getColumnIndex("precio")));
+	    	    prod.setCategoria(this.getCategoria(categoria));
+	    	    productos.set(i, prod);
+	            ++i;
+	        } while (c.moveToNext());
+	    }
+	    db.close();
+	    return productos;
+		
+		/*//----------------debug code--------------
 		Producto[] productos = new Producto[2];
 		if (categoria == "madera"){
 				Categoria cate = new Categoria();
@@ -248,7 +245,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 			prod2.setPrecio(aux);
 			productos[1]= prod2;
 		}
-		return productos;
+		return productos;*/
 	}
 	
 	public Categoria getCategoria(int idcat){
@@ -262,7 +259,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	        c.moveToFirst();
 	    categoria.setId(idcat);
 	    categoria.setCategoria(c.getString(c.getColumnIndex("categoria")));
-		
+	    db.close();
 		return categoria;
 	}
 	
@@ -277,7 +274,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	        c.moveToFirst();
 	    categoria.setId(c.getInt(c.getColumnIndex("id")));
 	    categoria.setCategoria(cat);
-		
+	    db.close();
 		return categoria;
 	}
 
@@ -288,6 +285,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		values.put("id", categoria.getId());
 		
 		db.insert("categoria", null, values);
+		db.close();
 	}
 	
 	public void updateCategoria (Categoria categoria){
@@ -299,6 +297,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    // updating row
 	    db.update("categoria", values, "id" + " = ?",
 	            new String[] { String.valueOf(categoria.getId()) });
+	    db.close();
 	}
 	
 	public void removeCategoria(String categoria){
@@ -310,6 +309,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		db.update("PRODUCTOS", nuevo, "idcategoria=?", id );
 		String[] cate ={categoria};
 		db.delete("CATEGORIA", "categoria=?", cate);
+		db.close();
 	}
 	
 	public void createCliente (Cliente cliente){
@@ -323,6 +323,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		values.put("localidad", cliente.getLocalidad());
 		
 		db.insert("cliente", null, values);
+		db.close();
 	}
 	
 	public void updateCliente (Cliente cliente) {
@@ -338,6 +339,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    // updating row
 	    db.update("cliente", values, "dni" + " = ?",
 	            new String[] { String.valueOf(cliente.getDni()) });
+	    db.close();
 	}
 	
 	public void createProducto (Producto producto){
@@ -348,6 +350,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		values.put("idcategoria", producto.getCategoria().getId());
 		
 		db.insert("producto", null, values);
+		db.close();
 	}
 	
 	public void updateProducto (Producto producto){
@@ -359,12 +362,14 @@ public class FacturaDB extends SQLiteOpenHelper {
 	 
 	    // updating row
 	    db.update("producto", values, "nombre" + " = ?", new String []{producto.getNombre()});
+	    db.close();
 	}
 	
 	public void removeProducto(String producto){
 		SQLiteDatabase db = this.getWritableDatabase();
 		String[] prod ={producto};
 		db.delete("PRODUCTO", "nombre=?", prod);
+		db.close();
 	}
 	
 	public void createLiniaproducto (LiniaProducto liniaprod){
@@ -376,6 +381,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		values.put("precio", liniaprod.getPrecio());
 		
 		db.insert("liniaproducto", null, values);
+		db.close();
 	}
 	public void updateLiniaproducto (LiniaProducto liniaprod){
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -386,6 +392,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	 
 	    // updating row
 	    db.update("liniaproducto", values, "nombreProducto" + " = ? and idFactura = ?", new String []{liniaprod.getNombre(), String.valueOf(liniaprod.getFactura())});
+	    db.close();
 	}
 	
 	public void createFactura (Factura factura){
@@ -399,6 +406,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    values.put("fecha", dateFormat.format(date));
 		
 		db.insert("factura", null, values);
+		db.close();
 	}
 	
 	public void updateFactura (Factura factura){
@@ -410,5 +418,6 @@ public class FacturaDB extends SQLiteOpenHelper {
 	 
 	    // updating row
 	    db.update("factura", values, "nombreProducto" + " = ?", new String []{String.valueOf(factura.getNumFact())});
+	    db.close();
 	}
 }

@@ -106,20 +106,23 @@ public class Managecatprod extends ActionBarActivity implements
 			final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 			LayoutInflater inflater = this.getLayoutInflater();
 			if(selectedTab == 0){
-				dialog.setView(inflater.inflate(R.id.nuevacategoria, null));
+				final View layout = inflater.inflate(R.layout.categoridialog, null);
+				dialog.setView(layout);
 				dialog.setPositiveButton("A–adir", new DialogInterface.OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int id){
-						EditText campocategoria = (EditText) findViewById(R.id.nuevacategoria);
+						EditText campocategoria = (EditText) layout.findViewById(R.id.nuevacategoria);
 						String categoria = campocategoria.getText().toString();
 						FacturaDB fdb = new FacturaDB(getBaseContext());
 						Categoria cate = new Categoria();
 						cate.setCategoria(categoria);
-						
-						//cate.setId();
+						//CatFragment fragment = (CatFragment) mSectionsPagerAdapter.getItem(selectedTab);
+						CatFragment.addItem(categoria);
+						cate.setId(CatFragment.ncategoria());
 						fdb.createCategoria(cate);
 					}
 				});
+				dialog.show();
 			}
 			else {
 				
@@ -191,9 +194,11 @@ public class Managecatprod extends ActionBarActivity implements
 	
 	public static class CatFragment extends ListFragment {
 		
-		private Adaptercatprod adapter;
+		private static Adaptercatprod adapter;
+		int pos;
 		
 		public CatFragment() {
+			pos = 0;
 		}
 		
 		@Override
@@ -216,29 +221,44 @@ public class Managecatprod extends ActionBarActivity implements
 				@Override
 		        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 		                int position, long id) {
+					pos = position;
+					if (position == 0){
+						//toast de que no se puede borrar
+					}
+					else {
+						final int pos = position;
+						final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+						String[] items = {"Eliminar", "Cancelar"};
+						dialog.setTitle("Estas seguro de eliminar " + adapter.getItem(position) + "?");
+						dialog.setItems(items, new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								if (which == 0){
+									String paborrar = adapter.getItem(pos);
+									adapter.remove(paborrar);
+									fdb.removeCategoria(paborrar);
+								}
+								else {
+									dialog.dismiss();
+								}
+							}
+						});
+						dialog.show();
+					}
 					
-					final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-					String[] items = {"Eliminar", "Cancelar"};
-					dialog.setTitle("Estas seguro de eliminar " + adapter.getItem(position) + "?");
-					dialog.setItems(items, new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							if (which == 0){
-								String paborrar = adapter.getItem(which);
-								adapter.remove(paborrar);
-								fdb.removeCategoria(paborrar);
-							}
-							else {
-								dialog.dismiss();
-							}
-						}
-					});
-					dialog.show();
 					return true;
 				}
 			});
+		}
+		
+		public static void addItem(String categoria){
+			adapter.add(categoria);
+		}
+		
+		public static int ncategoria (){
+			return adapter.getCount();
 		}
 
 		
@@ -297,6 +317,10 @@ public class Managecatprod extends ActionBarActivity implements
 					return true;
 				}
 			});
+		}
+		
+		public void addItem(String producto){
+			adapter.add(producto);
 		}
 	}
 
