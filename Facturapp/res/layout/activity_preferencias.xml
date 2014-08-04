@@ -13,4 +13,13 @@
         android:text="@string/catprod"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <TextView
+        android:id="@+id/clietes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/cateprod"
+        android:text="Clientes"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 </RelativeLayout>

@@ -40,9 +40,6 @@ public class Gestion_facturas extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.gestion_facturas);
-		FacturaDB fdb = new FacturaDB(this);
-		SQLiteDatabase db = fdb.getWritableDatabase();
-		db.close();
 		Bundle bundle = getIntent().getExtras();
 		activity = this;
 		setContentGestionFacturas(bundle);
@@ -52,8 +49,22 @@ public class Gestion_facturas extends ListActivity {
 
 	
 	
+	@Override
+	protected void onStop() {
+		FacturaDB fdb = new FacturaDB(this);
+		fdb.close();
+		super.onStop();
+	}
+
+	@Override
+	public void onBackPressed() {
+		FacturaDB fdb = new FacturaDB(this);
+		fdb.close();
+		super.onBackPressed();
+	}
+
+
 	private void setContentGestionFacturas(Bundle bundle) {
-		// TODO Auto-generated method stub
 		//Si no es nueva consultar base de datos
 			//generar todas las linias segun los productos obtenidos de esa factura
 		//sino generar linia vacia
@@ -89,7 +100,7 @@ public class Gestion_facturas extends ListActivity {
 		int id = item.getItemId();
 		if (id == R.id.anadir) {
 			final Dialog dialog = new Dialog(this);
-			dialog.setContentView(R.layout.productdialog);
+			dialog.setContentView(R.layout.liniaproductdialog);
 			dialog.setTitle("Escoge tu producto");
 			
 			FacturaDB fdb = new FacturaDB(this);
@@ -102,12 +113,14 @@ public class Gestion_facturas extends ListActivity {
 		                android.view.View v, int position, long id) {
 		        			FacturaDB fdb = new FacturaDB(getApplicationContext());
 		        			List<String> categorias = fdb.getCategorias();
-		        			final List<Producto> productos = fdb.getProductoscat(categorias.get(position));
+		        			final List<Producto> productos = fdb.getProductoscat(fdb.getCategoria(categorias.get(position)).getId());
 		        			Spinner spinprod = (Spinner)dialog.findViewById(R.id.spinproducto);
 		        			int n = productos.size();
+		        			Log.e("dberror", "El numero de productos es:" + n + "y la posicion es: " + position + "Y las categorias son: " + categorias.get(0) + categorias.get(1));
 		        			String[] prods = new String[n];
 		        			for(int i = 0; i < n; i++){
 		        				prods[i] = productos.get(i).getNombre();
+		        				Log.e("dberror", productos.get(i).getNombre());
 		        			}
 		        			ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, prods);
 		        			spinprod.setAdapter(adapter2);

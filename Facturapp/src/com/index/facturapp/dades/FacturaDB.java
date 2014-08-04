@@ -22,14 +22,14 @@ public class FacturaDB extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "facturas.db";
 	private String sqlCreate = "CREATE TABLE CLIENTE(dni VARCHAR(10) PRIMARY KEY, nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30), direccion VARCHAR(100), localidad VARCHAR(40))";
 	private String sqlCreate2 =	"CREATE TABLE CATEGORIA (id INTEGER PRIMARY KEY, categoria VARCHAR(30))";
-	private String sqlCreate3 = "CREATE TABLE PRODUCTO (nombre TEXT PRIMARY KEY, precio FLOAT(8, 2), idcategoria INTEGER)";
+	private String sqlCreate3 = "CREATE TABLE PRODUCTO (nombre TEXT PRIMARY KEY, precio FLOAT(8, 2), idcategoria VARCHAR(30))";
 	private String sqlCreate4 = "CREATE TABLE FACTURAS (idFactura INTERGER PRIMARY KEY, fecha DATE, estado VARCHAR(12), cliente VARCHAR(10))";
 	private String sqlCreate5 = "CREATE TABLE LINIAPRODUCTO (nombreProducto TEXT, idFactura INTEGER, cantidad INTEGER, precio FLOAT(8, 2), PRIMARY KEY(nombreProducto, idFactura))";
 	private String sqlCreate6 = "INSERT INTO CATEGORIA (id, categoria) VALUES (0, 'Sin categoria')";
 	private SQLiteDatabase db;
 	
 	public FacturaDB(Context context){
-		super (context, DATABASE_NAME, null, 5);
+		super (context, DATABASE_NAME, null, 6);
 	}
 	
 	@Override
@@ -148,10 +148,10 @@ public class FacturaDB extends SQLiteOpenHelper {
 	public Cliente getCliente(String idcliente) {
 		Cliente cliente = new Cliente();
 		this.db = this.getWritableDatabase();
-		String selectQuery = "SELECT  * FROM cliente where dni = " + idcliente;
-		
+		String selectQuery = "SELECT  dni, nombre, apellido1, apellido2, direccion, localidad FROM cliente where dni = ?";
+		String[] aux = {idcliente};
 		Log.e("dberror", selectQuery);
-	    Cursor c = db.rawQuery(selectQuery, null);
+	    Cursor c = db.rawQuery(selectQuery, aux);
 	    if (c != null)
 	        c.moveToFirst();
 	    cliente.setDni(idcliente);
@@ -167,10 +167,10 @@ public class FacturaDB extends SQLiteOpenHelper {
 	public Producto getProducto(String nombre){
 		Producto producto = new Producto();
 		this.db = this.getWritableDatabase();
-		String selectQuery = "SELECT  * FROM producto where nombre = " + nombre;
-		
+		String selectQuery = "SELECT  nombre, precio, idcategoria FROM producto where nombre = ?";
+		String[] aux = {nombre};
 		Log.e("dberror", selectQuery);
-	    Cursor c = db.rawQuery(selectQuery, null);
+	    Cursor c = db.rawQuery(selectQuery, aux);
 	    if (c != null)
 	        c.moveToFirst();
 	    producto.setNombre(nombre);
@@ -191,7 +191,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    Cursor c = db.rawQuery(selectQuery, null);
 	    if (c.moveToFirst()) {
 	        do {
-	            productos.set(i, c.getString(c.getColumnIndex("nombre")));
+	            productos.add(i, c.getString(c.getColumnIndex("nombre")));
 	            ++i;
 	        } while (c.moveToNext());
 	    }
@@ -199,21 +199,22 @@ public class FacturaDB extends SQLiteOpenHelper {
 		return productos;
 	}
 	
-	public List<Producto> getProductoscat (String categoria){
+	public List<Producto> getProductoscat (int idcategoria){
 		List<Producto> productos = new ArrayList<Producto>();
 		int i = 0;
 		this.db = this.getWritableDatabase();
-		String selectQuery = "SELECT  * FROM producto where categoria = " + categoria;
-		
+		String selectQuery = "SELECT nombre, precio, idcategoria FROM producto where idcategoria = ?";
+		String[] aux = {String.valueOf(idcategoria)};
 		Log.e("dberror", selectQuery);
-	    Cursor c = db.rawQuery(selectQuery, null);
+	    Cursor c = db.rawQuery(selectQuery, aux);
 	    if (c.moveToFirst()) {
 	        do {
-	        	Producto prod = productos.get(i);
+	        	//Producto prod = productos.get(i);
+	        	Producto prod = new Producto();
 	        	prod.setNombre(c.getString(c.getColumnIndex("nombre")));
 	    	    prod.setPrecio(c.getFloat(c.getColumnIndex("precio")));
-	    	    prod.setCategoria(this.getCategoria(categoria));
-	    	    productos.set(i, prod);
+	    	    prod.setCategoria(this.getCategoria(idcategoria));
+	    	    productos.add(i, prod);
 	            ++i;
 	        } while (c.moveToNext());
 	    }
@@ -262,10 +263,10 @@ public class FacturaDB extends SQLiteOpenHelper {
 	public Categoria getCategoria(int idcat){
 		Categoria categoria = new Categoria();
 		this.db = this.getWritableDatabase(); 
-		String selectQuery = "SELECT  * FROM categoria where id = " + idcat;
-		
+		String selectQuery = "SELECT  id, categoria FROM categoria where id = ?";
+		String[] aux = {String.valueOf(idcat)};
 		Log.e("dberror", selectQuery);
-	    Cursor c = db.rawQuery(selectQuery, null);
+	    Cursor c = db.rawQuery(selectQuery, aux);
 	    if (c != null)
 	        c.moveToFirst();
 	    categoria.setId(idcat);
@@ -277,7 +278,6 @@ public class FacturaDB extends SQLiteOpenHelper {
 	public Categoria getCategoria(String cat){
 		Categoria categoria = new Categoria();
 		this.db = this.getWritableDatabase();
-		//String selectQuery = "SELECT  * FROM CATEGORIA where categoria = " + cat;
 		String selectQuery = "SELECT  categoria, id FROM CATEGORIA where categoria = ?";
 		
 		String[] aux = {cat};
@@ -320,7 +320,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		nuevo.put("idcategoria", "0");
 		String[] id ={String.valueOf(catego.getId())};
 		//try{
-			db.update("productos", nuevo, "idcategoria = ?", id );	
+			db.update("producto", nuevo, "idcategoria = ?", id );	
 		/*}
 		catch(Exception e){
 			Log.e("dberror", "STACKTRACE");

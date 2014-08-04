@@ -15,18 +15,19 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.Spinner;
 
 import com.index.facturapp.adapters.Adaptercatprod;
 import com.index.facturapp.clasesextra.Categoria;
+import com.index.facturapp.clasesextra.Producto;
 import com.index.facturapp.dades.FacturaDB;
 
 public class Managecatprod extends ActionBarActivity implements
@@ -52,6 +53,13 @@ public class Managecatprod extends ActionBarActivity implements
 		FacturaDB fdb = new FacturaDB(this);
 		fdb.close();
 		super.onStop();
+	}
+
+	@Override
+	public void onBackPressed() {
+		FacturaDB fdb = new FacturaDB(this);
+		fdb.close();
+		super.onBackPressed();
 	}
 
 	@Override
@@ -132,7 +140,29 @@ public class Managecatprod extends ActionBarActivity implements
 				dialog.show();
 			}
 			else {
-				
+				final View layout2 = inflater.inflate(R.layout.productodialog, null);
+				dialog.setView(layout2);
+				Spinner campocat = (Spinner)layout2.findViewById(R.id.categoriaprod);
+				FacturaDB fdb = new FacturaDB(getBaseContext());
+				List<String> values = fdb.getCategorias();
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, values);
+				campocat.setAdapter(adapter);
+				dialog.setPositiveButton("A–adir", new DialogInterface.OnClickListener(){
+					@Override
+					public void onClick(DialogInterface dialog, int id){
+						EditText camponombre = (EditText) layout2.findViewById(R.id.nombreprod);
+						EditText campoprecio = (EditText) layout2.findViewById(R.id.precioprod);
+						Spinner campocat = (Spinner)layout2.findViewById(R.id.categoriaprod);
+						FacturaDB fdb = new FacturaDB(getBaseContext());
+						Producto prod = new Producto();
+						prod.setNombre(camponombre.getText().toString());
+						prod.setPrecio(Float.valueOf(campoprecio.getText().toString()));
+						prod.setCategoria(fdb.getCategoria(campocat.getSelectedItem().toString()));
+						ProdFragment.addItem(camponombre.getText().toString());
+						fdb.createProducto(prod);
+					}
+				});
+				dialog.show();
 			}
 		}
 		return super.onOptionsItemSelected(item);
@@ -276,7 +306,7 @@ public class Managecatprod extends ActionBarActivity implements
 	
 	public static class ProdFragment extends ListFragment {
 		
-		private Adaptercatprod adapter;
+		private static Adaptercatprod adapter;
 		
 		public ProdFragment() {
 		}
@@ -326,7 +356,7 @@ public class Managecatprod extends ActionBarActivity implements
 			});
 		}
 		
-		public void addItem(String producto){
+		public static void addItem(String producto){
 			adapter.add(producto);
 		}
 	}

@@ -18,8 +18,18 @@ public class Preferencias extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				Intent intent = new Intent(v.getContext(), Managecatprod.class);
+				startActivity(intent);
+			}
+		});
+		TextView clientes = (TextView) findViewById(R.id.clietes);
+		clientes.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				Intent intent = new Intent(v.getContext(), ClientesAct.class);
 				startActivity(intent);
 			}
 		});
