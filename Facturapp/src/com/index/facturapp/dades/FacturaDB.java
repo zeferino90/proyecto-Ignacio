@@ -26,6 +26,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	private String sqlCreate4 = "CREATE TABLE FACTURAS (idFactura INTERGER PRIMARY KEY, fecha DATE, estado VARCHAR(12), cliente VARCHAR(10))";
 	private String sqlCreate5 = "CREATE TABLE LINIAPRODUCTO (nombreProducto TEXT, idFactura INTEGER, cantidad INTEGER, precio FLOAT(8, 2), PRIMARY KEY(nombreProducto, idFactura))";
 	private String sqlCreate6 = "INSERT INTO CATEGORIA (id, categoria) VALUES (0, 'Sin categoria')";
+	private SQLiteDatabase db;
 	
 	public FacturaDB(Context context){
 		super (context, DATABASE_NAME, null, 5);
@@ -39,6 +40,8 @@ public class FacturaDB extends SQLiteOpenHelper {
 		db.execSQL(sqlCreate4);
 		db.execSQL(sqlCreate5);
 		db.execSQL(sqlCreate6);
+		this.db = db;
+		
 	}
 	
 	@Override
@@ -51,9 +54,17 @@ public class FacturaDB extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
+	public void openDB (){
+		this.db = this.getWritableDatabase();
+	}
+	
+	public void closeDB(){
+		this.db.close();
+	}
+	
 	public List<LiniaProducto> getLiniasProducto(Factura factura){
 		List<LiniaProducto> productos = new ArrayList<LiniaProducto>();
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		String[] campos = new String[] {"nombreProducto", "cantidad"};
 		String[] args = new String[] {};
 		args[0] = Integer.toString(factura.getNumFact());
@@ -71,14 +82,14 @@ public class FacturaDB extends SQLiteOpenHelper {
 			} while(c.moveToNext());
 		}
 		else Log.e("dberror", "no hay linias de producto para la factura " + factura.getNumFact());
-		db.close();
+		
 		return productos;
 	}
 	
 	public List<Factura> getFacturas(){
 		List<Factura> facturas = new ArrayList<Factura>();
 		int i = 0;
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 	    String selectQuery = "SELECT  * FROM Factura";
 	 
 	    Log.e("dberror", selectQuery);
@@ -98,14 +109,14 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            ++i;
 	        } while (c.moveToNext());
 	    }
-	 db.close();
+	 
 	    return facturas;
 	}
 	
 	public List<String> getCategorias(){
 		List<Categoria> categorias = new ArrayList<Categoria>();
 		int i = 0;
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 	    String selectQuery = "SELECT  * FROM Categoria";
 	 
 	    Log.e("dberror", selectQuery);
@@ -129,14 +140,14 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    	catego.add(j, categorias.get(j).getCategoria());
 	    }
 		
-	    db.close();
+	    
 	    return catego;
 		
 	}
 	
 	public Cliente getCliente(String idcliente) {
 		Cliente cliente = new Cliente();
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		String selectQuery = "SELECT  * FROM cliente where dni = " + idcliente;
 		
 		Log.e("dberror", selectQuery);
@@ -149,13 +160,13 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    cliente.setDir(c.getString(c.getColumnIndex("direccion")));
 	    cliente.setLocalidad(c.getString(c.getColumnIndex("localidad")));
 	    cliente.setNombre(c.getString(c.getColumnIndex("nombre")));
-	    db.close();
+	    
 		return cliente;
 	}
 	
 	public Producto getProducto(String nombre){
 		Producto producto = new Producto();
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		String selectQuery = "SELECT  * FROM producto where nombre = " + nombre;
 		
 		Log.e("dberror", selectQuery);
@@ -167,13 +178,13 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    producto.setCategoria(this.getCategoria(c.getInt(c.getColumnIndex("id"))));
 	    
 	    
-	    db.close();
+	      
 		return producto;
 	}
 	
 	public List<String> getProductos(){
 		List<String> productos = new ArrayList<String>();
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		String selectQuery = "SELECT  * FROM producto";
 		int i = 0;
 		Log.e("dberror", selectQuery);
@@ -184,14 +195,14 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            ++i;
 	        } while (c.moveToNext());
 	    }
-	    db.close();
+	      
 		return productos;
 	}
 	
 	public List<Producto> getProductoscat (String categoria){
 		List<Producto> productos = new ArrayList<Producto>();
 		int i = 0;
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		String selectQuery = "SELECT  * FROM producto where categoria = " + categoria;
 		
 		Log.e("dberror", selectQuery);
@@ -206,7 +217,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            ++i;
 	        } while (c.moveToNext());
 	    }
-	    db.close();
+	      
 	    return productos;
 		
 		/*//----------------debug code--------------
@@ -250,7 +261,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	
 	public Categoria getCategoria(int idcat){
 		Categoria categoria = new Categoria();
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase(); 
 		String selectQuery = "SELECT  * FROM categoria where id = " + idcat;
 		
 		Log.e("dberror", selectQuery);
@@ -259,37 +270,39 @@ public class FacturaDB extends SQLiteOpenHelper {
 	        c.moveToFirst();
 	    categoria.setId(idcat);
 	    categoria.setCategoria(c.getString(c.getColumnIndex("categoria")));
-	    db.close();
+	      
 		return categoria;
 	}
 	
 	public Categoria getCategoria(String cat){
 		Categoria categoria = new Categoria();
-		SQLiteDatabase db = this.getWritableDatabase();
-		String selectQuery = "SELECT  * FROM categoria where categoria = " + cat;
+		this.db = this.getWritableDatabase();
+		//String selectQuery = "SELECT  * FROM CATEGORIA where categoria = " + cat;
+		String selectQuery = "SELECT  categoria, id FROM CATEGORIA where categoria = ?";
 		
+		String[] aux = {cat};
 		Log.e("dberror", selectQuery);
-	    Cursor c = db.rawQuery(selectQuery, null);
+	    Cursor c = db.rawQuery(selectQuery, aux);
 	    if (c != null)
 	        c.moveToFirst();
 	    categoria.setId(c.getInt(c.getColumnIndex("id")));
 	    categoria.setCategoria(cat);
-	    db.close();
+	      
 		return categoria;
 	}
 
 	public void createCategoria (Categoria categoria){
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("categoria", categoria.getCategoria());
 		values.put("id", categoria.getId());
 		
 		db.insert("categoria", null, values);
-		db.close();
+		  
 	}
 	
 	public void updateCategoria (Categoria categoria){
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		 
 	    ContentValues values = new ContentValues();
 	    values.put("categoria", categoria.getCategoria());
@@ -297,23 +310,30 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    // updating row
 	    db.update("categoria", values, "id" + " = ?",
 	            new String[] { String.valueOf(categoria.getId()) });
-	    db.close();
+	      
 	}
 	
 	public void removeCategoria(String categoria){
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		Categoria catego = this.getCategoria(categoria);
-		ContentValues nuevo= new ContentValues();
-		nuevo.put("idcategoria", 0);
+		ContentValues nuevo = new ContentValues();
+		nuevo.put("idcategoria", "0");
 		String[] id ={String.valueOf(catego.getId())};
-		db.update("PRODUCTOS", nuevo, "idcategoria=?", id );
+		//try{
+			db.update("productos", nuevo, "idcategoria = ?", id );	
+		/*}
+		catch(Exception e){
+			Log.e("dberror", "STACKTRACE");
+			Log.e("DBerror", Log.getStackTraceString(e));
+		}*/
+		
 		String[] cate ={categoria};
 		db.delete("CATEGORIA", "categoria=?", cate);
-		db.close();
+		  
 	}
 	
 	public void createCliente (Cliente cliente){
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("dni", cliente.getDni());
 		values.put("nombre", cliente.getNombre());
@@ -323,12 +343,12 @@ public class FacturaDB extends SQLiteOpenHelper {
 		values.put("localidad", cliente.getLocalidad());
 		
 		db.insert("cliente", null, values);
-		db.close();
+		  
 	}
 	
 	public void updateCliente (Cliente cliente) {
-		SQLiteDatabase db = this.getWritableDatabase();
 		 
+		this.db = this.getWritableDatabase();
 	    ContentValues values = new ContentValues();
 	    values.put("nombre", cliente.getNombre());
 		values.put("apellido1", cliente.getApellido1());
@@ -339,41 +359,41 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    // updating row
 	    db.update("cliente", values, "dni" + " = ?",
 	            new String[] { String.valueOf(cliente.getDni()) });
-	    db.close();
+	      
 	}
 	
 	public void createProducto (Producto producto){
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("nombre", producto.getNombre());
 		values.put("precio", producto.getPrecio());
 		values.put("idcategoria", producto.getCategoria().getId());
 		
 		db.insert("producto", null, values);
-		db.close();
+		  
 	}
 	
 	public void updateProducto (Producto producto){
-		SQLiteDatabase db = this.getWritableDatabase();
 		 
+		this.db = this.getWritableDatabase();
 	    ContentValues values = new ContentValues();
 	    values.put("precio", producto.getPrecio());
 		values.put("idcategoria", producto.getCategoria().getId());
 	 
 	    // updating row
 	    db.update("producto", values, "nombre" + " = ?", new String []{producto.getNombre()});
-	    db.close();
+	      
 	}
 	
 	public void removeProducto(String producto){
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		String[] prod ={producto};
 		db.delete("PRODUCTO", "nombre=?", prod);
-		db.close();
+		  
 	}
 	
 	public void createLiniaproducto (LiniaProducto liniaprod){
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("nombreProducto", liniaprod.getNombre());
 		values.put("idFactura", liniaprod.getFactura());
@@ -381,22 +401,22 @@ public class FacturaDB extends SQLiteOpenHelper {
 		values.put("precio", liniaprod.getPrecio());
 		
 		db.insert("liniaproducto", null, values);
-		db.close();
+		  
 	}
 	public void updateLiniaproducto (LiniaProducto liniaprod){
-		SQLiteDatabase db = this.getWritableDatabase();
 		 
+		this.db = this.getWritableDatabase(); 
 	    ContentValues values = new ContentValues();
 	    values.put("cantidad", liniaprod.getCantidad());
 	    values.put("precio", liniaprod.getPrecio());
 	 
 	    // updating row
 	    db.update("liniaproducto", values, "nombreProducto" + " = ? and idFactura = ?", new String []{liniaprod.getNombre(), String.valueOf(liniaprod.getFactura())});
-	    db.close();
+	      
 	}
 	
 	public void createFactura (Factura factura){
-		SQLiteDatabase db = this.getWritableDatabase();
+		this.db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("idFactura", factura.getNumFact());
 		values.put("estado", factura.getEstado());
@@ -406,18 +426,18 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    values.put("fecha", dateFormat.format(date));
 		
 		db.insert("factura", null, values);
-		db.close();
+		  
 	}
 	
 	public void updateFactura (Factura factura){
-		SQLiteDatabase db = this.getWritableDatabase();
 		 
+		this.db = this.getWritableDatabase(); 
 	    ContentValues values = new ContentValues();
 	    values.put("estado", factura.getEstado());
 		values.put("cliente", factura.getCliente().getDni());
 	 
 	    // updating row
 	    db.update("factura", values, "nombreProducto" + " = ?", new String []{String.valueOf(factura.getNumFact())});
-	    db.close();
+	      
 	}
 }

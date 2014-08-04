@@ -15,6 +15,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,10 +48,16 @@ public class Managecatprod extends ActionBarActivity implements
 	ViewPager mViewPager;
 
 	@Override
+	protected void onStop() {
+		FacturaDB fdb = new FacturaDB(this);
+		fdb.close();
+		super.onStop();
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_managecatprod);
-
 		// Set up the action bar.
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -118,7 +125,7 @@ public class Managecatprod extends ActionBarActivity implements
 						cate.setCategoria(categoria);
 						//CatFragment fragment = (CatFragment) mSectionsPagerAdapter.getItem(selectedTab);
 						CatFragment.addItem(categoria);
-						cate.setId(CatFragment.ncategoria());
+						cate.setId(CatFragment.ncategoria() - 1);
 						fdb.createCategoria(cate);
 					}
 				});
