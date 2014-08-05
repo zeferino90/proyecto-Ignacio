@@ -185,7 +185,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	public List<String> getProductos(){
 		List<String> productos = new ArrayList<String>();
 		this.db = this.getWritableDatabase();
-		String selectQuery = "SELECT  * FROM producto";
+		String selectQuery = "SELECT * FROM producto";
 		int i = 0;
 		Log.e("dberror", selectQuery);
 	    Cursor c = db.rawQuery(selectQuery, null);
@@ -362,6 +362,45 @@ public class FacturaDB extends SQLiteOpenHelper {
 	      
 	}
 	
+	public void removeCliente(String client) {
+		// TODO Auto-generated method stub
+		this.db = this.getWritableDatabase();
+		String[] cliente = client.split(" ");
+		db.delete("CLIENTE", "nombre=? AND apellido1 = ? AND apellido2 = ?", cliente);
+	}
+	
+	public List<String> getClientes() {
+		List<String> clientes = new ArrayList<String>();
+		int i = 0;
+		this.db = this.getWritableDatabase();
+	    String selectQuery = "SELECT * FROM cliente";
+	 
+	    Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, null);
+	 
+	    // looping through all rows and adding to list
+	    if (c.moveToFirst()) {
+	        do {
+	            Cliente cliente = new Cliente();
+	            cliente.setNombre(c.getString(c.getColumnIndex("nombre")));
+	            cliente.setApellido1(c.getString(c.getColumnIndex("apellido1")));
+	            cliente.setApellido2(c.getString(c.getColumnIndex("apellido2")));
+	            cliente.setDni(c.getString(c.getColumnIndex("dni")));
+	            cliente.setDir(c.getString(c.getColumnIndex("direccion")));
+	            cliente.setLocalidad(c.getString(c.getColumnIndex("localidad")));
+	        	String aux = new String();
+	            aux = cliente.getNombre();
+	            aux = aux.concat(" ");
+	            aux = aux.concat(cliente.getApellido1());
+	            aux = aux.concat(" ");
+	            aux = aux.concat(cliente.getApellido2());
+	        	clientes.add(i, aux);
+	            i++;
+	        } while (c.moveToNext());
+	    }
+		return clientes;
+	}
+	
 	public void createProducto (Producto producto){
 		this.db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -440,4 +479,8 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    db.update("factura", values, "nombreProducto" + " = ?", new String []{String.valueOf(factura.getNumFact())});
 	      
 	}
+
+	
+
+	
 }

@@ -137,6 +137,14 @@ public class Managecatprod extends ActionBarActivity implements
 						fdb.createCategoria(cate);
 					}
 				});
+				dialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						
+					}
+				});
 				dialog.show();
 			}
 			else {
@@ -331,7 +339,7 @@ public class Managecatprod extends ActionBarActivity implements
 				@Override
 		        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 		                int position, long id) {
-						
+					final int pos = position;	
 					final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
 					String[] items = {"Eliminar", "Cancelar"};
 					dialog.setTitle("Estas seguro de eliminar " + adapter.getItem(position) + "?");
@@ -341,7 +349,7 @@ public class Managecatprod extends ActionBarActivity implements
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
 							if (which == 0){
-								String paborrar = adapter.getItem(which);
+								String paborrar = adapter.getItem(pos);
 								adapter.remove(paborrar);
 								fdb.removeProducto(paborrar);
 							}
