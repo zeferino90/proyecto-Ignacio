@@ -1,8 +1,10 @@
 package com.index.facturapp.clasesextra;
 
+import java.util.Date;
+
 public class Factura {
 	private int numFact;
-	//private Date data;
+	private Date data;
 	private String estado;
 	private Cliente cliente;
 	public int getNumFact() {
@@ -22,5 +24,11 @@ public class Factura {
 	}
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+	public Date getData() {
+		return data;
+	}
+	public void setData(Date data) {
+		this.data = data;
 	}
 }

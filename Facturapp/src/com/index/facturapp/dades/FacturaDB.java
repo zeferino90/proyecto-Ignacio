@@ -1,5 +1,6 @@
 package com.index.facturapp.dades;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,13 +24,13 @@ public class FacturaDB extends SQLiteOpenHelper {
 	private String sqlCreate = "CREATE TABLE CLIENTE(dni VARCHAR(10) PRIMARY KEY, nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30), direccion VARCHAR(100), localidad VARCHAR(40))";
 	private String sqlCreate2 =	"CREATE TABLE CATEGORIA (id INTEGER PRIMARY KEY, categoria VARCHAR(30))";
 	private String sqlCreate3 = "CREATE TABLE PRODUCTO (nombre TEXT PRIMARY KEY, precio FLOAT(8, 2), idcategoria VARCHAR(30))";
-	private String sqlCreate4 = "CREATE TABLE FACTURAS (idFactura INTERGER PRIMARY KEY, fecha DATE, estado VARCHAR(12), cliente VARCHAR(10))";
+	private String sqlCreate4 = "CREATE TABLE FACTURAS (idFactura INTERGER PRIMARY KEY, fecha VARCHAR(60), estado VARCHAR(12), cliente VARCHAR(10))";
 	private String sqlCreate5 = "CREATE TABLE LINIAPRODUCTO (nombreProducto TEXT, idFactura INTEGER, cantidad INTEGER, precio FLOAT(8, 2), PRIMARY KEY(nombreProducto, idFactura))";
 	private String sqlCreate6 = "INSERT INTO CATEGORIA (id, categoria) VALUES (0, 'Sin categoria')";
 	private SQLiteDatabase db;
 	
 	public FacturaDB(Context context){
-		super (context, DATABASE_NAME, null, 6);
+		super (context, DATABASE_NAME, null, 7);
 	}
 	
 	@Override
@@ -86,7 +87,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		return productos;
 	}
 	
-	public List<Factura> getFacturas(){
+	public List<Factura> getFacturas() throws ParseException{
 		List<Factura> facturas = new ArrayList<Factura>();
 		int i = 0;
 		this.db = this.getWritableDatabase();
@@ -103,9 +104,13 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            fact.setEstado(c.getString(c.getColumnIndex("estado")));
 	            
 	            fact.setCliente(this.getCliente(c.getString(c.getColumnIndex("cliente"))));
+	            Date date = new Date();
+	            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	            date = dateFormat.parse(c.getString(c.getColumnIndex("fecha")));
+	            fact.setData(date);
 	 
 	            // adding to todo list
-	            facturas.set(i, fact);
+	            facturas.add(i, fact);
 	            ++i;
 	        } while (c.moveToNext());
 	    }
@@ -461,8 +466,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		values.put("estado", factura.getEstado());
 		values.put("cliente", factura.getCliente().getDni());
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-		Date date = new Date();
-	    values.put("fecha", dateFormat.format(date));
+	    values.put("fecha", dateFormat.format(factura.getData()));
 		
 		db.insert("factura", null, values);
 		  
@@ -478,6 +482,12 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    // updating row
 	    db.update("factura", values, "nombreProducto" + " = ?", new String []{String.valueOf(factura.getNumFact())});
 	      
+	}
+	
+	public void removeFactura (Factura factura){
+		this.db = this.getWritableDatabase();
+		String[] fact ={String.valueOf(factura.getNumFact())};
+		db.delete("FACTURA", "idFactura=?", fact);
 	}
 
 	
