@@ -40,7 +40,9 @@ public class Gestion_facturas extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.gestion_facturas);
-		Bundle bundle = getIntent().getExtras();
+		bundle = getIntent().getExtras();
+		FacturaDB fdb = new FacturaDB(this);
+		fact = fdb.getFactura(bundle.getInt("idfactura"));
 		activity = this;
 		setContentGestionFacturas(bundle);
 		

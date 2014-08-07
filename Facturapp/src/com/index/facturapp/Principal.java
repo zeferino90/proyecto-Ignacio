@@ -32,9 +32,36 @@ public class Principal extends ListActivity {
 	private int numfact;
 	
 	@Override
+	public void onBackPressed() {
+		FacturaDB fdb = new FacturaDB(this);
+		fdb.close();
+		super.onBackPressed();
+	}
+
+	@Override
+	protected void onPause() {
+		FacturaDB fdb = new FacturaDB(this);
+		fdb.close();
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		FacturaDB fdb = new FacturaDB(this);
+		fdb.close();
+		super.onStop();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		adapter.notifyDataSetChanged();
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_principal);
+		//setContentView(R.layout.activity_principal);
 		FacturaDB fdb = new FacturaDB(this);
 		myactivity = this;
 		List<Factura> facturas = new ArrayList<Factura>();
@@ -147,7 +174,7 @@ public class Principal extends ListActivity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long id) {
 				Intent intent = new Intent(myactivity, Gestion_facturas.class);
-				intent.putExtra("factura", (Parcelable)adapter.getItem(position));
+				intent.putExtra("idfactura", adapter.getItem(position).getNumFact());
 				startActivity(intent);
 			}
 		});
@@ -162,7 +189,8 @@ public class Principal extends ListActivity {
 				aux = facturas.get(i).getNumFact();
 			}
 		}
-		return aux+1;
+		aux +=1;
+		return aux;
 	}
 
 	@Override
@@ -198,7 +226,7 @@ public class Principal extends ListActivity {
 					fdb.createFactura(factura);
 					Intent intent = new Intent(myactivity, Gestion_facturas.class);
 					intent.putExtra("nuevo", true);
-					intent.putExtra("factura", (Parcelable)factura);
+					intent.putExtra("idfactura", factura.getNumFact());
 					startActivity(intent);
 				}
 
