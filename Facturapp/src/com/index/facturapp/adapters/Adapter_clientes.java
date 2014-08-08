@@ -18,8 +18,8 @@ public class Adapter_clientes extends ArrayAdapter<String> {
 	private Context context;
 	private List<String> datos;
 	
-	public Adapter_clientes(Context context, List<String> values) {
-		super(context, R.layout.item_cliente, values);
+	public Adapter_clientes(Context context, List<String> values, int id_layout) {
+		super(context, id_layout, values);
 		datos = values;
 		this.context = context;
 	}
@@ -28,7 +28,7 @@ public class Adapter_clientes extends ArrayAdapter<String> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.item_cliente, parent, false);
+        convertView = inflater.inflate(R.layout.item_cliente_long, parent, false);
         
         String item = datos.get(position);
         

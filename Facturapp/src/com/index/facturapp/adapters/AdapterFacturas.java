@@ -20,7 +20,7 @@ public class AdapterFacturas extends ArrayAdapter<Factura> {
 	private Context context;
 	
 	public AdapterFacturas(Context context, List<Factura> values) {
-		super(context, R.layout.item_cliente, values);
+		super(context, R.layout.item_cliente_long, values);
 		datos = values;
 		this.context = context;
 	}

@@ -30,7 +30,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	private SQLiteDatabase db;
 	
 	public FacturaDB(Context context){
-		super (context, DATABASE_NAME, null, 8);
+		super (context, DATABASE_NAME, null, 9);
 	}
 	
 	@Override
@@ -134,6 +134,27 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    cliente.setDir(c.getString(c.getColumnIndex("direccion")));
 	    cliente.setLocalidad(c.getString(c.getColumnIndex("localidad")));
 	    cliente.setNombre(c.getString(c.getColumnIndex("nombre")));
+	    
+		return cliente;
+	    }
+	    return null;
+	}
+	
+	public Cliente getCliente(String nombre, String ape1, String ape2) {
+		Cliente cliente = new Cliente();
+		this.db = this.getWritableDatabase();
+		String selectQuery = "SELECT  dni, direccion, localidad FROM cliente where nombre = ? AND apellido1 = ? AND apellido2 = ?";
+		String[] aux = {nombre, ape1, ape2};
+		Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, aux);
+	    if (c != null){
+	        c.moveToFirst();
+	    cliente.setDni(c.getString(c.getColumnIndex("dni")));
+	    cliente.setApellido1(ape1);
+	    cliente.setApellido2(ape2);
+	    cliente.setDir(c.getString(c.getColumnIndex("direccion")));
+	    cliente.setLocalidad(c.getString(c.getColumnIndex("localidad")));
+	    cliente.setNombre(nombre);
 	    
 		return cliente;
 	    }
@@ -339,9 +360,13 @@ public class FacturaDB extends SQLiteOpenHelper {
 	}
 	
 	public void removeCliente(String client) {
-		// TODO Auto-generated method stub
 		this.db = this.getWritableDatabase();
 		String[] cliente = client.split(" ");
+		Cliente cli = this.getCliente(cliente[0], cliente[1], cliente[2]);
+		String[] aux = {String.valueOf(cli.getDni())};
+		ContentValues values = new ContentValues();
+		values.putNull("cliente");
+		db.update("FACTURAS", values, "cliente = ?", aux);
 		db.delete("CLIENTE", "nombre=? AND apellido1 = ? AND apellido2 = ?", cliente);
 	}
 	
@@ -396,7 +421,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		values.put("idcategoria", producto.getCategoria().getId());
 	 
 	    // updating row
-	    db.update("PRODUCTO", values, "nombre" + " = ?", new String []{producto.getNombre()});
+	    db.update("PRODUCTO", values, "nombre = ?", new String []{producto.getNombre()});
 	      
 	}
 	
@@ -467,7 +492,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            Factura fact = new Factura();
 	            fact.setNumFact(c.getInt(c.getColumnIndex("idFactura")));
 	            fact.setEstado(c.getString(c.getColumnIndex("estado")));
-	            if (this.getCliente(c.getString(c.getColumnIndex("cliente")))!= null){
+	            if (!c.isNull(c.getColumnIndex("cliente"))){
 	            	fact.setCliente(this.getCliente(c.getString(c.getColumnIndex("cliente"))));
 	            }
 	            Date date = new Date();
@@ -504,10 +529,11 @@ public class FacturaDB extends SQLiteOpenHelper {
 		this.db = this.getWritableDatabase(); 
 	    ContentValues values = new ContentValues();
 	    values.put("estado", factura.getEstado());
+	    if(factura.getCliente()!= null)
 		values.put("cliente", factura.getCliente().getDni());
 	 
 	    // updating row
-	    db.update("FACTURAS", values, "nombreProducto" + " = ?", new String []{String.valueOf(factura.getNumFact())});
+	    db.update("FACTURAS", values, "idFactura" + " = ?", new String []{String.valueOf(factura.getNumFact())});
 	      
 	}
 	

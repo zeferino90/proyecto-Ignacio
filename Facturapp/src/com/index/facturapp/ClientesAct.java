@@ -37,7 +37,7 @@ public class ClientesAct extends ListActivity {
 			Log.e("dberror", "STACKTRACE");
 			Log.e("DBerror", Log.getStackTraceString(e));
 		}
-		adapter = new Adapter_clientes(this, clientes);
+		adapter = new Adapter_clientes(this, clientes, R.layout.item_cliente_long);
 		setListAdapter(adapter);
 		getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
