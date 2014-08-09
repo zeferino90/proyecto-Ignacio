@@ -35,7 +35,7 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
         if (item!= null) {
             
             TextView nomprod = (TextView) view.findViewById(R.id.nombreProd);
-            EditText nprod = (EditText) view.findViewById(R.id.nProd);
+            TextView nprod = (TextView) view.findViewById(R.id.nProd);
             TextView precioUni = (TextView) view.findViewById(R.id.precioUni);
             TextView precioTotal = (TextView) view.findViewById(R.id.precioTotal);
             if ( nomprod != null ) {

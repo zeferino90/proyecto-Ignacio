@@ -30,7 +30,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	private SQLiteDatabase db;
 	
 	public FacturaDB(Context context){
-		super (context, DATABASE_NAME, null, 9);
+		super (context, DATABASE_NAME, null, 10);
 	}
 	
 	@Override
@@ -66,9 +66,8 @@ public class FacturaDB extends SQLiteOpenHelper {
 	public List<LiniaProducto> getLiniasProducto(Factura factura){
 		List<LiniaProducto> productos = new ArrayList<LiniaProducto>();
 		this.db = this.getWritableDatabase();
-		String[] campos = new String[] {"nombreProducto", "cantidad"};
-		String[] args = new String[] {};
-		args[0] = Integer.toString(factura.getNumFact());
+		String[] campos = new String[] {"nombreProducto", "cantidad", "precio"};
+		String[] args = {Integer.toString(factura.getNumFact())};
 		Cursor c = db.query("LINIAPRODUCTO", campos, "idFactura=?", args, null, null, null);
 		if(c.moveToFirst()){
 			int i = 0;
@@ -78,7 +77,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 				prod.setCantidad(c.getInt(c.getColumnIndex("cantidad")));
 				prod.setFactura(factura.getNumFact());
 				prod.setPrecio(c.getFloat(c.getColumnIndex("precio")));
-				productos.set(i, prod);
+				productos.add(i, prod);
 				i++;
 			} while(c.moveToNext());
 		}

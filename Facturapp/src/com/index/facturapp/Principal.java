@@ -16,8 +16,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.index.facturapp.adapters.AdapterFacturas;
@@ -65,8 +67,8 @@ public class Principal extends ListActivity {
 				Log.e("dberror", "STACKTRACE");
 				Log.e("DBerror", Log.getStackTraceString(e));
 			}
-		adapter = new AdapterFacturas(this, facturas);
-		setListAdapter(adapter);
+		adapter = new AdapterFacturas(myactivity, this, facturas);
+		getListView().setAdapter(adapter);
 		//adapter.notifyDataSetChanged();
 	}
 
@@ -85,8 +87,28 @@ public class Principal extends ListActivity {
 			Log.e("DBerror", Log.getStackTraceString(e));
 		}
 		this.getNumfact(facturas);
-		adapter = new AdapterFacturas(this, facturas);
-		setListAdapter(adapter);
+		adapter = new AdapterFacturas(myactivity, this, facturas);
+		/*getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long id) {
+				Log.e("chivato", "pasando por le onclick");
+				Intent intent = new Intent(myactivity, Gestion_facturas.class);
+				intent.putExtra("idfactura", adapter.getItem(position).getNumFact());
+				intent.putExtra("nuevo", false);
+				startActivity(intent);
+			}
+		});*/
+		/*getListView().setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.e("chivato dos", "Recuperando el tag: " + String.valueOf(v.getTag()));
+			}
+		});*/
+		
+		
+		
 		getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
 			@Override
@@ -234,23 +256,13 @@ public class Principal extends ListActivity {
 					Log.e("dialogerror", "STACKTRACE");
 					Log.e("dialogerror", Log.getStackTraceString(e));
 				}
-				return true;
+				return false;
 			}
 			
 		});
-		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long id) {
-				Intent intent = new Intent(myactivity, Gestion_facturas.class);
-				intent.putExtra("idfactura", adapter.getItem(position).getNumFact());
-				startActivity(intent);
-			}
-		});
-
+		getListView().setAdapter(adapter);
 	}
-	
+
 	protected void getNumfact(List<Factura> facturas) {
 		int n = facturas.size();
 		int aux = 0;
