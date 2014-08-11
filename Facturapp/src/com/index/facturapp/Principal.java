@@ -311,7 +311,7 @@ public class Principal extends ListActivity {
 						e.printStackTrace();
 					}
 					Intent intent = new Intent(myactivity, Gestion_facturas.class);
-					intent.putExtra("nuevo", true);
+					//intent.putExtra("nuevo", true);
 					intent.putExtra("idfactura", factura.getNumFact());
 					startActivity(intent);
 				}

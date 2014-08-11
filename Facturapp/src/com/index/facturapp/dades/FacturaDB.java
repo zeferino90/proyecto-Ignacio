@@ -454,6 +454,13 @@ public class FacturaDB extends SQLiteOpenHelper {
 	      
 	}
 	
+	public void removeLiniaProducto(LiniaProducto lprod) {
+		// TODO Auto-generated method stub
+		this.db = this.getWritableDatabase();
+		String[] lp ={String.valueOf(lprod.getFactura()), String.valueOf(lprod.getNombre())};
+		db.delete("FACTURAS", "idFactura=? AND nombreProducto = ?", lp);
+	}
+	
 	public Factura getFactura(int idfactura) {
 		Factura factura = new Factura();
 		this.db = this.getWritableDatabase();
@@ -541,6 +548,8 @@ public class FacturaDB extends SQLiteOpenHelper {
 		String[] fact ={String.valueOf(factura.getNumFact())};
 		db.delete("FACTURAS", "idFactura=?", fact);
 	}
+
+	
 
 	
 

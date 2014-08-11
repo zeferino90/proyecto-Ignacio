@@ -58,7 +58,7 @@ public class AdapterFacturas extends ArrayAdapter<Factura> {
 					TextView campoidfactura = (TextView) v.findViewById(R.id.idfactura);
 					intent.putExtra("idfactura", Integer.valueOf(campoidfactura.getText().toString()));
 					Log.e("chivato", "Num factura: " + campoidfactura.getText().toString());
-					intent.putExtra("nuevo", false);
+					//intent.putExtra("nuevo", false);
 					FacturaDB fdb = new FacturaDB(myactivity);
 					fdb.close();
 					v.getContext().startActivity(intent);
