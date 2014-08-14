@@ -66,10 +66,9 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
                 layout.setClickable(true);
                 layout.setLongClickable(true);
                 layout.setOnLongClickListener(new View.OnLongClickListener() {
-					
 					@Override
 					public boolean onLongClick(View v) {
-						
+						Log.e("chivato", "se crea el listener");
 						final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
 						String[] items = {"Editar", "Eliminar", "Cancelar"};
 						dialog.setTitle("Opciones");
@@ -173,11 +172,13 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 											else dialog.dismiss();
 										}
 									});
+									dialog2.show();
 								}
 								else dialog.dismiss();
 							}
 							
 						});
+						dialog.show();
 						return false;
 					}
 				});

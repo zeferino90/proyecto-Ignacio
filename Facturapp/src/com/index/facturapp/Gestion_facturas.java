@@ -74,7 +74,7 @@ public class Gestion_facturas extends ListActivity {
 			Log.e("chivato lp", "factura no nueva2");
 			setListAdapter(adaptador);
 			Log.e("chivato lp", "factura no nueva3");
-    		getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+    		/*getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
 				@Override
 				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
@@ -190,7 +190,7 @@ public class Gestion_facturas extends ListActivity {
 					return false;
 				}
     		});
-		//}
+		*///}
 	}
 
 	@Override
