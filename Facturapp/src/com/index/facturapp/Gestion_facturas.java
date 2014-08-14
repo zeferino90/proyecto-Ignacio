@@ -70,9 +70,11 @@ public class Gestion_facturas extends ListActivity {
 			Log.e("chivato lp", "factura no nueva");
 			FacturaDB fdb = new FacturaDB(this);
 			List<LiniaProducto> liniaprod = fdb.getLiniasProducto(fact);
-			adaptador = new Adapter_liniaprod(this, liniaprod);
+			adaptador = new Adapter_liniaprod(this, liniaprod, fact);
+			Log.e("chivato lp", "factura no nueva2");
 			setListAdapter(adaptador);
-    		/*getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			Log.e("chivato lp", "factura no nueva3");
+    		getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
 				@Override
 				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
@@ -188,7 +190,7 @@ public class Gestion_facturas extends ListActivity {
 					return false;
 				}
     		});
-*/		//}
+		//}
 	}
 
 	@Override

@@ -256,7 +256,7 @@ public class Principal extends ListActivity {
 					Log.e("dialogerror", "STACKTRACE");
 					Log.e("dialogerror", Log.getStackTraceString(e));
 				}
-				return false;
+				return true;
 			}
 			
 		});
