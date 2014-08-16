@@ -60,8 +60,8 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
                 // do whatever you want with your string and long
                 nomprod.setText(item.getNombre());
                 nprod.setText(Integer.toString(item.getCantidad()));
-                precioUni.setText(Float.toString(item.getPrecio()));
-                precioTotal.setText(Float.toString(item.getPrecio()* item.getCantidad()));
+                precioUni.setText(Float.toString(item.getPrecio()) + "Û");
+                precioTotal.setText(Float.toString(item.getPrecio()* item.getCantidad()) + "Û");
                 LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.layoutlprod);
                 layout.setClickable(true);
                 layout.setLongClickable(true);
@@ -84,6 +84,8 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 									FacturaDB fdb = new FacturaDB(getContext());
 									final LiniaProducto lprod = datos.get(pos);
 									List<String> categorias = fdb.getCategorias();
+									EditText edi = (EditText)dialog3.findViewById(R.id.cantidad);
+									edi.setText(String.valueOf(lprod.getCantidad()));
 									Spinner spincat = (Spinner)dialog3.findViewById(R.id.spincategoria);
 									ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, categorias); 
 									spincat.setAdapter(adapter);
@@ -137,19 +139,19 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 						                public void onClick(View aceptar) {
 						                	LiniaProducto prod = new LiniaProducto();
 						                	EditText edi = (EditText)dialog3.findViewById(R.id.cantidad);
-						                	prod.setCantidad(Integer.parseInt(edi.getText().toString()));
+						                	lprod.setCantidad(Integer.parseInt(edi.getText().toString()));
 						                	//prod.setFactura(fact.getNumFact());
-						                	prod.setFactura(fact.getNumFact());
+						                	//prod.setFactura(fact.getNumFact());
 						                	Spinner spinprod = (Spinner)dialog3.findViewById(R.id.spinproducto);
-						                	prod.setNombre(spinprod.getSelectedItem().toString());
+						                	lprod.setNombre(spinprod.getSelectedItem().toString());
 						                	TextView preu = (TextView)dialog3.findViewById(R.id.precio);
 						                	CharSequence precio = preu.getText();
 						                	precio.subSequence(0, precio.length());
-						                	prod.setPrecio(Float.parseFloat(precio.subSequence(0, precio.length()-1).toString()));
+						                	lprod.setPrecio(Float.parseFloat(precio.subSequence(0, precio.length()-1).toString()));
 						                	//adaptador.add(prod);
-						                	datos.add(prod);
+						                	datos.set(pos, lprod);
 						                	FacturaDB fdb = new FacturaDB(context);
-						                	fdb.createLiniaproducto(prod);
+						                	fdb.updateLiniaproducto(lprod);
 						                	dialog3.dismiss();
 						                }
 						                });
@@ -168,6 +170,8 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 												LiniaProducto lprod = datos.get(pos);
 												FacturaDB fdb = new FacturaDB(getContext());
 												fdb.removeLiniaProducto(lprod);
+												datos.remove(pos);
+												notificarcanvio();
 											}
 											else dialog.dismiss();
 										}
@@ -191,5 +195,7 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 		return this.datos;
 	}
 	
-	
+	public void notificarcanvio(){
+		this.notifyDataSetChanged();
+	}
 }

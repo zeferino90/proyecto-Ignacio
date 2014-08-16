@@ -68,6 +68,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		this.db = this.getWritableDatabase();
 		String[] campos = new String[] {"nombreProducto", "cantidad", "precio"};
 		String[] args = {Integer.toString(factura.getNumFact())};
+		Log.e("dberror", "Consultando Liniaprod factura: " + String.valueOf(factura.getNumFact()));
 		Cursor c = db.query("LINIAPRODUCTO", campos, "idFactura=?", args, null, null, null);
 		if(c.moveToFirst()){
 			int i = 0;
@@ -171,7 +172,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	        c.moveToFirst();
 	    producto.setNombre(nombre);
 	    producto.setPrecio(c.getFloat(c.getColumnIndex("precio")));
-	    producto.setCategoria(this.getCategoria(c.getInt(c.getColumnIndex("id"))));
+	    producto.setCategoria(this.getCategoria(c.getInt(c.getColumnIndex("idcategoria"))));
 	    
 	    
 	      
@@ -458,19 +459,22 @@ public class FacturaDB extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 		this.db = this.getWritableDatabase();
 		String[] lp ={String.valueOf(lprod.getFactura()), String.valueOf(lprod.getNombre())};
-		db.delete("FACTURAS", "idFactura=? AND nombreProducto = ?", lp);
+		db.delete("LINIAPRODUCTO", "idFactura=? AND nombreProducto = ?", lp);
 	}
 	
 	public Factura getFactura(int idfactura) {
 		Factura factura = new Factura();
 		this.db = this.getWritableDatabase();
 	    String selectQuery = "SELECT  idFactura, fecha, estado, cliente FROM FACTURAS WHERE idFactura = ?";
-	    Log.e("dberror", selectQuery);
-	    Cursor c = db.rawQuery(selectQuery, null);
+	    String[] args = {String.valueOf(idfactura)};
+	    Log.e("dberror", selectQuery  + " idfactura = " + String.valueOf(idfactura));
+	    Cursor c = db.rawQuery(selectQuery, args);
 	    if (c.moveToFirst()) {
 	    	factura.setNumFact(idfactura);
 	    	factura.setEstado(c.getString(c.getColumnIndex("estado")));
-	    	factura.setCliente(this.getCliente(c.getString(c.getColumnIndex("cliente"))));
+	    	if (!c.isNull(c.getColumnIndex("cliente"))){
+            	factura.setCliente(this.getCliente(c.getString(c.getColumnIndex("cliente"))));
+            }
 	    	Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {

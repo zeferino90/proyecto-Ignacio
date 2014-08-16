@@ -11,32 +11,51 @@
         android:id="@+id/nombreProd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:focusable="false"
+        android:paddingRight="10dp"
         android:text="Nombre"
-        android:textAppearance="?android:attr/textAppearanceLarge" 
-        android:focusable="false"/>
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/nProd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:focusable="false"
+        android:paddingRight="2dp"
         android:text="0"
-        android:textAppearance="?android:attr/textAppearanceLarge" 
-        android:focusable="false"/>
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="10dp"
+        android:text="ud."
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/precioUni"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:focusable="false"
+        android:paddingRight="10dp"
         android:text="0.0€"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:focusable="false" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total: "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/precioTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:focusable="false"
+        android:paddingRight="10dp"
         android:text="0.0€"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:focusable="false" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

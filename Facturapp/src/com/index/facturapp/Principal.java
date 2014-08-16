@@ -313,6 +313,7 @@ public class Principal extends ListActivity {
 					Intent intent = new Intent(myactivity, Gestion_facturas.class);
 					//intent.putExtra("nuevo", true);
 					intent.putExtra("idfactura", factura.getNumFact());
+					Log.e("chivato", "creacion nueva factura: " + String.valueOf(factura.getNumFact()));
 					startActivity(intent);
 				}
 

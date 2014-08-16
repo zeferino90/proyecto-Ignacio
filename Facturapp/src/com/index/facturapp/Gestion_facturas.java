@@ -46,6 +46,8 @@ public class Gestion_facturas extends ListActivity {
 		Bundle bundle = getIntent().getExtras();
 		FacturaDB fdb = new FacturaDB(this);
 		fact = fdb.getFactura(bundle.getInt("idfactura"));
+		
+		Log.e("chivato", "recuperando factura: " + String.valueOf(fact.getNumFact())+ "Pero hemos pedido factura: " + String.valueOf(bundle.getInt("idfactura")));
 		//nuevo = bundle.getBoolean("nuevo");
 		activity = this;
 		setContentGestionFacturas();
