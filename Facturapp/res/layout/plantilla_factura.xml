@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="3mm"
+    android:layout_marginLeft="3mm"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/Empresa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/amarillo_claro"
+        android:paddingLeft="3mm"
+        android:text="REFORMAS INTEGRALES \nIGNACIO MACÍA"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/prueva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="texto random"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</LinearLayout>

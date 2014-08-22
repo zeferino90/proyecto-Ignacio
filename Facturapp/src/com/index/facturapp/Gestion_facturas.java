@@ -1,37 +1,37 @@
 package com.index.facturapp;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
+import android.graphics.pdf.PdfDocument;
+import android.graphics.pdf.PdfDocument.Page;
+import android.graphics.pdf.PdfDocument.PageInfo;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.index.facturapp.dades.FacturaDB;
-import com.index.facturapp.clasesextra.Categoria;
+import com.index.facturapp.adapters.Adapter_liniaprod;
 import com.index.facturapp.clasesextra.Factura;
 import com.index.facturapp.clasesextra.LiniaProducto;
 import com.index.facturapp.clasesextra.Producto;
-import com.index.facturapp.adapters.*;
+import com.index.facturapp.dades.FacturaDB;
 
 public class Gestion_facturas extends ListActivity {
 	//Bundle bundle;
@@ -282,9 +282,61 @@ public class Gestion_facturas extends ListActivity {
                 });
 			dialog.show();
 		}
+		else if(id == R.id.exportar){
+			//Habra que preguntar si por dropbox o por mail de momento por mail
+			// create a new document
+			 PdfDocument document = new PdfDocument();
+			 
+			 // crate a page description
+			 int pageWidth = 595;
+			 int pageHeigth = 842;
+			 int pagenumber = 0;
+			 PageInfo pageInfo = new PageInfo.Builder(pageWidth, pageHeigth, pagenumber).create();
+			 // start a page
+			 Page page = document.startPage(pageInfo);
+			 // draw something on the page
+			 View content = LayoutInflater.from(this).inflate(R.layout.plantilla_factura, null);
+			 TextView prueva = (TextView) content.findViewById(R.id.prueva);
+			 prueva.setText("Espero que funciones cabron");
+			 content.draw(page.getCanvas());
+			 
+			 // finish the page
+			 document.finishPage(page);
+			 
+			 // add more pages
+			 File pdffile = new File(this.getFilesDir(), "pdfprueva");
+			 
+			 // write the document content
+			 try {
+				document.writeTo(new FileOutputStream(pdffile));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			 
+			 //close the document
+			 document.close();
+			 String[] to = {"mperesp1990@gmail.com"};
+			 String[] cc = {"mpe1990@msn.com"}; 
+			 enviar(to, cc, "prueva android", "Espero que leas esto por tu bien", pdffile);
+			 Toast.makeText(this, "Enviando el mail", Toast.LENGTH_SHORT).show();
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	
+	private void enviar(String[] to, String[] cc, String asunto, String mensaje, File file) {
+	        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+	        emailIntent.setData(Uri.parse("mailto:"));
+	        //String[] to = direccionesEmail;
+	        //String[] cc = copias;
+	        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+	        emailIntent.putExtra(Intent.EXTRA_CC, cc);
+	        emailIntent.putExtra(Intent.EXTRA_SUBJECT, asunto);
+	        emailIntent.putExtra(Intent.EXTRA_TEXT, mensaje);
+	        emailIntent.setType("message/rfc822");
+	        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+	        startActivity(Intent.createChooser(emailIntent, "Email "));
+	    }
 
 }
