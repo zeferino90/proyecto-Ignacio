@@ -9,13 +9,15 @@ import java.util.List;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfDocument.Page;
 import android.graphics.pdf.PdfDocument.PageInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -295,32 +297,56 @@ public class Gestion_facturas extends ListActivity {
 			 // start a page
 			 Page page = document.startPage(pageInfo);
 			 // draw something on the page
-			 View content = LayoutInflater.from(this).inflate(R.layout.plantilla_factura, null);
-			 TextView prueva = (TextView) content.findViewById(R.id.prueva);
-			 prueva.setText("Espero que funciones cabron");
-			 content.draw(page.getCanvas());
+			 //View content = LayoutInflater.from(this).inflate(R.layout.plantilla_factura, null);
+			 //TextView prueva = (TextView) content.findViewById(R.id.prueva);
+			 //prueva.setText("Espero que funciones cabron");
+			 Canvas canvas = page.getCanvas();
+			 Paint paint = new Paint();
+			 paint.setTextSize(10);
+			 float cero = 10;
+			 canvas.drawText("Esto es un documento revisado por un notario donde le expreso yo Se–or Perez a la se–orita Chervak mi amor", cero, cero, paint);
+			 cero = 20;
+			 canvas.drawText(" incondicional.\nAdemas le deseo un gran dia y deseo verla lo antes posible para que esta noche se lo pueda", cero, cero, paint);
+			 cero = 30;
+			 canvas.drawText(" demostrar como a mi me gusta hacerlo", cero, cero, paint);
 			 
 			 // finish the page
 			 document.finishPage(page);
 			 
 			 // add more pages
-			 File pdffile = new File(this.getFilesDir(), "pdfprueva");
+			 File pdffile;
+			 if(isExternalStorageWritable() && isExternalStorageReadable()){
+				 pdffile = new File(this.getExternalFilesDir(null), "pdfprueva_ext.pdf");
+				 Toast.makeText(this, "Guardado en SDcard", Toast.LENGTH_SHORT).show();
+			 }
+			 else {
+				 pdffile = new File(this.getFilesDir(), "pdfprueva.pdf");
+				 Toast.makeText(this, "Guardado en Interno", Toast.LENGTH_SHORT).show();
+			 }
 			 
 			 // write the document content
-			 try {
-				document.writeTo(new FileOutputStream(pdffile));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+			 FileOutputStream outputstream;
+			try {
+				outputstream = new FileOutputStream(pdffile);
+				document.writeTo(outputstream);
+				outputstream.close();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			 
+			 String[] to = {"lidia.chervak@gmail.com"};
+			 String[] cc = {"mperesp1990@gmail.com"}; 
+			 enviar(to, cc, "prueva android", "contrato notario", pdffile);
+			 Toast.makeText(this, "Enviando el mail", Toast.LENGTH_SHORT).show();
 			 
 			 //close the document
 			 document.close();
-			 String[] to = {"mperesp1990@gmail.com"};
-			 String[] cc = {"mpe1990@msn.com"}; 
-			 enviar(to, cc, "prueva android", "Espero que leas esto por tu bien", pdffile);
-			 Toast.makeText(this, "Enviando el mail", Toast.LENGTH_SHORT).show();
+			 
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -337,6 +363,24 @@ public class Gestion_facturas extends ListActivity {
 	        emailIntent.setType("message/rfc822");
 	        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
 	        startActivity(Intent.createChooser(emailIntent, "Email "));
+	}
+	/* Checks if external storage is available for read and write */
+	public boolean isExternalStorageWritable() {
+	    String state = Environment.getExternalStorageState();
+	    if (Environment.MEDIA_MOUNTED.equals(state)) {
+	        return true;
 	    }
+	    return false;
+	}
+
+	/* Checks if external storage is available to at least read */
+	public boolean isExternalStorageReadable() {
+	    String state = Environment.getExternalStorageState();
+	    if (Environment.MEDIA_MOUNTED.equals(state) ||
+	        Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+	        return true;
+	    }
+	    return false;
+	}
 
 }
