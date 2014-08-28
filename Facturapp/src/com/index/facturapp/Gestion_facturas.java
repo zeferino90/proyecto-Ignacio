@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfDocument.Page;
@@ -296,19 +297,79 @@ public class Gestion_facturas extends ListActivity {
 			 PageInfo pageInfo = new PageInfo.Builder(pageWidth, pageHeigth, pagenumber).create();
 			 // start a page
 			 Page page = document.startPage(pageInfo);
-			 // draw something on the page
-			 //View content = LayoutInflater.from(this).inflate(R.layout.plantilla_factura, null);
-			 //TextView prueva = (TextView) content.findViewById(R.id.prueva);
-			 //prueva.setText("Espero que funciones cabron");
+			 // -----------------draw on the page------------------------------------
 			 Canvas canvas = page.getCanvas();
 			 Paint paint = new Paint();
+			 //Color color = new Color();
+			 int col = Color.parseColor("#fefccd");
+			 paint.setTextSize(12);
+			 float coordX = 0;//horizontal
+			 float coordY = 0;//vertical
+			 //canvas.drawText("prueba", coordX, coordY, paint);
+			 paint.setStyle(Paint.Style.FILL);
+			 paint.setColor(col);
+			 canvas.drawRect(1, 1, 400, 30, paint);
+			 paint.setStyle(Paint.Style.STROKE);
+			 paint.setColor(Color.BLACK);
+			 canvas.drawRect(1, 1, 400, 30, paint);
+			 coordX = 100;
+			 coordY = 13;
+			 canvas.drawText("REFORMAS INTEGRALES", coordX, coordY, paint);
+			 coordY = 23;
+			 canvas.drawText("IGNACIO MACÍA NIF 38080988-A", coordX, coordY, paint);
+			 coordY = 50;
 			 paint.setTextSize(10);
-			 float cero = 10;
-			 canvas.drawText("Esto es un documento revisado por un notario donde le expreso yo Señor Perez a la señorita Chervak mi amor", cero, cero, paint);
-			 cero = 20;
-			 canvas.drawText(" incondicional.\nAdemas le deseo un gran dia y deseo verla lo antes posible para que esta noche se lo pueda", cero, cero, paint);
-			 cero = 30;
-			 canvas.drawText(" demostrar como a mi me gusta hacerlo", cero, cero, paint);
+			 canvas.drawText("Teléfono 637237412", coordX, coordY, paint);
+			 coordX = 500;
+			 paint.setColor(Color.RED);
+			 canvas.drawText("PRESUPUESTO", coordX, coordY, paint);
+			 //---------fin cabecera datos ignacio-------
+			 Paint paint2 = new Paint();
+			 paint.setColor(Color.BLACK);
+			 coordY = 85;
+			 coordX = 3;
+			 paint2.setTextSize(10);
+			 canvas.drawText("Cliente", coordX, coordY, paint2);
+			 coordY = 50;
+			 coordX = 500;
+			 canvas.drawLine(0, coordY+2, coordX-2, coordY+2, paint);
+			 canvas.drawLine(coordX-2, coordY+2, coordX-2, coordY-11, paint);
+			 canvas.drawLine(coordX-2, coordY-11, coordX+96, coordY-11, paint);
+			 coordY = 75;
+			 canvas.drawLine(0, coordY+12, 95, coordY+12, paint);
+			 canvas.drawLine(95, coordY+12, 95, coordY, paint);
+			 canvas.drawLine(95, coordY, 95+300, coordY, paint);
+			 canvas.drawLine(405, coordY+12, 497, coordY+12, paint);
+			 canvas.drawLine(497, coordY+12, 497, coordY, paint);
+			 canvas.drawLine(497, coordY, 595, coordY, paint);
+			 coordX = 407;
+			 coordY = 97;
+			 canvas.drawText("Fecha", coordX, coordY, paint2);
+			 coordX = 500;
+			 canvas.drawText("campofecha", coordX, coordY, paint2);
+			 coordX = 3;
+			 canvas.drawText("Nombre", coordX, coordY, paint2);
+			 coordY = 107;
+			 canvas.drawText("Dirección", coordX, coordY, paint2);
+			 coordY = 117;
+			 canvas.drawText("Localidad", coordX, coordY, paint2);
+			 coordY = 127;
+			 canvas.drawText("Teléfono", coordX, coordY, paint2);
+			 coordX = 95;
+			 coordY = 97;
+			 canvas.drawText("camponombre", coordX, coordY, paint2);
+			 coordY = 107;
+			 canvas.drawText("campodir", coordX, coordY, paint2);
+			 coordY = 117;
+			 canvas.drawText("campolocalidad", coordX, coordY, paint2);
+			 coordY = 127;
+			 canvas.drawText("campotel", coordX, coordY, paint2);
+			 
+			 
+			 
+			 
+			 
+			 
 			 
 			 // finish the page
 			 document.finishPage(page);
@@ -339,8 +400,8 @@ public class Gestion_facturas extends ListActivity {
 			}
 			
 			 
-			 String[] to = {"lidia.chervak@gmail.com"};
-			 String[] cc = {"mperesp1990@gmail.com"}; 
+			 String[] to = {"mperesp1990@gmail.com"};
+			 String[] cc = {"lidia.chervak@gmail.com"}; 
 			 enviar(to, cc, "prueva android", "contrato notario", pdffile);
 			 Toast.makeText(this, "Enviando el mail", Toast.LENGTH_SHORT).show();
 			 
@@ -357,7 +418,8 @@ public class Gestion_facturas extends ListActivity {
 	        //String[] to = direccionesEmail;
 	        //String[] cc = copias;
 	        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-	        emailIntent.putExtra(Intent.EXTRA_CC, cc);
+	        if (cc!= null)
+	        	emailIntent.putExtra(Intent.EXTRA_CC, cc);
 	        emailIntent.putExtra(Intent.EXTRA_SUBJECT, asunto);
 	        emailIntent.putExtra(Intent.EXTRA_TEXT, mensaje);
 	        emailIntent.setType("message/rfc822");
