@@ -27,10 +27,12 @@ public class FacturaDB extends SQLiteOpenHelper {
 	private String sqlCreate4 = "CREATE TABLE FACTURAS (idFactura INTERGER PRIMARY KEY, fecha VARCHAR(60), estado VARCHAR(12), cliente VARCHAR(10))";
 	private String sqlCreate5 = "CREATE TABLE LINIAPRODUCTO (nombreProducto TEXT, idFactura INTEGER, cantidad INTEGER, precio FLOAT(8, 2), PRIMARY KEY(nombreProducto, idFactura))";
 	private String sqlCreate6 = "INSERT INTO CATEGORIA (id, categoria) VALUES (0, 'Sin categoria')";
+	private String sqlCreate7 = "CREATE TABLE IVA (valor INTEGER PRIMARY KEY)";
+	private String sqlCreate8 = "INSERT INTO IVA (valor) VALUES (21)";
 	private SQLiteDatabase db;
 	
 	public FacturaDB(Context context){
-		super (context, DATABASE_NAME, null, 10);
+		super (context, DATABASE_NAME, null, 13);
 	}
 	
 	@Override
@@ -41,6 +43,8 @@ public class FacturaDB extends SQLiteOpenHelper {
 		db.execSQL(sqlCreate4);
 		db.execSQL(sqlCreate5);
 		db.execSQL(sqlCreate6);
+		db.execSQL(sqlCreate7);
+		db.execSQL(sqlCreate8);
 		this.db = db;
 		
 	}
@@ -52,6 +56,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS PRODUCTO");
 		db.execSQL("DROP TABLE IF EXISTS CATEGORIA");
 		db.execSQL("DROP TABLE IF EXISTS CLIENTE");
+		db.execSQL("DROP TABLE IF EXISTS IVA");
 		onCreate(db);
 	}
 	
@@ -61,6 +66,30 @@ public class FacturaDB extends SQLiteOpenHelper {
 	
 	public void closeDB(){
 		this.db.close();
+	}
+	
+	public int getIVA(){
+		int IVA = 0;
+		this.db = this.getWritableDatabase();
+		String selectQuery = "SELECT * FROM IVA";
+		Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, null);
+	    if (c.moveToFirst()) {
+	    	IVA = c.getInt(c.getColumnIndex("valor"));
+	    }
+		return IVA;
+	}
+	
+	public void setIVA(int nIVA, int oIVA){
+		this.db = this.getWritableDatabase();
+		 
+	    ContentValues values = new ContentValues();
+	    values.put("valor", nIVA);
+	 
+	    // updating row
+	    db.update("IVA", values, "valor" + " = ?",
+	            new String[] { String.valueOf(oIVA) });
+	    Log.e("dberror", "Iva actualizado");
 	}
 	
 	public List<LiniaProducto> getLiniasProducto(Factura factura){

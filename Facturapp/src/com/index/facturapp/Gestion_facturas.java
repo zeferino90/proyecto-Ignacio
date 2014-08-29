@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
@@ -295,11 +296,15 @@ public class Gestion_facturas extends ListActivity {
 			 int pageWidth = 595;
 			 int pageHeigth = 842;
 			 int pagenumber = 0;
+			 int actualpage = 0;
+			 boolean iva = false;
 			 PageInfo pageInfo = new PageInfo.Builder(pageWidth, pageHeigth, pagenumber).create();
 			 // start a page
-			 Page page = document.startPage(pageInfo);
+			 //Page page = document.startPage(pageInfo);
+			 List<Page> pages = new ArrayList<Page>();
+			 pages.add(actualpage, document.startPage(pageInfo));
 			 // -----------------draw on the page------------------------------------
-			 Canvas canvas = page.getCanvas();
+			 Canvas canvas = pages.get(actualpage).getCanvas();
 			 Paint paint = new Paint();
 			 //Color color = new Color();
 			 int col = Color.parseColor("#fefccd");
@@ -387,18 +392,89 @@ public class Gestion_facturas extends ListActivity {
 			 canvas.drawText("TOTAL", coordX, coordY-2, paint2);
 			 //---------Generaci—n de linias producto en la factura
 			 int nlprod = 10;
-			 for(int i = 0; i < nlprod; i++){
-				 
+			 int i = 0;
+			 while (i < nlprod){
+				 if(coordY > 740){
+					// finish the page
+					 document.finishPage(pages.get(actualpage));
+					 actualpage++;
+					 pages.add(actualpage, document.startPage(pageInfo));
+					 canvas = pages.get(actualpage).getCanvas();
+					 coordY = 40;
+					 canvas.drawLine(0, coordY, 595, coordY, paint);
+					 coordY += 12;
+					 canvas.drawLine(0, coordY, 595, coordY, paint);
+					 coordX = 25;
+					 canvas.drawText("Cantidad", coordX, coordY-2, paint2);
+					 coordX = 95;
+					 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+					 coordX = 235;
+					 canvas.drawText("Descripci—n", coordX, coordY-2, paint2);
+					 coordX = 405;
+					 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+					 coordX = 415;
+					 canvas.drawText("Precio unitario", coordX, coordY-2, paint2);
+					 coordX = 500;
+					 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+					 coordX = 535;
+					 canvas.drawText("TOTAL", coordX, coordY-2, paint2);
+				 } 
+				 coordY += 12;
+				 canvas.drawLine(0, coordY, 595, coordY, paint);
+				 coordX = 95;
+				 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+				 coordX = 405;
+				 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+				 coordX = 500;
+				 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+				 coordX = 25;
+				 canvas.drawText("n¼", coordX, coordY-2, paint2);
+				 coordX = 97;
+				 canvas.drawText("ese producto to rexu", coordX, coordY-2, paint2);
+				 coordX = 415;
+				 canvas.drawText("PU", coordX, coordY-2, paint2);
+				 coordX = 535;
+				 canvas.drawText("20000", coordX, coordY-2, paint2);
+				 i++;
+			 }
+			 coordY = 740 + 12;
+			 coordX = 415;
+			 canvas.drawText("Subtotal", coordX, coordY-2, paint2);
+			 coordX = 535;
+			 canvas.drawText("total", coordX, coordY-2, paint2);
+			 coordY +=12;
+			 Paint paint3 = new Paint();
+			 paint3.setStyle(Paint.Style.STROKE);
+			 paint3.setColor(Color.BLACK);
+			 canvas.drawLine(0, coordY+12, 95, coordY+12, paint3);
+			 canvas.drawLine(95, coordY+12, 95, coordY, paint3);
+			 canvas.drawLine(95, coordY, 295, coordY, paint3);
+			 if(iva){
+				 coordY += 12;
+				 coordX = 415;
+				 canvas.drawText("IVA + %", coordX, coordY, paint2);
+				 coordX = 535;
+				 canvas.drawText("precioIVA", coordX, coordY, paint2);
+				 coordY += 12;
+				 coordX = 415;
+				 canvas.drawText("TOTAL", coordX, coordY, paint2);
+				 coordX = 535;
+				 canvas.drawText("preciototal", coordX, coordY, paint2);
+			 }
+			 else{
+				 coordY += 12;
+				 coordX = 130;
+				 canvas.drawText("IVA NO INCLUIDO", coordX, coordY, paint2);
+				 coordY += 12;
+				 coordX = 415;
+				 canvas.drawText("TOTAL", coordX, coordY, paint2);
+				 coordX = 535;
+				 canvas.drawText("preciototal", coordX, coordY, paint2);
+				 //a–adir notas si cal
 			 }
 			 
-			 
-			 
-			 
-			 
-			 
-			 
 			 // finish the page
-			 document.finishPage(page);
+			 document.finishPage(pages.get(actualpage));
 			 
 			 // add more pages
 			 File pdffile;
@@ -427,8 +503,8 @@ public class Gestion_facturas extends ListActivity {
 			
 			 
 			 String[] to = {"mperesp1990@gmail.com"};
-			 String[] cc = {"lidia.chervak@gmail.com"}; 
-			 enviar(to, cc, "prueva android", "contrato notario", pdffile);
+			 String[] cc = {}; 
+			 enviar(to, null, "prueva android", "contrato notario", pdffile);
 			 Toast.makeText(this, "Enviando el mail", Toast.LENGTH_SHORT).show();
 			 
 			 //close the document

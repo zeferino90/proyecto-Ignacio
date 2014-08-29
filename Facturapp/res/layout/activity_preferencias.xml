@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
         android:text="@string/catprod"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -19,7 +20,33 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/cateprod"
+        android:layout_marginTop="15dp"
         android:text="Clientes"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/clietes"
+        android:layout_marginTop="14dp" >
+
+        <TextView
+            android:id="@+id/IVA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IVA"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/nIVA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="number" />
+    </LinearLayout>
 
 </RelativeLayout>
