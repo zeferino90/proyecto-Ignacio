@@ -11,6 +11,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfDocument.Page;
@@ -364,6 +365,31 @@ public class Gestion_facturas extends ListActivity {
 			 canvas.drawText("campolocalidad", coordX, coordY, paint2);
 			 coordY = 127;
 			 canvas.drawText("campotel", coordX, coordY, paint2);
+			 coordY = 137;
+			 paint.setStyle(Paint.Style.STROKE);
+			 paint.setPathEffect(new DashPathEffect(new float[]{1, 2}, 0));
+			 canvas.drawLine(0, coordY, 595, coordY, paint);
+			 coordY = 149;
+			 canvas.drawLine(0, coordY, 595, coordY, paint);
+			 coordX = 25;
+			 canvas.drawText("Cantidad", coordX, coordY-2, paint2);
+			 coordX = 95;
+			 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+			 coordX = 235;
+			 canvas.drawText("Descripci—n", coordX, coordY-2, paint2);
+			 coordX = 405;
+			 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+			 coordX = 415;
+			 canvas.drawText("Precio unitario", coordX, coordY-2, paint2);
+			 coordX = 500;
+			 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+			 coordX = 535;
+			 canvas.drawText("TOTAL", coordX, coordY-2, paint2);
+			 //---------Generaci—n de linias producto en la factura
+			 int nlprod = 10;
+			 for(int i = 0; i < nlprod; i++){
+				 
+			 }
 			 
 			 
 			 
