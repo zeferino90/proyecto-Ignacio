@@ -28,7 +28,8 @@
         </activity>
         <activity
             android:name=".Preferencias"
-            android:label="@string/title_activity_preferencias" >
+            android:label="@string/title_activity_preferencias"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".Managecatprod"

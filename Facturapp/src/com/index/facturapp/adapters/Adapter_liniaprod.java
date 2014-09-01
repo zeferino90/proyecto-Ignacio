@@ -1,6 +1,9 @@
 package com.index.facturapp.adapters;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -60,15 +63,15 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
                 // do whatever you want with your string and long
                 nomprod.setText(item.getNombre());
                 nprod.setText(Integer.toString(item.getCantidad()));
-                precioUni.setText(Float.toString(item.getPrecio()) + "Û");
-                precioTotal.setText(Float.toString(item.getPrecio()* item.getCantidad()) + "Û");
+                NumberFormat nformat = NumberFormat.getCurrencyInstance(Locale.FRANCE);
+                precioUni.setText(nformat.format(item.getPrecio()));
+                precioTotal.setText(nformat.format(item.getPrecio()* item.getCantidad()));
                 LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.layoutlprod);
                 layout.setClickable(true);
                 layout.setLongClickable(true);
                 layout.setOnLongClickListener(new View.OnLongClickListener() {
 					@Override
 					public boolean onLongClick(View v) {
-						Log.e("chivato", "se crea el listener");
 						final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
 						String[] items = {"Editar", "Eliminar", "Cancelar"};
 						dialog.setTitle("Opciones");
@@ -113,7 +116,8 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 								        				public void onItemSelected(AdapterView<?> parent,
 								        		                android.view.View v, int position, long id){
 								        						TextView precio = (TextView)dialog3.findViewById(R.id.precio);
-								        						precio.setText(String.valueOf(productos.get(position).getPrecio()) + "Û");
+								        						NumberFormat nformat = NumberFormat.getCurrencyInstance(Locale.FRANCE);
+								        						precio.setText(nformat.format(productos.get(position).getPrecio()));
 								        						//poner formato a euro correctamente
 								        				}
 								        				public void onNothingSelected(AdapterView<?> parent) {
@@ -146,12 +150,18 @@ public class Adapter_liniaprod extends ArrayAdapter<LiniaProducto> {
 						                	lprod.setNombre(spinprod.getSelectedItem().toString());
 						                	TextView preu = (TextView)dialog3.findViewById(R.id.precio);
 						                	CharSequence precio = preu.getText();
-						                	precio.subSequence(0, precio.length());
-						                	lprod.setPrecio(Float.parseFloat(precio.subSequence(0, precio.length()-1).toString()));
+						                	NumberFormat nformat = NumberFormat.getCurrencyInstance(Locale.FRANCE);
+						                	try {
+												lprod.setPrecio(nformat.parse(precio.toString()).floatValue());
+											} catch (ParseException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
 						                	//adaptador.add(prod);
 						                	datos.set(pos, lprod);
 						                	FacturaDB fdb = new FacturaDB(context);
 						                	fdb.updateLiniaproducto(lprod);
+						                	notificarcanvio();
 						                	dialog3.dismiss();
 						                }
 						                });

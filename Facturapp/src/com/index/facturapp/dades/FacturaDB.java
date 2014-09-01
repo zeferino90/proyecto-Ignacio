@@ -92,6 +92,15 @@ public class FacturaDB extends SQLiteOpenHelper {
 	    Log.e("dberror", "Iva actualizado");
 	}
 	
+	public boolean existsLiniaProducto (LiniaProducto lprod){
+		LiniaProducto aux = new LiniaProducto();
+		this.db = this.getWritableDatabase();
+		String[] campos = new String[]{"nombreProducto", "cantidad", "precio", "idFactura"};
+		String[] args = {lprod.getNombre(), Integer.toString(lprod.getFactura())};
+		Cursor c = db.query("LINIAPRODUCTO", campos, "nombreProducto = ? and idFactura = ?", args, null, null, null);
+		return c.moveToFirst();
+	}
+	
 	public List<LiniaProducto> getLiniasProducto(Factura factura){
 		List<LiniaProducto> productos = new ArrayList<LiniaProducto>();
 		this.db = this.getWritableDatabase();

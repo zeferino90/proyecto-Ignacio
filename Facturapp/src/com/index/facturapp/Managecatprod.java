@@ -15,6 +15,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -279,7 +280,6 @@ public class Managecatprod extends ActionBarActivity implements
 							
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								// TODO Auto-generated method stub
 								if (which == 0){
 									String paborrar = adapter.getItem(pos);
 									adapter.remove(paborrar);
@@ -341,14 +341,57 @@ public class Managecatprod extends ActionBarActivity implements
 		                int position, long id) {
 					final int pos = position;	
 					final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-					String[] items = {"Eliminar", "Cancelar"};
-					dialog.setTitle("Estas seguro de eliminar " + adapter.getItem(position) + "?");
+					String[] items = {"Editar", "Eliminar", "Cancelar"};
+					dialog.setTitle("Que desea hacer con " + adapter.getItem(position) + "?");
 					dialog.setItems(items, new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
+							
 							if (which == 0){
+								final FacturaDB fdb = new FacturaDB(getActivity());
+								final AlertDialog.Builder dialog2 = new AlertDialog.Builder(getActivity());
+								LayoutInflater inflater = getActivity().getLayoutInflater();
+								final View layout2 = inflater.inflate(R.layout.productodialog, null);
+								dialog2.setView(layout2);
+								Spinner campocat = (Spinner)layout2.findViewById(R.id.categoriaprod);
+								List<String> values = fdb.getCategorias();
+								ArrayAdapter<String> adapterspin = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, values);
+								campocat.setAdapter(adapterspin);
+								final String nprod = adapter.getItem(pos);
+								Producto prod = fdb.getProducto(nprod);
+								EditText camponombre = (EditText) layout2.findViewById(R.id.nombreprod);
+								EditText campoprecio = (EditText) layout2.findViewById(R.id.precioprod);
+								camponombre.setText(prod.getNombre());
+								campoprecio.setText(String.valueOf(prod.getPrecio()));
+								int posspin = adapterspin.getPosition(prod.getCategoria().getCategoria());
+								campocat.setSelection(posspin);
+								dialog2.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										dialog.dismiss();
+										
+									}
+								});
+								dialog2.setPositiveButton("Actualizar", new DialogInterface.OnClickListener(){
+									@Override
+									public void onClick(DialogInterface dialog, int id){
+										EditText camponombre = (EditText) layout2.findViewById(R.id.nombreprod);
+										EditText campoprecio = (EditText) layout2.findViewById(R.id.precioprod);
+										Spinner campocat = (Spinner)layout2.findViewById(R.id.categoriaprod);
+										Producto prod = new Producto();
+										prod.setNombre(camponombre.getText().toString());
+										prod.setPrecio(Float.valueOf(campoprecio.getText().toString()));
+										prod.setCategoria(fdb.getCategoria(campocat.getSelectedItem().toString()));
+										ProdFragment.addItem(camponombre.getText().toString());
+										fdb.updateProducto(prod);
+									}
+								});
+								
+								dialog2.show();
+							}
+							else if (which == 1){
 								String paborrar = adapter.getItem(pos);
 								adapter.remove(paborrar);
 								fdb.removeProducto(paborrar);
