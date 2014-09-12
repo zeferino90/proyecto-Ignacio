@@ -88,123 +88,6 @@ public class Gestion_facturas extends ListActivity {
 			Log.e("chivato lp", "factura no nueva2");
 			setListAdapter(adaptador);
 			Log.e("chivato lp", "factura no nueva3");
-    		/*getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-				@Override
-				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-						int position, long id) {
-					final int pos = position;
-					final AlertDialog.Builder dialog = new AlertDialog.Builder(getBaseContext());
-					String[] items = {"Editar", "Eliminar", "Cancelar"};
-					dialog.setTitle("Opciones");
-					dialog.setItems(items, new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int witch) {
-							if(witch == 0){
-								final Dialog dialog3 = new Dialog(getBaseContext());
-								dialog3.setContentView(R.layout.liniaproductdialog);
-								dialog3.setTitle("Escoge tu producto");
-								
-								FacturaDB fdb = new FacturaDB(getBaseContext());
-								final LiniaProducto lprod = adaptador.getItem(pos);
-								List<String> categorias = fdb.getCategorias();
-								Spinner spincat = (Spinner)dialog3.findViewById(R.id.spincategoria);
-								ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, categorias); 
-								spincat.setAdapter(adapter);
-								int poscat = adapter.getPosition(fdb.getProducto(lprod.getNombre()).getCategoria().getCategoria());
-								spincat.setSelection(poscat);
-								spincat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-							        public void onItemSelected(AdapterView<?> parent,
-							                android.view.View v, int position, long id) {
-							        			FacturaDB fdb = new FacturaDB(getApplicationContext());
-							        			List<String> categorias = fdb.getCategorias();
-							        			final List<Producto> productos = fdb.getProductoscat(fdb.getCategoria(categorias.get(position)).getId());
-							        			Spinner spinprod = (Spinner)dialog3.findViewById(R.id.spinproducto);
-							        			int n = productos.size();
-							        			//Log.e("dberror", "El numero de productos es:" + n + "y la posicion es: " + position + "Y las categorias son: " + categorias.get(0) + categorias.get(1));
-							        			String[] prods = new String[n];
-							        			for(int i = 0; i < n; i++){
-							        				prods[i] = productos.get(i).getNombre();
-							        				Log.e("dberror", productos.get(i).getNombre());
-							        			}
-							        			ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, prods);
-							        			spinprod.setAdapter(adapter2);
-							        			int posprod = adapter2.getPosition(lprod.getNombre());
-							        			spinprod.setSelection(posprod);
-							        			spinprod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-							        				public void onItemSelected(AdapterView<?> parent,
-							        		                android.view.View v, int position, long id){
-							        						TextView precio = (TextView)dialog3.findViewById(R.id.precio);
-							        						precio.setText(String.valueOf(productos.get(position).getPrecio()) + "€");
-							        						//poner formato a euro correctamente
-							        				}
-							        				public void onNothingSelected(AdapterView<?> parent) {
-							        		            
-							        		        }
-							        			});
-							        		
-							        			
-							            }
-							        public void onNothingSelected(AdapterView<?> parent) {
-							            
-							        }
-								});
-								
-								Button button = (Button)dialog3.findViewById(R.id.declinar);
-					            button.setOnClickListener(new View.OnClickListener(){
-					                public void onClick(View declinar) {
-					                	dialog3.dismiss();
-					                }
-					                });
-					            Button button2 = (Button)dialog3.findViewById(R.id.confirmar);
-					            button2.setOnClickListener(new View.OnClickListener(){
-					                public void onClick(View aceptar) {
-					                	LiniaProducto prod = new LiniaProducto();
-					                	EditText edi = (EditText)dialog3.findViewById(R.id.cantidad);
-					                	prod.setCantidad(Integer.parseInt(edi.getText().toString()));
-					                	//prod.setFactura(fact.getNumFact());
-					                	prod.setFactura(fact.getNumFact());
-					                	Spinner spinprod = (Spinner)dialog3.findViewById(R.id.spinproducto);
-					                	prod.setNombre(spinprod.getSelectedItem().toString());
-					                	TextView preu = (TextView)dialog3.findViewById(R.id.precio);
-					                	CharSequence precio = preu.getText();
-					                	precio.subSequence(0, precio.length());
-					                	prod.setPrecio(Float.parseFloat(precio.subSequence(0, precio.length()-1).toString()));
-					                	adaptador.add(prod);
-					                	FacturaDB fdb = new FacturaDB(activity);
-					                	fdb.createLiniaproducto(prod);
-					                	dialog3.dismiss();
-					                }
-					                });
-								dialog3.show();
-							}
-							else if (witch == 1){
-								final AlertDialog.Builder dialog2 = new AlertDialog.Builder(getBaseContext());
-								String[] items = {"Si", "Cancelar"};
-								dialog2.setTitle("Seguro que desea eliminar?");
-								dialog2.setItems(items, new DialogInterface.OnClickListener() {
-
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										if(which == 0){
-											LiniaProducto lprod = adaptador.getItem(pos);
-											FacturaDB fdb = new FacturaDB(getBaseContext());
-											fdb.removeLiniaProducto(lprod);
-										}
-										else dialog.dismiss();
-									}
-								});
-							}
-							else dialog.dismiss();
-						}
-						
-					});
-					return false;
-				}
-    		});
-		*///}
 	}
 
 	@Override
@@ -308,271 +191,262 @@ public class Gestion_facturas extends ListActivity {
 		else if(id == R.id.exportar){
 			//Habra que preguntar si por dropbox o por mail de momento por mail
 			final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-			String[] items = {"Factura", "Pressupuesto(building)"};
+			String[] items = {"Factura", "Pressupuesto"};
 			dialog.setTitle("Escoge el formato");
 			dialog.setItems(items, new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface arg0, int which) {
-					
-					
-					if(which == 0){ 
-						final AlertDialog.Builder dialog2 = new AlertDialog.Builder(activity);
-						dialog2.setTitle("Con IVA?");
-						String[] items = {"Si", "No"};
-						dialog2.setItems(items, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// create a new document
-								PdfDocument document = new PdfDocument();
-								boolean iva = true;
-								if(which == 0){
-									iva = true;
-								}
-								else iva = false;
-								// crate a page description
-								 int pageWidth = 595;
-								 int pageHeigth = 842;
-								 int pagenumber = 0;
-								 int actualpage = 0;
-								 PageInfo pageInfo = new PageInfo.Builder(pageWidth, pageHeigth, pagenumber).create();
-								 // start a page
-								 //Page page = document.startPage(pageInfo);
-								 List<Page> pages = new ArrayList<Page>();
-								 pages.add(actualpage, document.startPage(pageInfo));
-								 // -----------------draw on the page------------------------------------
-								 Canvas canvas = pages.get(actualpage).getCanvas();
-								 Paint paint = new Paint();
-								 //Color color = new Color();
-								 int col = Color.parseColor("#fefccd");
-								 paint.setTextSize(12);
-								 float coordX = 0;//horizontal
-								 float coordY = 0;//vertical
-								 //canvas.drawText("prueba", coordX, coordY, paint);
-								 paint.setStyle(Paint.Style.FILL);
-								 paint.setColor(col);
-								 canvas.drawRect(1, 1, 400, 30, paint);
-								 paint.setStyle(Paint.Style.STROKE);
-								 paint.setColor(Color.BLACK);
-								 canvas.drawRect(1, 1, 400, 30, paint);
-								 coordX = 100;
-								 coordY = 13;
-								 canvas.drawText("REFORMAS INTEGRALES", coordX, coordY, paint);
-								 coordY = 23;
-								 canvas.drawText("IGNACIO MACÍA NIF 38080988-A", coordX, coordY, paint);
-								 coordY = 50;
-								 paint.setTextSize(10);
-								 canvas.drawText("Teléfono 637237412", coordX, coordY, paint);
-								 coordX = 500;
-								 paint.setColor(Color.RED);
-								 canvas.drawText("PRESUPUESTO", coordX, coordY, paint);
-								 //---------fin cabecera datos ignacio-------
-								 Paint paint2 = new Paint();
-								 paint.setColor(Color.BLACK);
-								 coordY = 85;
-								 coordX = 3;
-								 paint2.setTextSize(10);
-								 canvas.drawText("Cliente", coordX, coordY, paint2);
-								 coordY = 50;
-								 coordX = 500;
-								 canvas.drawLine(0, coordY+2, coordX-2, coordY+2, paint);
-								 canvas.drawLine(coordX-2, coordY+2, coordX-2, coordY-11, paint);
-								 canvas.drawLine(coordX-2, coordY-11, coordX+96, coordY-11, paint);
-								 coordY = 75;
-								 canvas.drawLine(0, coordY+12, 95, coordY+12, paint);
-								 canvas.drawLine(95, coordY+12, 95, coordY, paint);
-								 canvas.drawLine(95, coordY, 95+300, coordY, paint);
-								 canvas.drawLine(405, coordY+12, 497, coordY+12, paint);
-								 canvas.drawLine(497, coordY+12, 497, coordY, paint);
-								 canvas.drawLine(497, coordY, 595, coordY, paint);
-								 coordX = 407;
-								 coordY = 97;
-								 canvas.drawText("Fecha", coordX, coordY, paint2);
-								 coordX = 500;
-								 SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault());
-								 canvas.drawText(sdf.format(fact.getData()), coordX, coordY, paint2);
-								 coordX = 3;
-								 canvas.drawText("Nombre", coordX, coordY, paint2);
-								 coordY = 107;
-								 canvas.drawText("Dirección", coordX, coordY, paint2);
-								 coordY = 117;
-								 canvas.drawText("Localidad", coordX, coordY, paint2);
-								 coordY = 127;
-								 canvas.drawText("Teléfono", coordX, coordY, paint2);
-								 coordX = 95;
-								 coordY = 97;
-								 if(fact.getCliente() != null){
-									 String aux = fact.getCliente().getNombre();
-									 aux = aux.concat(" ");
-									 aux = aux.concat(fact.getCliente().getApellido1());
-									 aux = aux.concat(" ");
-									 aux = aux.concat(fact.getCliente().getApellido2());
-									 canvas.drawText(aux, coordX, coordY, paint2);
-									 coordY = 107;
-									 canvas.drawText(fact.getCliente().getDir(), coordX, coordY, paint2);
-									 coordY = 117;
-									 canvas.drawText(fact.getCliente().getLocalidad(), coordX, coordY, paint2);
-									 coordY = 127;
-									 canvas.drawText("campotel", coordX, coordY, paint2);
-								 }
-								 coordY = 137;
-								 paint.setStyle(Paint.Style.STROKE);
-								 paint.setPathEffect(new DashPathEffect(new float[]{1, 2}, 0));
-								 canvas.drawLine(0, coordY, 595, coordY, paint);
-								 coordY = 149;
-								 canvas.drawLine(0, coordY, 595, coordY, paint);
-								 coordX = 25;
-								 canvas.drawText("Cantidad", coordX, coordY-2, paint2);
-								 coordX = 95;
-								 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
-								 coordX = 235;
-								 canvas.drawText("Descripción", coordX, coordY-2, paint2);
-								 coordX = 405;
-								 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
-								 coordX = 415;
-								 canvas.drawText("Precio unitario", coordX, coordY-2, paint2);
-								 coordX = 500;
-								 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
-								 coordX = 535;
-								 canvas.drawText("TOTAL", coordX, coordY-2, paint2);
-								 //---------Generación de linias producto en la factura
-								 
-								 int i = 0;
-								 float subtotal = 0;
-								 List<LiniaProducto> lprod = adaptador.getLiniasProducto();
-								 int nlprod = lprod.size();
-								 while (i < nlprod){
-									 if(coordY > 740){
-										// finish the page
-										 document.finishPage(pages.get(actualpage));
-										 actualpage++;
-										 pages.add(actualpage, document.startPage(pageInfo));
-										 canvas = pages.get(actualpage).getCanvas();
-										 coordY = 40;
-										 canvas.drawLine(0, coordY, 595, coordY, paint);
-										 coordY += 12;
-										 canvas.drawLine(0, coordY, 595, coordY, paint);
-										 coordX = 25;
-										 canvas.drawText("Cantidad", coordX, coordY-2, paint2);
-										 coordX = 95;
-										 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
-										 coordX = 235;
-										 canvas.drawText("Descripción", coordX, coordY-2, paint2);
-										 coordX = 405;
-										 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
-										 coordX = 415;
-										 canvas.drawText("Precio unitario", coordX, coordY-2, paint2);
-										 coordX = 500;
-										 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
-										 coordX = 535;
-										 canvas.drawText("TOTAL", coordX, coordY-2, paint2);
-									 } 
-									 coordY += 12;
-									 canvas.drawLine(0, coordY, 595, coordY, paint);
-									 coordX = 95;
-									 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
-									 coordX = 405;
-									 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
-									 coordX = 500;
-									 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
-									 coordX = 25;
-									 int cant = lprod.get(i).getCantidad();
-									 canvas.drawText(String.valueOf(cant), coordX, coordY-2, paint2);
-									 coordX = 97;
-									 canvas.drawText(lprod.get(i).getNombre(), coordX, coordY-2, paint2);
-									 coordX = 415;
-									 NumberFormat nformat = NumberFormat.getCurrencyInstance(Locale.FRANCE);
-									 float precio = lprod.get(i).getPrecio();
-									 canvas.drawText(nformat.format(precio), coordX, coordY-2, paint2);
-									 coordX = 535;
-									 float lprodtotal = cant * precio;
-									 
-									 subtotal += lprodtotal;
-									 canvas.drawText(nformat.format(lprodtotal), coordX, coordY-2, paint2);
-									 i++;
-								 }
-								 coordY = 740 + 12;
-								 coordX = 415;
-								 canvas.drawText("Subtotal", coordX, coordY-2, paint2);
-								 coordX = 535;
-								 NumberFormat nformat = NumberFormat.getCurrencyInstance(Locale.FRANCE);
-								 canvas.drawText(nformat.format(subtotal), coordX, coordY-2, paint2);
-								 coordY +=12;
-								 Paint paint3 = new Paint();
-								 paint3.setStyle(Paint.Style.STROKE);
-								 paint3.setColor(Color.BLACK);
-								 canvas.drawLine(0, coordY+12, 95, coordY+12, paint3);
-								 canvas.drawLine(95, coordY+12, 95, coordY, paint3);
-								 canvas.drawLine(95, coordY, 295, coordY, paint3);
-								 if(iva){
-									 coordY += 12;
-									 coordX = 415;
-									 FacturaDB fdb = new FacturaDB(activity);
-									 int niva = fdb.getIVA();
-									 canvas.drawText("IVA " + String.valueOf(niva) + "%", coordX, coordY, paint2);
-									 coordX = 535;
-									 float precioIVA = (subtotal*niva)/ 100;
-									 canvas.drawText(nformat.format(precioIVA), coordX, coordY, paint2);
-									 coordY += 12;
-									 coordX = 415;
-									 canvas.drawText("TOTAL", coordX, coordY, paint2);
-									 coordX = 535;
-									 subtotal += precioIVA;
-									 canvas.drawText(nformat.format(subtotal), coordX, coordY, paint2);
-								 }
-								 else{
-									 coordY += 12;
-									 coordX = 130;
-									 canvas.drawText("IVA NO INCLUIDO", coordX, coordY, paint2);
-									 coordY += 12;
-									 coordX = 415;
-									 canvas.drawText("TOTAL", coordX, coordY, paint2);
-									 coordX = 535;
-									 canvas.drawText(nformat.format(subtotal), coordX, coordY, paint2);
-									 //añadir notas si cal
-								 }
-								 
-								 // finish the page
-								 document.finishPage(pages.get(actualpage));
-								 File pdffile;
-								 if(isExternalStorageWritable() && isExternalStorageReadable()){
-									 pdffile = new File(activity.getExternalFilesDir(null), "pdfprueva_ext.pdf");
-									 Toast.makeText(activity, "Guardado en SDcard", Toast.LENGTH_SHORT).show();
-								 }
-								 else {
-									 pdffile = new File(activity.getFilesDir(), "pdfprueva.pdf");
-									 Toast.makeText(activity, "Guardado en Interno", Toast.LENGTH_SHORT).show();
-								 }
-								// write the document content
-								 FileOutputStream outputstream;
-								try {
-									outputstream = new FileOutputStream(pdffile);
-									document.writeTo(outputstream);
-									outputstream.close();
-								} catch (FileNotFoundException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								} catch (IOException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								
-								 
-								 String[] to = {"mperesp1990@gmail.com"};
-								 String[] cc = {}; 
-								 enviar(to, cc, "prueva android", "contrato notario", pdffile);
-								 Toast.makeText(activity, "Enviando el mail", Toast.LENGTH_SHORT).show();
-								 
-								 //close the document
-								 document.close();
-							}
-							
-						});
-						dialog2.show();
+					// create a new document
+					PdfDocument document = new PdfDocument();
+					boolean iva = true;
+					if(which == 0){
+						iva = true;
 					}
-					else {
-						Toast.makeText(activity, "le has dado a pressupuesto", Toast.LENGTH_SHORT).show();
+					else iva = false;
+					// crate a page description
+					 int pageWidth = 595;
+					 int pageHeigth = 842;
+					 int pagenumber = 0;
+					 int actualpage = 0;
+					 PageInfo pageInfo = new PageInfo.Builder(pageWidth, pageHeigth, pagenumber).create();
+					 // start a page
+					 //Page page = document.startPage(pageInfo);
+					 List<Page> pages = new ArrayList<Page>();
+					 pages.add(actualpage, document.startPage(pageInfo));
+					 // -----------------draw on the page------------------------------------
+					 Canvas canvas = pages.get(actualpage).getCanvas();
+					 Paint paint = new Paint();
+					 paint.setTextSize(12);
+					 float coordX = 0;//horizontal
+					 float coordY = 0;//vertical
+					 //Color color = new Color();
+					 if(iva){
+						 //cabeceraIgnacio+numfact
+						 int col = Color.parseColor("#fefccd");
+						 //canvas.drawText("prueba", coordX, coordY, paint);
+						 int nfact = fact.getNumFact();
+						 int n = nxifres(nfact);
+						 coordY = 13;
+						 coordX = 595 - (n+7*5);
+						 canvas.drawText("N∫ Fact:" + String.valueOf(nfact), coordX, coordY, paint);
+						 paint.setStyle(Paint.Style.FILL);
+						 paint.setColor(col);
+						 canvas.drawRect(1, 1, 400, 30, paint);
+						 paint.setStyle(Paint.Style.STROKE);
+						 paint.setColor(Color.BLACK);
+						 canvas.drawRect(1, 1, 400, 30, paint);
+						 coordX = 100;
+						 coordY = 13;
+						 canvas.drawText("REFORMAS INTEGRALES", coordX, coordY, paint);
+						 coordY = 23;
+						 canvas.drawText("IGNACIO MACÕA NIF 38080988-A", coordX, coordY, paint);
+						 coordY = 50;
+						 paint.setTextSize(10);
+						 canvas.drawText("TelÈfono 637237412", coordX, coordY, paint);
+						 coordX = 500;
+						 paint.setColor(Color.RED);
+						 canvas.drawText("PRESUPUESTO", coordX, coordY, paint);
+						 //---------fin cabecera datos ignacio-------
+					 }
+					 Paint paint2 = new Paint();
+					 paint.setColor(Color.BLACK);
+					 coordY = 85;
+					 coordX = 3;
+					 paint2.setTextSize(10);
+					 canvas.drawText("Cliente", coordX, coordY, paint2);
+					 coordY = 50;
+					 coordX = 500;
+					 canvas.drawLine(0, coordY+2, coordX-2, coordY+2, paint);
+					 canvas.drawLine(coordX-2, coordY+2, coordX-2, coordY-11, paint);
+					 canvas.drawLine(coordX-2, coordY-11, coordX+96, coordY-11, paint);
+					 coordY = 75;
+					 canvas.drawLine(0, coordY+12, 95, coordY+12, paint);
+					 canvas.drawLine(95, coordY+12, 95, coordY, paint);
+					 canvas.drawLine(95, coordY, 95+300, coordY, paint);
+					 canvas.drawLine(405, coordY+12, 497, coordY+12, paint);
+					 canvas.drawLine(497, coordY+12, 497, coordY, paint);
+					 canvas.drawLine(497, coordY, 595, coordY, paint);
+					 coordX = 407;
+					 coordY = 97;
+					 canvas.drawText("Fecha", coordX, coordY, paint2);
+					 coordX = 500;
+					 SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault());
+					 canvas.drawText(sdf.format(fact.getData()), coordX, coordY, paint2);
+					 coordX = 3;
+					 canvas.drawText("Nombre", coordX, coordY, paint2);
+					 coordY = 107;
+					 canvas.drawText("Dirección", coordX, coordY, paint2);
+					 coordY = 117;
+					 canvas.drawText("Localidad", coordX, coordY, paint2);
+					 coordY = 127;
+					 canvas.drawText("Teléfono", coordX, coordY, paint2);
+					 coordX = 95;
+					 coordY = 97;
+					 if(fact.getCliente() != null){
+						 String aux = fact.getCliente().getNombre();
+						 aux = aux.concat(" ");
+						 aux = aux.concat(fact.getCliente().getApellido1());
+						 aux = aux.concat(" ");
+						 aux = aux.concat(fact.getCliente().getApellido2());
+						 canvas.drawText(aux, coordX, coordY, paint2);
+						 coordY = 107;
+						 canvas.drawText(fact.getCliente().getDir(), coordX, coordY, paint2);
+						 coordY = 117;
+						 canvas.drawText(fact.getCliente().getLocalidad(), coordX, coordY, paint2);
+						 coordY = 127;
+						 canvas.drawText("campotel", coordX, coordY, paint2);
+					 }
+					 coordY = 137;
+					 paint.setStyle(Paint.Style.STROKE);
+					 paint.setPathEffect(new DashPathEffect(new float[]{1, 2}, 0));
+					 canvas.drawLine(0, coordY, 595, coordY, paint);
+					 coordY = 149;
+					 canvas.drawLine(0, coordY, 595, coordY, paint);
+					 coordX = 25;
+					 canvas.drawText("Cantidad", coordX, coordY-2, paint2);
+					 coordX = 95;
+					 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+					 coordX = 235;
+					 canvas.drawText("Descripción", coordX, coordY-2, paint2);
+					 coordX = 405;
+					 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+					 coordX = 415;
+					 canvas.drawText("Precio unitario", coordX, coordY-2, paint2);
+					 coordX = 500;
+					 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+					 coordX = 535;
+					 canvas.drawText("TOTAL", coordX, coordY-2, paint2);
+					 //---------Generación de linias producto en la factura
+					 
+					 int i = 0;
+					 float subtotal = 0;
+					 List<LiniaProducto> lprod = adaptador.getLiniasProducto();
+					 int nlprod = lprod.size();
+					 while (i < nlprod){
+						 if(coordY > 740){
+							// finish the page
+							 document.finishPage(pages.get(actualpage));
+							 actualpage++;
+							 pages.add(actualpage, document.startPage(pageInfo));
+							 canvas = pages.get(actualpage).getCanvas();
+							 coordY = 40;
+							 canvas.drawLine(0, coordY, 595, coordY, paint);
+							 coordY += 12;
+							 canvas.drawLine(0, coordY, 595, coordY, paint);
+							 coordX = 25;
+							 canvas.drawText("Cantidad", coordX, coordY-2, paint2);
+							 coordX = 95;
+							 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+							 coordX = 235;
+							 canvas.drawText("Descripción", coordX, coordY-2, paint2);
+							 coordX = 405;
+							 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+							 coordX = 415;
+							 canvas.drawText("Precio unitario", coordX, coordY-2, paint2);
+							 coordX = 500;
+							 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+							 coordX = 535;
+							 canvas.drawText("TOTAL", coordX, coordY-2, paint2);
+						 } 
+						 coordY += 12;
+						 canvas.drawLine(0, coordY, 595, coordY, paint);
+						 coordX = 95;
+						 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+						 coordX = 405;
+						 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+						 coordX = 500;
+						 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
+						 coordX = 25;
+						 int cant = lprod.get(i).getCantidad();
+						 canvas.drawText(String.valueOf(cant), coordX, coordY-2, paint2);
+						 coordX = 97;
+						 canvas.drawText(lprod.get(i).getNombre(), coordX, coordY-2, paint2);
+						 coordX = 415;
+						 NumberFormat nformat = NumberFormat.getCurrencyInstance(Locale.FRANCE);
+						 float precio = lprod.get(i).getPrecio();
+						 canvas.drawText(nformat.format(precio), coordX, coordY-2, paint2);
+						 coordX = 535;
+						 float lprodtotal = cant * precio;
+						 
+						 subtotal += lprodtotal;
+						 canvas.drawText(nformat.format(lprodtotal), coordX, coordY-2, paint2);
+						 i++;
+					 }
+					 coordY = 740 + 12;
+					 coordX = 415;
+					 canvas.drawText("Subtotal", coordX, coordY-2, paint2);
+					 coordX = 535;
+					 NumberFormat nformat = NumberFormat.getCurrencyInstance(Locale.FRANCE);
+					 canvas.drawText(nformat.format(subtotal), coordX, coordY-2, paint2);
+					 coordY +=12;
+					 Paint paint3 = new Paint();
+					 paint3.setStyle(Paint.Style.STROKE);
+					 paint3.setColor(Color.BLACK);
+					 canvas.drawLine(0, coordY+12, 95, coordY+12, paint3);
+					 canvas.drawLine(95, coordY+12, 95, coordY, paint3);
+					 canvas.drawLine(95, coordY, 295, coordY, paint3);
+					 if(iva){
+						 coordY += 12;
+						 coordX = 415;
+						 FacturaDB fdb = new FacturaDB(activity);
+						 int niva = fdb.getIVA();
+						 canvas.drawText("IVA " + String.valueOf(niva) + "%", coordX, coordY, paint2);
+						 coordX = 535;
+						 float precioIVA = (subtotal*niva)/ 100;
+						 canvas.drawText(nformat.format(precioIVA), coordX, coordY, paint2);
+						 coordY += 12;
+						 coordX = 415;
+						 canvas.drawText("TOTAL", coordX, coordY, paint2);
+						 coordX = 535;
+						 subtotal += precioIVA;
+						 canvas.drawText(nformat.format(subtotal), coordX, coordY, paint2);
+					 }
+					 else{
+						 coordY += 12;
+						 coordX = 130;
+						 canvas.drawText("IVA NO INCLUIDO", coordX, coordY, paint2);
+						 coordY += 12;
+						 coordX = 415;
+						 canvas.drawText("TOTAL", coordX, coordY, paint2);
+						 coordX = 535;
+						 canvas.drawText(nformat.format(subtotal), coordX, coordY, paint2);
+						 //añadir notas si cal
+					 }
+					 
+					 // finish the page
+					 document.finishPage(pages.get(actualpage));
+					 File pdffile;
+					 if(isExternalStorageWritable() && isExternalStorageReadable()){
+						 pdffile = new File(activity.getExternalFilesDir(null), "pdfprueva_ext.pdf");
+						 Toast.makeText(activity, "Guardado en SDcard", Toast.LENGTH_SHORT).show();
+					 }
+					 else {
+						 pdffile = new File(activity.getFilesDir(), "pdfprueva.pdf");
+						 Toast.makeText(activity, "Guardado en Interno", Toast.LENGTH_SHORT).show();
+					 }
+					// write the document content
+					 FileOutputStream outputstream;
+					try {
+						outputstream = new FileOutputStream(pdffile);
+						document.writeTo(outputstream);
+						outputstream.close();
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					
+					 
+					 String[] to = {"mperesp1990@gmail.com"};
+					 String[] cc = {}; 
+					 enviar(to, cc, "prueva android", "contrato notario", pdffile);
+					 Toast.makeText(activity, "Enviando el mail", Toast.LENGTH_SHORT).show();
+					 
+					 //close the document
+					 document.close();
 				}
 			});
 			dialog.show();
@@ -611,6 +485,16 @@ public class Gestion_facturas extends ListActivity {
 	        return true;
 	    }
 	    return false;
+	}
+	
+	private int nxifres (int x){
+		int aux = x;
+		int i=0;
+		while(aux != 0){
+			aux = aux/10;
+			i++;
+		}
+		return i;
 	}
 
 }
