@@ -24,7 +24,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	private String sqlCreate = "CREATE TABLE CLIENTE(dni VARCHAR(10) PRIMARY KEY, nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30), direccion VARCHAR(100), localidad VARCHAR(40))";
 	private String sqlCreate2 =	"CREATE TABLE CATEGORIA (id INTEGER PRIMARY KEY, categoria VARCHAR(30))";
 	private String sqlCreate3 = "CREATE TABLE PRODUCTO (nombre TEXT PRIMARY KEY, precio FLOAT(8, 2), idcategoria VARCHAR(30))";
-	private String sqlCreate4 = "CREATE TABLE FACTURAS (idFactura INTERGER PRIMARY KEY, fecha VARCHAR(60), estado VARCHAR(12), cliente VARCHAR(10))";
+	private String sqlCreate4 = "CREATE TABLE FACTURAS (idFactura INTERGER PRIMARY KEY, fecha VARCHAR(60), estado VARCHAR(12), cliente VARCHAR(10), notas TEXT)";
 	private String sqlCreate5 = "CREATE TABLE LINIAPRODUCTO (nombreProducto TEXT, idFactura INTEGER, cantidad INTEGER, precio FLOAT(8, 2), PRIMARY KEY(nombreProducto, idFactura))";
 	private String sqlCreate6 = "INSERT INTO CATEGORIA (id, categoria) VALUES (0, 'Sin categoria')";
 	private String sqlCreate7 = "CREATE TABLE IVA (valor INTEGER PRIMARY KEY)";
@@ -503,13 +503,14 @@ public class FacturaDB extends SQLiteOpenHelper {
 	public Factura getFactura(int idfactura) {
 		Factura factura = new Factura();
 		this.db = this.getWritableDatabase();
-	    String selectQuery = "SELECT  idFactura, fecha, estado, cliente FROM FACTURAS WHERE idFactura = ?";
+	    String selectQuery = "SELECT  idFactura, fecha, estado, cliente, notas FROM FACTURAS WHERE idFactura = ?";
 	    String[] args = {String.valueOf(idfactura)};
 	    Log.e("dberror", selectQuery  + " idfactura = " + String.valueOf(idfactura));
 	    Cursor c = db.rawQuery(selectQuery, args);
 	    if (c.moveToFirst()) {
 	    	factura.setNumFact(idfactura);
 	    	factura.setEstado(c.getString(c.getColumnIndex("estado")));
+	    	factura.setNotas(c.getString(c.getColumnIndex("notas")));
 	    	if (!c.isNull(c.getColumnIndex("cliente"))){
             	factura.setCliente(this.getCliente(c.getString(c.getColumnIndex("cliente"))));
             }
@@ -540,6 +541,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            Factura fact = new Factura();
 	            fact.setNumFact(c.getInt(c.getColumnIndex("idFactura")));
 	            fact.setEstado(c.getString(c.getColumnIndex("estado")));
+	            fact.setNotas(c.getString(c.getColumnIndex("notas")));
 	            if (!c.isNull(c.getColumnIndex("cliente"))){
 	            	fact.setCliente(this.getCliente(c.getString(c.getColumnIndex("cliente"))));
 	            }
@@ -562,6 +564,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put("idFactura", factura.getNumFact());
 		values.put("estado", factura.getEstado());
+		values.put("notas", factura.getNotas());
 		if(factura.getCliente() != null){
 			values.put("cliente", factura.getCliente().getDni());
 		}
@@ -577,6 +580,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		this.db = this.getWritableDatabase(); 
 	    ContentValues values = new ContentValues();
 	    values.put("estado", factura.getEstado());
+	    values.put("notas", factura.getNotas());
 	    if(factura.getCliente()!= null)
 		values.put("cliente", factura.getCliente().getDni());
 	 

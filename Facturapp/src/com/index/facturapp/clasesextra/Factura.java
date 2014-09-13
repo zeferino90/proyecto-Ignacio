@@ -7,6 +7,7 @@ public class Factura {
 	private Date data;
 	private String estado;
 	private Cliente cliente;
+	private String notas;
 	public int getNumFact() {
 		return numFact;
 	}
@@ -30,5 +31,11 @@ public class Factura {
 	}
 	public void setData(Date data) {
 		this.data = data;
+	}
+	public String getNotas() {
+		return notas;
+	}
+	public void setNotas(String notas) {
+		this.notas = notas;
 	}
 }
