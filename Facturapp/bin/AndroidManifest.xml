@@ -34,13 +34,18 @@
         <activity
             android:name=".Managecatprod"
             android:label="@string/title_activity_managecatprod"
-            android:theme="@style/Theme.AppCompat">        
+            android:theme="@style/Theme.AppCompat" >
         </activity>
         <activity
             android:name=".ClientesAct"
             android:label="@string/title_activity_clientes" >
         </activity>
+        <activity
+            android:name=".Notas"
+            android:label="@string/title_activity_notas" >
+        </activity>
     </application>
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 

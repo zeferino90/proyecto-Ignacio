@@ -22,5 +22,8 @@
     <string name="title_section3">Section 3</string>
     <string name="hintcategoria">Nombre categoria</string>
     <string name="title_activity_clientes">ClientesAct</string>
+    <string name="title_activity_notas">Explicacion</string>
+    <string name="guardar">Guardar</string>
+    <string name="explicacion">Explicacion</string>
 
 </resources>

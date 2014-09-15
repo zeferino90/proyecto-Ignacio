@@ -451,6 +451,11 @@ public class Gestion_facturas extends ListActivity {
 			});
 			dialog.show();
 		}
+		else if(id == R.id.Explicacion){
+			Intent intent = new Intent(activity, Notas.class);
+			intent.putExtra("idfactura", fact.getNumFact());
+			startActivity(intent);
+		}
 		return super.onOptionsItemSelected(item);
 	}
 

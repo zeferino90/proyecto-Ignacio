@@ -4,5 +4,6 @@
         android:title="@string/anadir"
         android:showAsAction="ifRoom"/>
     <item android:id="@+id/exportar" android:title="Exportar a PDF" android:showAsAction="ifRoom" android:visible="true"></item>
+    <item android:id="@+id/Explicacion" android:title="@string/explicacion"></item>
 
 </menu>
