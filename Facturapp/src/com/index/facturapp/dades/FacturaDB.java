@@ -32,7 +32,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 	private SQLiteDatabase db;
 	
 	public FacturaDB(Context context){
-		super (context, DATABASE_NAME, null, 13);
+		super (context, DATABASE_NAME, null, 14);
 	}
 	
 	@Override

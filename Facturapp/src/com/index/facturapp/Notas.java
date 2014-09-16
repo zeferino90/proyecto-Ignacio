@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.index.facturapp.clasesextra.Factura;
 import com.index.facturapp.dades.FacturaDB;
@@ -40,6 +41,7 @@ public class Notas extends Activity {
 			fact.setNotas(nota.getText().toString());
 			FacturaDB fdb = new FacturaDB(this);
 			fdb.updateFactura(fact);
+			Toast.makeText(this, "Se ha guardado la explicacion", Toast.LENGTH_SHORT).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
