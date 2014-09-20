@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.index.facturapp.adapters.AdapterFacturas;
 import com.index.facturapp.adapters.Adapter_clientes;
@@ -116,7 +117,7 @@ public class Principal extends ListActivity {
 					int position, long id) {
 				final int pos = position;
 				final AlertDialog.Builder dialog = new AlertDialog.Builder(myactivity);
-				String[] items = {"A–adir cliente", "Eliminar", "Cancelar"};
+				String[] items = {"A–adir cliente", "Cambiar estado", "Eliminar", "Cancelar"};
 				dialog.setTitle("Opciones");
 				dialog.setItems(items, new DialogInterface.OnClickListener() {
 					
@@ -174,23 +175,36 @@ public class Principal extends ListActivity {
 											@Override
 											public void onClick(DialogInterface dialog, int which) {
 												Cliente cliente = new Cliente();
-												EditText campodni = (EditText) layout.findViewById(R.id.dni);
-												EditText camponombre = (EditText) layout.findViewById(R.id.nombre);
-												EditText campoape1 = (EditText) layout.findViewById(R.id.apellido1);
-												EditText campoape2 = (EditText) layout.findViewById(R.id.apellido2);
-												EditText campodir = (EditText) layout.findViewById(R.id.direccion);
-												EditText campoloc = (EditText) layout.findViewById(R.id.localidad);
-												cliente.setDni(campodni.getText().toString());
-												cliente.setNombre(camponombre.getText().toString());
-												cliente.setApellido1(campoape1.getText().toString());
-												cliente.setApellido2(campoape2.getText().toString());
-												cliente.setDir(campodir.getText().toString());
-												cliente.setLocalidad(campoloc.getText().toString());
 												FacturaDB fdb = new FacturaDB(getBaseContext());
-												fdb.createCliente(cliente);
-												adapter.getItem(pos).setCliente(cliente);
-												fdb.updateFactura(adapter.getItem(pos));
-												adapter.notifyDataSetChanged();
+												EditText campodni = (EditText) layout.findViewById(R.id.dni);
+												
+												if(fdb.getCliente(campodni.getText().toString()) != null){
+													Toast.makeText(myactivity, "Ya existe este cliente", Toast.LENGTH_SHORT).show();
+												}
+												else {
+													EditText camponombre = (EditText) layout.findViewById(R.id.nombre);
+													EditText campoape1 = (EditText) layout.findViewById(R.id.apellido1);
+													EditText campoape2 = (EditText) layout.findViewById(R.id.apellido2);
+													EditText campodir = (EditText) layout.findViewById(R.id.direccion);
+													EditText campoloc = (EditText) layout.findViewById(R.id.localidad);
+													cliente.setDni(campodni.getText().toString());
+													cliente.setNombre(camponombre.getText().toString());
+													cliente.setApellido1(campoape1.getText().toString());
+													cliente.setApellido2(campoape2.getText().toString());
+													if(camponombre.getText().toString().contains(" ") || campoape1.getText().toString().contains(" ") || campoape2.getText().toString().contains(" ")){
+														Toast.makeText(myactivity, "Nombre o apellidos contienen un espacio, porfavor borrelo", Toast.LENGTH_SHORT).show();
+													}
+													else{
+														cliente.setDir(campodir.getText().toString());
+														cliente.setLocalidad(campoloc.getText().toString());
+														fdb.createCliente(cliente);
+														adapter.getItem(pos).setCliente(cliente);
+														fdb.updateFactura(adapter.getItem(pos));
+														adapter.notifyDataSetChanged();
+													}
+													
+												}
+												
 											}
 										});
 										dialog3.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -213,6 +227,31 @@ public class Principal extends ListActivity {
 							}
 						}
 						else if (which == 1){
+							final AlertDialog.Builder dialog4 = new AlertDialog.Builder(myactivity);
+							String[] items = {"En progreso", "Sin pagar", "Pagada", "Cancelar"};
+							dialog4.setTitle("Escoge el nuevo estado");
+							dialog4.setItems(items, new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									if(which == 0){
+										adapter.getItem(pos).setEstado("En progreso");
+									}
+									else if(which == 1){
+										adapter.getItem(pos).setEstado("Sin pagar");
+									}
+									else  if(which == 2){
+										adapter.getItem(pos).setEstado("Pagada");
+									}
+									else dialog.dismiss();
+									FacturaDB fdb = new FacturaDB(myactivity);
+									fdb.updateFactura(adapter.getItem(pos));
+									adapter.notifyDataSetChanged();
+								}
+							});
+							dialog4.show();
+						}
+						else if (which == 2){
 							final AlertDialog.Builder dialog2 = new AlertDialog.Builder(myactivity);
 							String[] items = {"Si", "Cancelar"};
 							dialog2.setTitle("Estas seguro de eliminar la factura " + String.valueOf(adapter.getItem(pos).getNumFact()) + "?");
@@ -299,22 +338,28 @@ public class Principal extends ListActivity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Factura factura = new Factura();
-					factura.setNumFact(Integer.valueOf(campofact.getText().toString()));
-					factura.setEstado("En progreso"); 
-					Date date = new Date();
-					factura.setData(date);
+					int auxnumfact = Integer.valueOf(campofact.getText().toString());
 					FacturaDB fdb = new FacturaDB(myactivity);
-					fdb.createFactura(factura);
-					try {
-						getNumfact(fdb.getFacturas());
-					} catch (ParseException e) {
-						e.printStackTrace();
+					if(fdb.getFactura(auxnumfact) != null) {
+						Toast.makeText(myactivity, "Ya existe esa factura", Toast.LENGTH_SHORT).show();
 					}
-					Intent intent = new Intent(myactivity, Gestion_facturas.class);
-					//intent.putExtra("nuevo", true);
-					intent.putExtra("idfactura", factura.getNumFact());
-					Log.e("chivato", "creacion nueva factura: " + String.valueOf(factura.getNumFact()));
-					startActivity(intent);
+					else{
+						factura.setNumFact(Integer.valueOf(campofact.getText().toString()));
+						factura.setEstado("En progreso"); 
+						Date date = new Date();
+						factura.setData(date);
+						fdb.createFactura(factura);
+						try {
+							getNumfact(fdb.getFacturas());
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						Intent intent = new Intent(myactivity, Gestion_facturas.class);
+						//intent.putExtra("nuevo", true);
+						intent.putExtra("idfactura", factura.getNumFact());
+						Log.e("chivato", "creacion nueva factura: " + String.valueOf(factura.getNumFact()));
+						startActivity(intent);
+					}
 				}
 
 				

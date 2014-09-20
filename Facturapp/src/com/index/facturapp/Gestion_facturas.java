@@ -78,7 +78,13 @@ public class Gestion_facturas extends ListActivity {
 		fdb.close();
 		super.onBackPressed();
 	}
-
+	
+	@Override
+	protected void onResume() {
+		FacturaDB fdb = new FacturaDB(this);
+		fact = fdb.getFactura(fact.getNumFact());
+		super.onResume();
+	}
 
 	private void setContentGestionFacturas() {
 			Log.e("chivato lp", "factura no nueva");
@@ -228,8 +234,8 @@ public class Gestion_facturas extends ListActivity {
 						 int nfact = fact.getNumFact();
 						 int n = nxifres(nfact);
 						 coordY = 13;
-						 coordX = 595 - (n+7*5);
-						 canvas.drawText("Nï¿½ Fact:" + String.valueOf(nfact), coordX, coordY, paint);
+						 coordX = 590 - (n+10*5);
+						 canvas.drawText("N¼ Fact: " + String.valueOf(nfact), coordX, coordY, paint);
 						 paint.setStyle(Paint.Style.FILL);
 						 paint.setColor(col);
 						 canvas.drawRect(1, 1, 400, 30, paint);
@@ -240,15 +246,16 @@ public class Gestion_facturas extends ListActivity {
 						 coordY = 13;
 						 canvas.drawText("REFORMAS INTEGRALES", coordX, coordY, paint);
 						 coordY = 23;
-						 canvas.drawText("IGNACIO MACï¿½A NIF 38080988-A", coordX, coordY, paint);
+						 canvas.drawText("IGNACIO MACêA NIF 38080988-A", coordX, coordY, paint);
 						 coordY = 50;
 						 paint.setTextSize(10);
-						 canvas.drawText("Telï¿½fono 637237412", coordX, coordY, paint);
+						 canvas.drawText("TelŽfono 637237412", coordX, coordY, paint);
 						 coordX = 500;
 						 paint.setColor(Color.RED);
 						 canvas.drawText("PRESUPUESTO", coordX, coordY, paint);
 						 //---------fin cabecera datos ignacio-------
 					 }
+					 //-----Pintar linias superiores i bloque cliente-------
 					 Paint paint2 = new Paint();
 					 paint.setColor(Color.BLACK);
 					 coordY = 85;
@@ -276,11 +283,11 @@ public class Gestion_facturas extends ListActivity {
 					 coordX = 3;
 					 canvas.drawText("Nombre", coordX, coordY, paint2);
 					 coordY = 107;
-					 canvas.drawText("Direcciï¿½n", coordX, coordY, paint2);
+					 canvas.drawText("Direcci—n", coordX, coordY, paint2);
 					 coordY = 117;
 					 canvas.drawText("Localidad", coordX, coordY, paint2);
 					 coordY = 127;
-					 canvas.drawText("Telï¿½fono", coordX, coordY, paint2);
+					 canvas.drawText("TelŽfono", coordX, coordY, paint2);
 					 coordX = 95;
 					 coordY = 97;
 					 if(fact.getCliente() != null){
@@ -297,6 +304,8 @@ public class Gestion_facturas extends ListActivity {
 						 coordY = 127;
 						 canvas.drawText("campotel", coordX, coordY, paint2);
 					 }
+					 //-----fin bloque cliente mas linia superior--------
+					 //------Primera linia superior a las linias de producto------
 					 coordY = 137;
 					 paint.setStyle(Paint.Style.STROKE);
 					 paint.setPathEffect(new DashPathEffect(new float[]{1, 2}, 0));
@@ -308,7 +317,7 @@ public class Gestion_facturas extends ListActivity {
 					 coordX = 95;
 					 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
 					 coordX = 235;
-					 canvas.drawText("Descripciï¿½n", coordX, coordY-2, paint2);
+					 canvas.drawText("Descripci—n", coordX, coordY-2, paint2);
 					 coordX = 405;
 					 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
 					 coordX = 415;
@@ -317,7 +326,7 @@ public class Gestion_facturas extends ListActivity {
 					 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
 					 coordX = 535;
 					 canvas.drawText("TOTAL", coordX, coordY-2, paint2);
-					 //---------Generaciï¿½n de linias producto en la factura
+					 //---------Generacion de linias producto en la factura
 					 
 					 int i = 0;
 					 float subtotal = 0;
@@ -339,7 +348,7 @@ public class Gestion_facturas extends ListActivity {
 							 coordX = 95;
 							 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
 							 coordX = 235;
-							 canvas.drawText("Descripciï¿½n", coordX, coordY-2, paint2);
+							 canvas.drawText("Descripci—n", coordX, coordY-2, paint2);
 							 coordX = 405;
 							 canvas.drawLine(coordX, coordY, coordX, coordY-12, paint);
 							 coordX = 415;
@@ -373,7 +382,123 @@ public class Gestion_facturas extends ListActivity {
 						 canvas.drawText(nformat.format(lprodtotal), coordX, coordY-2, paint2);
 						 i++;
 					 }
-					 coordY = 740 + 12;
+					 //------fin bloque generacion linia producto------
+					 //-----Bloque notas------------------
+					 coordY += 12 *4;
+					 
+					 if(coordY > 600)
+					 coordY = 741;
+					 else {
+						 canvas.drawLine(0, coordY, 595, coordY, paint);
+						 coordY += 12;
+						 canvas.drawLine(0, coordY, 595, coordY, paint);
+						 coordX = 25;
+						 canvas.drawText("Descripci—n del trabajo a realizar", coordX, coordY-2, paint2);
+						 coordY +=12;
+					 }
+					 
+					 String nota = fact.getNotas();
+					 String[] saltos = nota.split("\n");
+					 int indsaltos = 0;
+					 while(indsaltos < saltos.length){
+						 int j = 0;
+						 //String nota = fact.getNotas();
+						 int maxj = saltos[indsaltos].length();
+						 String[] palabras = saltos[indsaltos].split(" ");
+						 int indexpal = 0;
+						 int index = 0;
+						 while(j < maxj){
+							 if(coordY > 740){
+									// finish the page
+									 document.finishPage(pages.get(actualpage));
+									 actualpage++;
+									 pages.add(actualpage, document.startPage(pageInfo));
+									 canvas = pages.get(actualpage).getCanvas();
+									 coordY = 40;
+									 canvas.drawLine(0, coordY, 595, coordY, paint);
+									 coordY += 12;
+									 canvas.drawLine(0, coordY, 595, coordY, paint);
+									 coordX = 25;
+									 canvas.drawText("Descripci—n del trabajo a realizar", coordX, coordY-2, paint2);
+									 coordY +=12;
+								 }
+							 int n = j;
+							 int n2 = 0;
+							 float stringwidth = 0;
+							 while(stringwidth < pageWidth-75 && indexpal < palabras.length){
+								 String aux = palabras[indexpal];
+								 index = saltos[indsaltos].indexOf(aux) + aux.length();
+								 if(index > j) {
+									 String substring = saltos[indsaltos].substring(j, index);
+									 n2 = substring.length();
+									 if(n2 < pageWidth){
+										 if(n2 < n){
+											 n += aux.length() + 1;
+										 }
+										 else n = n2;
+									 }
+								 }
+								 else n += aux.length() + 1;
+								 stringwidth = paint2.measureText(saltos[indsaltos].substring(j, n));
+								 indexpal++;
+							 }
+							 canvas.drawText(saltos[indsaltos].substring(j, n), coordX, coordY, paint2);
+							 j = index;
+							 coordY +=12;
+						 }
+						 indsaltos++;
+					 }
+					 
+					 //-----fin bloque notas--------------
+					 
+					 /*coordY = 741;
+					 int j = 0;
+					 String nota = fact.getNotas();
+					 int maxj = nota.length();
+					 String[] palabras = nota.split(" ");
+					 int indexpal = 0;
+					 int index = 0;
+					 while(j < maxj){
+						 if(coordY > 740){
+								// finish the page
+								 document.finishPage(pages.get(actualpage));
+								 actualpage++;
+								 pages.add(actualpage, document.startPage(pageInfo));
+								 canvas = pages.get(actualpage).getCanvas();
+								 coordY = 40;
+								 canvas.drawLine(0, coordY, 595, coordY, paint);
+								 coordY += 12;
+								 canvas.drawLine(0, coordY, 595, coordY, paint);
+								 coordX = 25;
+								 canvas.drawText("Descripci—n del Trabajo a realizar", coordX, coordY-2, paint2);
+								 coordY +=12;
+							 }
+						 int n = j;
+						 int n2 = 0;
+						 float stringwidth = 0;
+						 while(stringwidth < pageWidth-75 && indexpal < palabras.length){
+							 String aux = palabras[indexpal];
+							 index = nota.indexOf(aux) + aux.length();
+							 if(index > j) {
+								 String substring = nota.substring(j, index);
+								 n2 = substring.length();
+								 if(n2 < pageWidth){
+									 if(n2 < n){
+										 n += aux.length() + 1;
+									 }
+									 else n = n2;
+								 }
+							 }
+							 else n += aux.length() + 1;
+							 stringwidth = paint2.measureText(nota.substring(j, n));
+							 indexpal++;
+						 }
+						 canvas.drawText(nota.substring(j, n), coordX, coordY, paint2);
+						 j = index;
+						 coordY +=12;
+					 }
+					 //-----fin bloque notas--------------
+*/					 coordY = 740 + 12;
 					 coordX = 415;
 					 canvas.drawText("Subtotal", coordX, coordY-2, paint2);
 					 coordX = 535;
@@ -411,7 +536,6 @@ public class Gestion_facturas extends ListActivity {
 						 canvas.drawText("TOTAL", coordX, coordY, paint2);
 						 coordX = 535;
 						 canvas.drawText(nformat.format(subtotal), coordX, coordY, paint2);
-						 //aï¿½adir notas si cal
 					 }
 					 
 					 // finish the page

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.index.facturapp.adapters.Adapter_clientes;
 import com.index.facturapp.clasesextra.Cliente;
@@ -113,27 +114,38 @@ public class ClientesAct extends ListActivity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Cliente cliente = new Cliente();
-					EditText campodni = (EditText) layout.findViewById(R.id.dni);
-					EditText camponombre = (EditText) layout.findViewById(R.id.nombre);
-					EditText campoape1 = (EditText) layout.findViewById(R.id.apellido1);
-					EditText campoape2 = (EditText) layout.findViewById(R.id.apellido2);
-					EditText campodir = (EditText) layout.findViewById(R.id.direccion);
-					EditText campoloc = (EditText) layout.findViewById(R.id.localidad);
-					cliente.setDni(campodni.getText().toString());
-					cliente.setNombre(camponombre.getText().toString());
-					cliente.setApellido1(campoape1.getText().toString());
-					cliente.setApellido2(campoape2.getText().toString());
-					cliente.setDir(campodir.getText().toString());
-					cliente.setLocalidad(campoloc.getText().toString());
 					FacturaDB fdb = new FacturaDB(getBaseContext());
-					fdb.createCliente(cliente);
-					String aux = new String();
-		            aux = camponombre.getText().toString();
-		            aux = aux.concat(" ");
-		            aux = aux.concat(campoape1.getText().toString());
-		            aux = aux.concat(" ");
-		            aux = aux.concat(campoape2.getText().toString());
-					adapter.add(aux);
+					EditText campodni = (EditText) layout.findViewById(R.id.dni);
+					
+					if(fdb.getCliente(campodni.getText().toString()) != null){
+						Toast.makeText(myactivity, "Ya existe este cliente", Toast.LENGTH_SHORT).show();
+					}
+					else {
+						EditText camponombre = (EditText) layout.findViewById(R.id.nombre);
+						EditText campoape1 = (EditText) layout.findViewById(R.id.apellido1);
+						EditText campoape2 = (EditText) layout.findViewById(R.id.apellido2);
+						EditText campodir = (EditText) layout.findViewById(R.id.direccion);
+						EditText campoloc = (EditText) layout.findViewById(R.id.localidad);
+						cliente.setDni(campodni.getText().toString());
+						cliente.setNombre(camponombre.getText().toString());
+						cliente.setApellido1(campoape1.getText().toString());
+						cliente.setApellido2(campoape2.getText().toString());
+						if(camponombre.getText().toString().contains(" ") || campoape1.getText().toString().contains(" ") || campoape2.getText().toString().contains(" ")){
+							Toast.makeText(myactivity, "Nombre o apellidos contienen un espacio, porfavor borrelo", Toast.LENGTH_SHORT).show();
+						}
+						else{
+							cliente.setDir(campodir.getText().toString());
+							cliente.setLocalidad(campoloc.getText().toString());
+							fdb.createCliente(cliente);
+							String aux = new String();
+				            aux = camponombre.getText().toString();
+				            aux = aux.concat(" ");
+				            aux = aux.concat(campoape1.getText().toString());
+				            aux = aux.concat(" ");
+				            aux = aux.concat(campoape2.getText().toString());
+							adapter.add(aux);
+						}
+					}
 				}
 			});
 			dialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

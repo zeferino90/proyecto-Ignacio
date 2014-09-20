@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,18 @@ public class AdapterFacturas extends ArrayAdapter<Factura> {
         	else {
         		campocliente.setText("Sin cliente");
         	}
-        	campoestado.setText(item.getEstado());
+        	if(item.getEstado().equals("En progreso")){
+        		campoestado.setTextColor(Color.RED);
+            	campoestado.setText(item.getEstado());
+        	}
+        	else if(item.getEstado().equals("Sin pagar")){
+        		campoestado.setTextColor(Color.BLUE);
+            	campoestado.setText(item.getEstado());
+        	}
+        	else {
+        		campoestado.setTextColor(Color.GREEN);
+            	campoestado.setText(item.getEstado());
+        	}
         	Log.e("cargando listFacturas", String.valueOf(item.getNumFact()));
 	        convertView.setOnClickListener(new View.OnClickListener() {
 				

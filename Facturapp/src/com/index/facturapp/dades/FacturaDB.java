@@ -164,16 +164,16 @@ public class FacturaDB extends SQLiteOpenHelper {
 		String[] aux = {idcliente};
 		Log.e("dberror", selectQuery);
 	    Cursor c = db.rawQuery(selectQuery, aux);
-	    if (c != null){
-	        c.moveToFirst();
-	    cliente.setDni(idcliente);
-	    cliente.setApellido1(c.getString(c.getColumnIndex("apellido1")));
-	    cliente.setApellido2(c.getString(c.getColumnIndex("apellido2")));
-	    cliente.setDir(c.getString(c.getColumnIndex("direccion")));
-	    cliente.setLocalidad(c.getString(c.getColumnIndex("localidad")));
-	    cliente.setNombre(c.getString(c.getColumnIndex("nombre")));
+	    if (c.moveToFirst()){
+	        cliente.setDni(idcliente);
+	        cliente.setApellido1(c.getString(c.getColumnIndex("apellido1")));
+	        cliente.setApellido2(c.getString(c.getColumnIndex("apellido2")));
+	        cliente.setDir(c.getString(c.getColumnIndex("direccion")));
+	        cliente.setLocalidad(c.getString(c.getColumnIndex("localidad")));
+	        cliente.setNombre(c.getString(c.getColumnIndex("nombre")));
+	        return cliente;
 	    
-		return cliente;
+	        
 	    }
 	    return null;
 	}
@@ -185,8 +185,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		String[] aux = {nombre, ape1, ape2};
 		Log.e("dberror", selectQuery);
 	    Cursor c = db.rawQuery(selectQuery, aux);
-	    if (c != null){
-	        c.moveToFirst();
+	    if (c.moveToFirst()){
 	    cliente.setDni(c.getString(c.getColumnIndex("dni")));
 	    cliente.setApellido1(ape1);
 	    cliente.setApellido2(ape2);
@@ -522,8 +521,9 @@ public class FacturaDB extends SQLiteOpenHelper {
 				e.printStackTrace();
 			}
             factura.setData(date);
+            return factura;
 	    }
-		return factura;
+		return null;
 	}
 	
 	public List<Factura> getFacturas() throws ParseException{
