@@ -1,5 +1,7 @@
 package com.index.facturapp;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +57,19 @@ public class Preferencias extends Activity {
 				IVA = nIVA;
 				Toast.makeText(getApplicationContext(), "IVA actualizado", Toast.LENGTH_SHORT).show();
 				return true;
+			}
+		});
+		
+		TextView cache = (TextView)findViewById(R.id.cache);
+		cache.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				File[] files = getFilesDir().listFiles();
+				for(File file : files){
+					file.delete();
+				}
+				Toast.makeText(getBaseContext(), "Se han limpiado los ficheros", Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

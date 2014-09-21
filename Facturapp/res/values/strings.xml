@@ -25,5 +25,6 @@
     <string name="title_activity_notas">Explicacion</string>
     <string name="guardar">Guardar</string>
     <string name="explicacion">Explicacion</string>
+    <string name="cleancache">Limpiar ficheros Facturapp</string>
 
 </resources>
