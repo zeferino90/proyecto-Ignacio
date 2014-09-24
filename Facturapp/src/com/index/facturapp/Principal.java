@@ -136,21 +136,20 @@ public class Principal extends ListActivity {
 										LayoutInflater inflater = myactivity.getLayoutInflater();
 										final View layout = inflater.inflate(R.layout.spinnerclientesdialog, null);
 										FacturaDB fdb = new FacturaDB(myactivity);
-										List<String> clients = fdb.getClientes();
+										List<Cliente> clients = fdb.getClientes_object();
 										dialog5.setTitle("Cliente existente");
 										dialog5.setView(layout);
 										final Spinner clientes = (Spinner)layout.findViewById(R.id.spinnerclientes);
-										Adapter_clientes adapter2 = new Adapter_clientes(myactivity, clients, R.layout.item_cliente);
+										final Adapter_clientes adapter2 = new Adapter_clientes(myactivity, clients, R.layout.item_cliente);
 										clientes.setAdapter(adapter2);
 										dialog5.setPositiveButton("A–adir", new DialogInterface.OnClickListener() {
 											
 											@Override
 											public void onClick(DialogInterface dialog, int which) {
-												String seleccion =  clientes.getSelectedItem().toString();
-												String[] aux = seleccion.split(" ");
+												Cliente aux = (Cliente)clientes.getSelectedItem();
+												//Cliente aux = adapter2.getItem(which);
 												FacturaDB fdb = new FacturaDB(myactivity);
-												Cliente cli = fdb.getCliente(aux[0], aux[1], aux[2]);
-												adapter.getItem(pos).setCliente(cli);
+												adapter.getItem(pos).setCliente(aux);
 												fdb.updateFactura(adapter.getItem(pos));
 												adapter.notifyDataSetChanged();
 											}

@@ -46,4 +46,27 @@ public class Cliente {
 	public void setLocalidad(String localidad) {
 		this.localidad = localidad;
 	}
+
+	@Override
+	public String toString() {
+		if(this.nombre != null){
+			String aux = this.nombre;
+			aux = aux.concat(" ");
+			if(this.apellido1 != null){
+				aux = aux.concat(this.apellido1);
+				aux.concat(" ");
+				if(this.apellido2 != null){
+					aux = aux.concat(this.apellido2);
+					aux.concat(" ");
+					return aux;
+				}
+			}
+		}
+		
+		
+		
+		return super.toString();
+	}
+	
+	
 }

@@ -396,15 +396,13 @@ public class FacturaDB extends SQLiteOpenHelper {
 	      
 	}
 	
-	public void removeCliente(String client) {
+	public void removeCliente(String idclient) {
 		this.db = this.getWritableDatabase();
-		String[] cliente = client.split(" ");
-		Cliente cli = this.getCliente(cliente[0], cliente[1], cliente[2]);
-		String[] aux = {String.valueOf(cli.getDni())};
+		String[] aux = {String.valueOf(idclient)};
 		ContentValues values = new ContentValues();
 		values.putNull("cliente");
 		db.update("FACTURAS", values, "cliente = ?", aux);
-		db.delete("CLIENTE", "nombre=? AND apellido1 = ? AND apellido2 = ?", cliente);
+		db.delete("CLIENTE", "dni=?", aux);
 	}
 	
 	public List<String> getClientes() {
@@ -433,6 +431,33 @@ public class FacturaDB extends SQLiteOpenHelper {
 	            aux = aux.concat(" ");
 	            aux = aux.concat(cliente.getApellido2());
 	        	clientes.add(i, aux);
+	            i++;
+	        } while (c.moveToNext());
+	    }
+		return clientes;
+	}
+	
+	public List<Cliente> getClientes_object() {
+		List<Cliente> clientes = new ArrayList<Cliente>();
+		int i = 0;
+		this.db = this.getWritableDatabase();
+	    String selectQuery = "SELECT * FROM cliente";
+	 
+	    Log.e("dberror", selectQuery);
+	    Cursor c = db.rawQuery(selectQuery, null);
+	 
+	    // looping through all rows and adding to list
+	    if (c.moveToFirst()) {
+	        do {
+	            Cliente cliente = new Cliente();
+	            cliente.setNombre(c.getString(c.getColumnIndex("nombre")));
+	            cliente.setApellido1(c.getString(c.getColumnIndex("apellido1")));
+	            cliente.setApellido2(c.getString(c.getColumnIndex("apellido2")));
+	            cliente.setDni(c.getString(c.getColumnIndex("dni")));
+	            cliente.setDir(c.getString(c.getColumnIndex("direccion")));
+	            cliente.setLocalidad(c.getString(c.getColumnIndex("localidad")));
+	        	
+	        	clientes.add(i, cliente);
 	            i++;
 	        } while (c.moveToNext());
 	    }

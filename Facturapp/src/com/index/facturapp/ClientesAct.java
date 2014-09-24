@@ -30,9 +30,9 @@ public class ClientesAct extends ListActivity {
 		super.onCreate(savedInstanceState);
 		FacturaDB fdb = new FacturaDB(this);
 		myactivity = this;
-		List<String> clientes = new ArrayList<String>();
+		List<Cliente> clientes = new ArrayList<Cliente>();
 		try{
-		clientes = fdb.getClientes();
+		clientes = fdb.getClientes_object();
 		}
 		catch(Exception e){
 			Log.e("dberror", "STACKTRACE");
@@ -54,10 +54,10 @@ public class ClientesAct extends ListActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						if (which == 0){
-							String paborrar = adapter.getItem(pos);
+							Cliente paborrar = adapter.getItem(pos);
 							adapter.remove(paborrar);
 							FacturaDB fdb = new FacturaDB(myactivity);
-							fdb.removeCliente(paborrar);
+							fdb.removeCliente(paborrar.getDni());
 						}
 						else {
 							dialog.dismiss();
@@ -137,13 +137,8 @@ public class ClientesAct extends ListActivity {
 							cliente.setDir(campodir.getText().toString());
 							cliente.setLocalidad(campoloc.getText().toString());
 							fdb.createCliente(cliente);
-							String aux = new String();
-				            aux = camponombre.getText().toString();
-				            aux = aux.concat(" ");
-				            aux = aux.concat(campoape1.getText().toString());
-				            aux = aux.concat(" ");
-				            aux = aux.concat(campoape2.getText().toString());
-							adapter.add(aux);
+							
+							adapter.add(cliente);
 						}
 					}
 				}

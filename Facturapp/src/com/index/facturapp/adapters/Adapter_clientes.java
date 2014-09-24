@@ -2,8 +2,6 @@ package com.index.facturapp.adapters;
 
 import java.util.List;
 
-import com.index.facturapp.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -13,12 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class Adapter_clientes extends ArrayAdapter<String> {
+import com.index.facturapp.R;
+import com.index.facturapp.clasesextra.Cliente;
+
+public class Adapter_clientes extends ArrayAdapter<Cliente> {
 
 	private Context context;
-	private List<String> datos;
+	private List<Cliente> datos;
 	
-	public Adapter_clientes(Context context, List<String> values, int id_layout) {
+	public Adapter_clientes(Context context, List<Cliente> values, int id_layout) {
 		super(context, id_layout, values);
 		datos = values;
 		this.context = context;
@@ -30,7 +31,21 @@ public class Adapter_clientes extends ArrayAdapter<String> {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.item_cliente_long, parent, false);
         
-        String item = datos.get(position);
+        String item = new String();
+        if(datos.get(position).getNombre() != null){
+        	item = datos.get(position).getNombre();
+            item = item.concat(" ");
+            if(datos.get(position).getApellido1() != null){
+            	item = item.concat(datos.get(position).getApellido1());
+            	item = item.concat(" ");
+            	if(datos.get(position).getApellido2() != null){
+            		item = item.concat(datos.get(position).getApellido2());
+                	item = item.concat(" ");
+            	}
+            }
+        }
+        
+        
         
         
         if(item != null){
