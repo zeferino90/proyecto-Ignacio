@@ -384,70 +384,72 @@ public class Gestion_facturas extends ListActivity {
 					 }
 					 //------fin bloque generacion linia producto------
 					 //-----Bloque notas------------------
-					 coordY += 12 *4;
-					 
-					 if(coordY > 600)
-					 coordY = 741;
-					 else {
-						 canvas.drawLine(0, coordY, 595, coordY, paint);
-						 coordY += 12;
-						 canvas.drawLine(0, coordY, 595, coordY, paint);
-						 coordX = 25;
-						 canvas.drawText("Descripci—n del trabajo a realizar", coordX, coordY-2, paint2);
-						 coordY +=12;
-					 }
-					 
 					 String nota = fact.getNotas();
-					 String[] saltos = nota.split("\n");
-					 int indsaltos = 0;
-					 while(indsaltos < saltos.length){
-						 int j = 0;
-						 //String nota = fact.getNotas();
-						 int maxj = saltos[indsaltos].length();
-						 String[] palabras = saltos[indsaltos].split(" ");
-						 int indexpal = 0;
-						 int index = 0;
-						 while(j < maxj){
-							 if(coordY > 740){
-									// finish the page
-									 document.finishPage(pages.get(actualpage));
-									 actualpage++;
-									 pages.add(actualpage, document.startPage(pageInfo));
-									 canvas = pages.get(actualpage).getCanvas();
-									 coordY = 40;
-									 canvas.drawLine(0, coordY, 595, coordY, paint);
-									 coordY += 12;
-									 canvas.drawLine(0, coordY, 595, coordY, paint);
-									 coordX = 25;
-									 canvas.drawText("Descripci—n del trabajo a realizar", coordX, coordY-2, paint2);
-									 coordY +=12;
-								 }
-							 int n = j;
-							 int n2 = 0;
-							 float stringwidth = 0;
-							 while(stringwidth < pageWidth-75 && indexpal < palabras.length){
-								 String aux = palabras[indexpal];
-								 index = saltos[indsaltos].indexOf(aux) + aux.length();
-								 if(index > j) {
-									 String substring = saltos[indsaltos].substring(j, index);
-									 n2 = substring.length();
-									 if(n2 < pageWidth){
-										 if(n2 < n){
-											 n += aux.length() + 1;
-										 }
-										 else n = n2;
-									 }
-								 }
-								 else n += aux.length() + 1;
-								 stringwidth = paint2.measureText(saltos[indsaltos].substring(j, n));
-								 indexpal++;
-							 }
-							 canvas.drawText(saltos[indsaltos].substring(j, n), coordX, coordY, paint2);
-							 j = index;
+					 if(nota != null){
+						 coordY += 12 *4;
+						 
+						 if(coordY > 600)
+						 coordY = 741;
+						 else {
+							 canvas.drawLine(0, coordY, 595, coordY, paint);
+							 coordY += 12;
+							 canvas.drawLine(0, coordY, 595, coordY, paint);
+							 coordX = 25;
+							 canvas.drawText("Descripci—n del trabajo a realizar", coordX, coordY-2, paint2);
 							 coordY +=12;
 						 }
-						 indsaltos++;
+						 String[] saltos = nota.split("\n");
+						 int indsaltos = 0;
+						 while(indsaltos < saltos.length){
+							 int j = 0;
+							 //String nota = fact.getNotas();
+							 int maxj = saltos[indsaltos].length();
+							 String[] palabras = saltos[indsaltos].split(" ");
+							 int indexpal = 0;
+							 int index = 0;
+							 while(j < maxj){
+								 if(coordY > 740){
+										// finish the page
+										 document.finishPage(pages.get(actualpage));
+										 actualpage++;
+										 pages.add(actualpage, document.startPage(pageInfo));
+										 canvas = pages.get(actualpage).getCanvas();
+										 coordY = 40;
+										 canvas.drawLine(0, coordY, 595, coordY, paint);
+										 coordY += 12;
+										 canvas.drawLine(0, coordY, 595, coordY, paint);
+										 coordX = 25;
+										 canvas.drawText("Descripci—n del trabajo a realizar", coordX, coordY-2, paint2);
+										 coordY +=12;
+									 }
+								 int n = j;
+								 int n2 = 0;
+								 float stringwidth = 0;
+								 while(stringwidth < pageWidth-75 && indexpal < palabras.length){
+									 String aux = palabras[indexpal];
+									 index = saltos[indsaltos].indexOf(aux) + aux.length();
+									 if(index > j) {
+										 String substring = saltos[indsaltos].substring(j, index);
+										 n2 = substring.length();
+										 if(n2 < pageWidth){
+											 if(n2 < n){
+												 n += aux.length() + 1;
+											 }
+											 else n = n2;
+										 }
+									 }
+									 else n += aux.length() + 1;
+									 stringwidth = paint2.measureText(saltos[indsaltos].substring(j, n));
+									 indexpal++;
+								 }
+								 canvas.drawText(saltos[indsaltos].substring(j, n), coordX, coordY, paint2);
+								 j = index;
+								 coordY +=12;
+							 }
+							 indsaltos++;
+						 } 
 					 }
+					 
 					 
 					 //-----fin bloque notas--------------
 					 
@@ -542,11 +544,17 @@ public class Gestion_facturas extends ListActivity {
 					 document.finishPage(pages.get(actualpage));
 					 File pdffile;
 					 if(isExternalStorageWritable() && isExternalStorageReadable()){
-						 pdffile = new File(activity.getExternalFilesDir(null), "pdfprueva_ext.pdf");
+						 if(iva)
+						 pdffile = new File(activity.getExternalFilesDir(null), "factura.pdf");
+						 else 
+							 pdffile = new File(activity.getExternalFilesDir(null), "presupuesto.pdf");
 						 Toast.makeText(activity, "Guardado en SDcard", Toast.LENGTH_SHORT).show();
 					 }
 					 else {
-						 pdffile = new File(activity.getFilesDir(), "pdfprueva.pdf");
+						 if(iva)
+							 pdffile = new File(activity.getFilesDir(), "factura.pdf");
+						 else
+							 pdffile = new File(activity.getFilesDir(), "presupuesto.pdf");
 						 Toast.makeText(activity, "Guardado en Interno", Toast.LENGTH_SHORT).show();
 					 }
 					// write the document content
@@ -564,9 +572,9 @@ public class Gestion_facturas extends ListActivity {
 					}
 					
 					 
-					 String[] to = {"mperesp1990@gmail.com"};
+					 String[] to = {};
 					 String[] cc = {}; 
-					 enviar(to, cc, "prueva android", "contrato notario", pdffile);
+					 enviar(to, cc, "" , "", pdffile);
 					 Toast.makeText(activity, "Enviando el mail", Toast.LENGTH_SHORT).show();
 					 
 					 //close the document
