@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -256,13 +257,23 @@ public class Managecatprod extends ActionBarActivity implements
 
 		@Override
 		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-			// TODO Auto-generated method stub
 			super.onActivityCreated(savedInstanceState);
 			final FacturaDB fdb = new FacturaDB(getActivity());
 			List<String> values;
 			values = fdb.getCategorias();
 			adapter = new Adaptercatprod(getActivity(),values);
 			setListAdapter(adapter);
+			getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int position, long id) {
+					String categoria = adapter.getItem(position);
+					Intent intent = new Intent(getActivity(), ProdsCat.class);
+					intent.putExtra("categoria", categoria);
+					Log.e("ProdCat", "empieza activity productos de una categoria");
+					startActivity(intent);
+				}
+			});
 			getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
 				@Override
 		        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
@@ -296,6 +307,7 @@ public class Managecatprod extends ActionBarActivity implements
 					return true;
 				}
 			});
+			
 		}
 		
 		public static void addItem(String categoria){

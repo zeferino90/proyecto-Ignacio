@@ -44,6 +44,10 @@
             android:name=".Notas"
             android:label="@string/title_activity_notas" >
         </activity>
+        <activity
+            android:name=".ProdsCat"
+            android:label="@string/title_activity_prods_cat" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

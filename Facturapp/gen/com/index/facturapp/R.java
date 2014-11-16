@@ -1280,6 +1280,7 @@ containing a value of this type.
         public static final int mgestion_facturas=0x7f0c0002;
         public static final int notas=0x7f0c0003;
         public static final int principal=0x7f0c0004;
+        public static final int prods_cat=0x7f0c0005;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1343,6 +1344,7 @@ containing a value of this type.
         public static final int title_activity_notas=0x7f0a0022;
         public static final int title_activity_preferences=0x7f0a0019;
         public static final int title_activity_preferencias=0x7f0a001a;
+        public static final int title_activity_prods_cat=0x7f0a0026;
         public static final int title_activity_settings=0x7f0a0018;
         public static final int title_section1=0x7f0a001d;
         public static final int title_section2=0x7f0a001e;

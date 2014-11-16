@@ -26,5 +26,6 @@
     <string name="guardar">Guardar</string>
     <string name="explicacion">Explicacion</string>
     <string name="cleancache">Limpiar ficheros Facturapp</string>
+    <string name="title_activity_prods_cat">Productos Categoria</string>
 
 </resources>
