@@ -25,7 +25,7 @@ public class ProdsCat extends ListActivity {
 		for(int i = 0; i < prodscat.size(); i++){
 			prodsname.add(prodscat.get(i).getNombre());
 		}
-		adapter = new Adaptercatprod(this , prodsname);
+		adapter = new Adaptercatprod(this , prodsname, "black", false);
 		setListAdapter(adapter);
 	}
 }

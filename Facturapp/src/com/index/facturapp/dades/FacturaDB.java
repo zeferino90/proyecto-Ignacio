@@ -237,7 +237,7 @@ public class FacturaDB extends SQLiteOpenHelper {
 		List<Producto> productos = new ArrayList<Producto>();
 		int i = 0;
 		this.db = this.getWritableDatabase();
-		String selectQuery = "SELECT nombre, precio, idcategoria FROM producto where idcategoria = ?";
+		String selectQuery = "SELECT nombre, precio FROM PRODUCTO where idcategoria = ?";
 		String[] aux = {String.valueOf(idcategoria)};
 		Log.e("dberror", selectQuery);
 	    Cursor c = db.rawQuery(selectQuery, aux);

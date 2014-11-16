@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.index.facturapp.adapters.Adaptercatprod;
 import com.index.facturapp.clasesextra.Categoria;
@@ -68,7 +69,7 @@ public class Managecatprod extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_managecatprod);
-		// Set up the action bar.
+		// Set up the action bar
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -261,26 +262,15 @@ public class Managecatprod extends ActionBarActivity implements
 			final FacturaDB fdb = new FacturaDB(getActivity());
 			List<String> values;
 			values = fdb.getCategorias();
-			adapter = new Adaptercatprod(getActivity(),values);
+			adapter = new Adaptercatprod(getActivity(),values, "white", true);
 			setListAdapter(adapter);
-			getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int position, long id) {
-					String categoria = adapter.getItem(position);
-					Intent intent = new Intent(getActivity(), ProdsCat.class);
-					intent.putExtra("categoria", categoria);
-					Log.e("ProdCat", "empieza activity productos de una categoria");
-					startActivity(intent);
-				}
-			});
 			getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
 				@Override
 		        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 		                int position, long id) {
 					pos = position;
 					if (position == 0){
-						//toast de que no se puede borrar
+						Toast.makeText(getActivity(), "No se puede borrar", Toast.LENGTH_SHORT).show();
 					}
 					else {
 						final int pos = position;
@@ -345,7 +335,7 @@ public class Managecatprod extends ActionBarActivity implements
 			final FacturaDB fdb = new FacturaDB(getActivity());
 			List<String> values;
 			values = fdb.getProductos();
-			adapter = new Adaptercatprod(getActivity(),values);
+			adapter = new Adaptercatprod(getActivity(),values, "white", false);
 			setListAdapter(adapter);
 			getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
 				@Override
