@@ -58,4 +58,24 @@
         android:text="@string/cleancache"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <TextView
+        android:id="@+id/copia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/cache"
+        android:layout_marginTop="16dp"
+        android:text="@string/copia"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/importar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/copia"
+        android:layout_marginTop="15dp"
+        android:text="@string/importar"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 </RelativeLayout>

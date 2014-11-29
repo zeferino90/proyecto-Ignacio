@@ -27,5 +27,7 @@
     <string name="explicacion">Explicacion</string>
     <string name="cleancache">Limpiar ficheros Facturapp</string>
     <string name="title_activity_prods_cat">Productos Categoria</string>
+    <string name="copia">Copia de seguridad datos</string>
+    <string name="importar">Importar copia de seguridad</string>
 
 </resources>

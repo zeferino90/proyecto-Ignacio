@@ -1,15 +1,17 @@
 package com.index.facturapp;
 
 import java.io.File;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.index.facturapp.dades.FacturaDB;
@@ -72,6 +74,67 @@ public class Preferencias extends Activity {
 				Toast.makeText(getBaseContext(), "Se han limpiado los ficheros", Toast.LENGTH_SHORT).show();
 			}
 		});
+		
+		TextView copia = (TextView)findViewById(R.id.copia);
+		copia.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				FacturaDB fdb = new FacturaDB(getApplicationContext());
+				String FileName = null;
+				try {
+					FileName = fdb.backupDatabase(getApplicationContext());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		        File dbFile = new File(FileName);
+		        //String[] to = {"reformasimacia@hotmail.es"};
+		        String[] to = {"mlespinosa1960@gmail.com"};
+		        String[] cc = {};
+				enviar(to, cc, "Copia de seguridad datos Facturapp", "", dbFile);
+			}
+		});
+		
+		TextView importar = (TextView) findViewById(R.id.importar);
+		importar.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				FacturaDB fdb = new FacturaDB(getApplicationContext());
+				File descargas = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "/");
+				File files[] = descargas.listFiles();
+				String dbPath = new String();
+				int j = 0;
+				for(int i = 0; i < files.length; i++){
+					if (files[i].getName().equals("DBFacturapp.factDB")){
+						dbPath = files[i].getPath();
+						j = i;
+					}
+				}
+				try {
+					fdb.importDatabase(dbPath, getApplicationContext());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				files[j].delete();
+				Toast.makeText(getApplicationContext(), "Datos importados correctamente", Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 	
+	private void enviar(String[] to, String[] cc, String asunto, String mensaje, File file) {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        //String[] to = direccionesEmail;
+        //String[] cc = copias;
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+        if (cc!= null)
+        	emailIntent.putExtra(Intent.EXTRA_CC, cc);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, asunto);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, mensaje);
+        emailIntent.setType("message/rfc822");
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        startActivity(Intent.createChooser(emailIntent, "Email "));
+}
 }
