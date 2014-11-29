@@ -89,7 +89,7 @@ public class Preferencias extends Activity {
 				}
 		        File dbFile = new File(FileName);
 		        //String[] to = {"reformasimacia@hotmail.es"};
-		        String[] to = {"mlespinosa1960@gmail.com"};
+		        String[] to = {"reformasimacia@hotmail.com"};
 		        String[] cc = {};
 				enviar(to, cc, "Copia de seguridad datos Facturapp", "", dbFile);
 			}
